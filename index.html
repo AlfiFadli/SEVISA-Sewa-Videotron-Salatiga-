@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEVISA - Sewa Videotron Salatiga (Cek Status & Pembayaran QRIS / Bank)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style> 
+        body { font-family: 'Plus Jakarta Sans', sans-serif; } 
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+    <!-- ========================================================================= -->
+    <!-- GATEKEEPER AUTH SCREEN -->
+    <!-- ========================================================================= -->
+    <div id="auth-gate-screen" class="fixed inset-0 z-50 bg-slate-100 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-8 shadow-2xl space-y-6 my-auto">
+            
+            <div class="text-center space-y-3">
+                <div class="inline-block p-2 bg-slate-50 border border-slate-200 rounded-2xl shadow-md">
+                    <img src="logo.png" alt="SEVISA Logo" class="w-16 h-16 rounded-xl object-cover">
+                </div>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Selamat Datang di SEVISA</h1>
+                <p class="text-xs text-slate-500 max-w-xs mx-auto">Silakan <strong>Masuk</strong> atau <strong>Daftar Akun</strong> terlebih dahulu untuk dapat mengakses layanan penyewaan videotron Salatiga.</p>
+            </div>
+
+            <div class="flex bg-slate-100 p-1 rounded-xl text-xs font-bold border border-slate-200">
+                <button onclick="switchAuthGateTab('login')" id="gate-tab-login" class="flex-1 py-2.5 rounded-lg bg-white text-brand-600 shadow-sm transition">
+                    Masuk Akun
+                </button>
+                <button onclick="switchAuthGateTab('register')" id="gate-tab-register" class="flex-1 py-2.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
+                    Daftar Akun Baru
+                </button>
+            </div>
+
+            <form id="gate-form-login" onsubmit="handleGateAuth(event, 'login')" class="space-y-4 text-xs">
+                <div>
+                    <label class="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider">Alamat Email</label>
+                    <input type="email" id="login-email" value="budi@gmail.com" placeholder="nama@email.com" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-slate-800 font-medium">
+                </div>
+
+                <div>
+                    <label class="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider">Kata Sandi</label>
+                    <input type="password" id="login-password" value="password" placeholder="••••••••" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-slate-800 font-medium">
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition">
+                    Masuk Akun &rarr;
+                </button>
+            </form>
+
+            <form id="gate-form-register" onsubmit="handleGateAuth(event, 'register')" class="hidden space-y-4 text-xs">
+                <div>
+                    <label class="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider">Nama Lengkap / Instansi</label>
+                    <input type="text" id="reg-name" placeholder="Contoh: Budi Santoso" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-slate-800 font-medium">
+                </div>
+
+                <div>
+                    <label class="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider">Alamat Email</label>
+                    <input type="email" id="reg-email" placeholder="nama@email.com" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-slate-800 font-medium">
+                </div>
+
+                <div>
+                    <label class="block text-slate-700 font-bold mb-1.5 uppercase tracking-wider">Kata Sandi</label>
+                    <input type="password" id="reg-password" placeholder="Minimal 8 Karakter" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-slate-800 font-medium">
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition">
+                    Daftar Akun Baru &rarr;
+                </button>
+            </form>
+
+            <div class="text-center pt-2 text-[11px] text-slate-400 border-t border-slate-100">
+                &copy; 2026 SEVISA (Sewa Videotron Salatiga). Hak Akses Terproteksi.
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MAIN APPLICATION CONTENT -->
+    <!-- ========================================================================= -->
+    <div id="main-app-wrapper" class="hidden flex-col min-h-screen">
+
+        <!-- HEADER / NAVIGATION BAR -->
+        <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                
+                <!-- POJOK KIRI ATAS: LOGO SEVISA -->
+                <a href="#" onclick="showPage('home')" class="flex items-center gap-3 group">
+                    <img src="logo.png" alt="SEVISA Logo" class="w-10 h-10 rounded-xl shadow-sm border border-slate-200 group-hover:scale-105 transition object-cover">
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight text-slate-900 block leading-none">SEVISA</span>
+                        <span class="text-[10px] font-semibold text-brand-600 tracking-widest uppercase block mt-1">Salatiga Videotron</span>
+                    </div>
+                </a>
+
+                <!-- POJOK KANAN: FITUR NAVIGASI -->
+                <nav class="flex items-center gap-2 sm:gap-5 text-sm font-semibold">
+                    <button onclick="showPage('home')" id="nav-home" class="px-3 py-2 text-brand-600 font-bold hover:text-brand-700 transition">
+                        Beranda
+                    </button>
+                    <button onclick="showPage('katalog')" id="nav-katalog" class="px-3 py-2 text-slate-600 hover:text-brand-600 transition">
+                        Katalog
+                    </button>
+                    <button onclick="showPage('pesanan')" id="nav-pesanan" class="px-3 py-2 text-slate-600 hover:text-brand-600 transition relative">
+                        <span>Pesanan Saya</span>
+                        <span id="pending-pay-indicator" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-amber-500 rounded-full animate-ping hidden"></span>
+                    </button>
+                    <button onclick="showPage('cek-status')" id="nav-cek-status" class="px-3 py-2 text-slate-600 hover:text-brand-600 transition font-bold text-brand-700 bg-brand-50 rounded-xl border border-brand-200">
+                        🔍 Cek Status
+                    </button>
+                    <button onclick="showPage('profil')" id="nav-profil" class="px-3 py-2 text-slate-600 hover:text-brand-600 transition flex items-center gap-1.5">
+                        <span>Data Diri</span>
+                        <span id="profile-status-badge" class="w-2 h-2 rounded-full bg-rose-500" title="Belum Lengkap"></span>
+                    </button>
+
+                    <!-- Profil User & Tombol Keluar -->
+                    <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
+                        <div class="text-right hidden sm:block">
+                            <span class="text-[10px] text-slate-400 block leading-none">Terautentikasi</span>
+                            <span class="text-xs font-bold text-slate-800" id="user-display-name">Budi Santoso</span>
+                        </div>
+                        <button onclick="handleLogout()" class="px-3.5 py-1.5 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition">
+                            Keluar
+                        </button>
+                    </div>
+                </nav>
+
+            </div>
+        </header>
+
+        <!-- PROFILE ALERT BANNER -->
+        <div id="profile-warning-banner" class="bg-amber-500 text-white px-4 py-3 text-xs font-semibold shadow-md flex items-center justify-between">
+            <div class="max-w-7xl mx-auto flex items-center gap-2">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <span><strong>PERHATIAN:</strong> Data diri Anda belum lengkap! Anda <strong>WAJIB</strong> melengkapi No. Telepon, Alamat, & NIK/NPWP sebelum dapat mengajukan sewa.</span>
+                <button onclick="showPage('profil')" class="underline font-extrabold ml-2 hover:text-amber-100">Lengkapi Sekarang &rarr;</button>
+            </div>
+        </div>
+
+        <!-- MAIN BODY CONTENT -->
+        <main class="flex-grow">
+            
+            <!-- PAGE 1: BERANDA -->
+            <section id="page-home" class="block">
+                <div class="bg-white border-b border-slate-200 py-16 sm:py-20 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] opacity-60"></div>
+
+                    <div class="relative max-w-4xl mx-auto px-4 space-y-6">
+                        <div class="inline-block p-3 bg-slate-50 border border-slate-200 rounded-3xl shadow-xl hover:scale-105 transition duration-300">
+                            <img src="logo.png" alt="SEVISA Logo Center" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover">
+                        </div>
+
+                        <div class="space-y-3">
+                            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 text-brand-700 border border-brand-200 text-xs font-bold uppercase tracking-wider">
+                                Sewa Videotron Salatiga (SEVISA)
+                            </span>
+                            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+                                Layanan Penyiaran Iklan Digital <br class="hidden sm:inline"><span class="text-brand-600">Terpercaya di Kota Salatiga</span>
+                            </h1>
+                            <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto font-medium leading-relaxed">
+                                Pesan slot penayangan iklan dan informasi publik pada titik-titik persimpangan teramai di Salatiga secara mudah, cepat, dan transparan.
+                            </p>
+                        </div>
+
+                        <div class="pt-2 flex flex-wrap justify-center gap-3">
+                            <button onclick="attemptBookingFlow('Tugu Pancasila Salatiga', '8 x 4 Meter', '1.500.000')" class="px-6 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-2xl shadow-lg shadow-brand-600/25 transition flex items-center gap-2">
+                                <span>Pesan Videotron Sekarang</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </button>
+                            <button onclick="showPage('cek-status')" class="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-2xl border border-slate-200 transition">
+                                🔍 Cek Status Pesanan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 TITIK POPULER -->
+                <div class="py-16 bg-slate-50">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+                        <div class="text-center max-w-2xl mx-auto space-y-2">
+                            <span class="text-xs font-bold text-brand-600 uppercase tracking-widest">Titik Favorit Masyarakat</span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">3 Lokasi Videotron Utama</h2>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <!-- Card 1 -->
+                            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-6">
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                        <span class="px-3 py-1 bg-brand-50 text-brand-700 font-bold text-xs rounded-full border border-brand-200">VDT-01</span>
+                                        <span class="text-xs font-semibold text-slate-500">8 x 4 Meter</span>
+                                    </div>
+                                    <h3 class="font-extrabold text-slate-900 text-base">Tugu Pancasila Salatiga</h3>
+                                    <p class="text-xs text-slate-500">Jl. Pemuda No. 1, Sidorejo</p>
+                                </div>
+                                <div class="space-y-3 pt-2">
+                                    <div class="flex justify-between text-xs"><span class="text-slate-500">Tarif Harian:</span><span class="font-extrabold text-amber-600">Rp 1.500.000</span></div>
+                                    <button onclick="attemptBookingFlow('Tugu Pancasila Salatiga', '8 x 4 Meter', '1.500.000')" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition">
+                                        Pesan Videotron Ini
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Card 2 -->
+                            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-6">
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                        <span class="px-3 py-1 bg-brand-50 text-brand-700 font-bold text-xs rounded-full border border-brand-200">VDT-02</span>
+                                        <span class="text-xs font-semibold text-slate-500">6 x 3 Meter</span>
+                                    </div>
+                                    <h3 class="font-extrabold text-slate-900 text-base">Simpang Pasar Raya</h3>
+                                    <p class="text-xs text-slate-500">Jl. Jend. Sudirman No. 45</p>
+                                </div>
+                                <div class="space-y-3 pt-2">
+                                    <div class="flex justify-between text-xs"><span class="text-slate-500">Tarif Harian:</span><span class="font-extrabold text-amber-600">Rp 1.200.000</span></div>
+                                    <button onclick="attemptBookingFlow('Simpang Pasar Raya', '6 x 3 Meter', '1.200.000')" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition">
+                                        Pesan Videotron Ini
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Card 3 -->
+                            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-6">
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                        <span class="px-3 py-1 bg-brand-50 text-brand-700 font-bold text-xs rounded-full border border-brand-200">VDT-03</span>
+                                        <span class="text-xs font-semibold text-slate-500">10 x 5 Meter</span>
+                                    </div>
+                                    <h3 class="font-extrabold text-slate-900 text-base">Bundaran Kalibening</h3>
+                                    <p class="text-xs text-slate-500">Jl. Raya Salatiga - Solo Km. 2</p>
+                                </div>
+                                <div class="space-y-3 pt-2">
+                                    <div class="flex justify-between text-xs"><span class="text-slate-500">Tarif Harian:</span><span class="font-extrabold text-amber-600">Rp 2.000.000</span></div>
+                                    <button onclick="attemptBookingFlow('Bundaran Kalibening Salatiga', '10 x 5 Meter', '2.000.000')" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition">
+                                        Pesan Videotron Ini
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 2: KATALOG -->
+            <section id="page-katalog" class="hidden py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="space-y-2 border-b border-slate-200 pb-6">
+                    <h1 class="text-3xl font-extrabold text-slate-900">Katalog Seluruh Videotron Salatiga</h1>
+                    <p class="text-xs sm:text-sm text-slate-600">Pilih titik lokasi videotron yang diinginkan.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white border border-slate-200 rounded-3xl p-6 space-y-4">
+                        <h3 class="font-bold text-slate-900">Tugu Pancasila Salatiga</h3>
+                        <p class="text-xs text-slate-500">Jl. Pemuda No. 1, Sidorejo</p>
+                        <button onclick="attemptBookingFlow('Tugu Pancasila Salatiga', '8 x 4 Meter', '1.500.000')" class="w-full py-3 bg-brand-600 text-white text-xs font-bold rounded-xl">Pesan Lokasi Ini</button>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-3xl p-6 space-y-4">
+                        <h3 class="font-bold text-slate-900">Simpang Pasar Raya</h3>
+                        <p class="text-xs text-slate-500">Jl. Jend. Sudirman No. 45</p>
+                        <button onclick="attemptBookingFlow('Simpang Pasar Raya', '6 x 3 Meter', '1.200.000')" class="w-full py-3 bg-brand-600 text-white text-xs font-bold rounded-xl">Pesan Lokasi Ini</button>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-3xl p-6 space-y-4">
+                        <h3 class="font-bold text-slate-900">Bundaran Kalibening</h3>
+                        <p class="text-xs text-slate-500">Jl. Raya Salatiga - Solo Km. 2</p>
+                        <button onclick="attemptBookingFlow('Bundaran Kalibening Salatiga', '10 x 5 Meter', '2.000.000')" class="w-full py-3 bg-brand-600 text-white text-xs font-bold rounded-xl">Pesan Lokasi Ini</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 3: DETAIL & FORM PESAN -->
+            <section id="page-detail" class="hidden py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="bg-white border border-slate-200 rounded-3xl p-6 space-y-4">
+                            <h2 class="text-xl font-extrabold text-slate-900" id="selected-loc-name">Videotron Utama Tugu Pancasila Salatiga</h2>
+                            <p class="text-xs text-slate-500" id="selected-loc-size">Ukuran: 8 x 4 Meter | FHD 1920x1080</p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5">
+                        <div class="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 shadow-xl">
+                            <h3 class="text-base font-extrabold text-slate-900">Formulir Pengajuan Sewa</h3>
+                            
+                            <div id="booking-lock-notice" class="p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-2xl text-xs space-y-2">
+                                <div class="font-extrabold">🚨 GAGAL: Data Diri Belum Lengkap!</div>
+                                <p>Sistem menolak pengajuan pesanan karena data diri Anda belum dilengkapi. Anda wajib mengisi Nomor Telepon, Alamat, & NIK/NPWP terlebih dahulu.</p>
+                                <button onclick="showPage('profil')" class="w-full py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl transition">
+                                    Lengkapi Data Diri Sekarang &rarr;
+                                </button>
+                            </div>
+
+                            <div id="booking-form-controls" class="hidden space-y-4 text-xs">
+                                <div>
+                                    <label class="block text-slate-700 font-bold mb-1">Pilih Jenis Paket</label>
+                                    <select id="order-package" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 font-medium">
+                                        <option value="1500000">Paket Harian - Rp 1.500.000</option>
+                                        <option value="8500000">Paket Mingguan - Rp 8.500.000</option>
+                                        <option value="30000000">Paket Bulanan - Rp 30.000.000</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-700 font-bold mb-1">Tanggal Mulai Penayangan</label>
+                                    <input type="date" value="2026-08-10" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 font-medium">
+                                </div>
+                                <button onclick="submitUserBooking()" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition">
+                                    Kirim Pengajuan Pesanan Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 4: PESANAN SAYA & BAYAR -->
+            <section id="page-pesanan" class="hidden py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+                <div class="border-b border-slate-200 pb-4 flex justify-between items-end">
+                    <div>
+                        <h1 class="text-2xl font-extrabold text-slate-900">Riwayat Pesanan Saya</h1>
+                        <p class="text-xs text-slate-500 mt-1">Daftar pengajuan dan status pembayaran penyewaan videotron Anda.</p>
+                    </div>
+                    <button onclick="showPage('cek-status')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition">
+                        🔍 Pencarian Kode Pesanan
+                    </button>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-100 text-slate-600 border-b border-slate-200 uppercase font-semibold">
+                            <tr>
+                                <th class="py-4 px-6">Kode Pesanan</th>
+                                <th class="py-4 px-6">Lokasi Videotron</th>
+                                <th class="py-4 px-6">Periode</th>
+                                <th class="py-4 px-6">Total Biaya</th>
+                                <th class="py-4 px-6">Status Konfirmasi Admin</th>
+                                <th class="py-4 px-6 text-center">Aksi Pembayaran</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-booking-list" class="divide-y divide-slate-100">
+                            <!-- Sample Order Confirmed By Admin Ready For Payment -->
+                            <tr class="bg-emerald-50/40">
+                                <td class="py-4 px-6 font-mono font-bold text-brand-600">SVS-20260805-A101</td>
+                                <td class="py-4 px-6 font-bold text-slate-900">Tugu Pancasila Salatiga</td>
+                                <td class="py-4 px-6 text-slate-600">10 Aug 2026 - 17 Aug 2026</td>
+                                <td class="py-4 px-6 font-bold text-amber-600 text-sm">Rp 8.500.000</td>
+                                <td class="py-4 px-6">
+                                    <span class="px-3 py-1 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full font-bold text-[10px] flex items-center gap-1 w-max">
+                                        <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                        Dikonfirmasi Admin (Siap Bayar)
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <button onclick="openPaymentModal('SVS-20260805-A101', 'Videotron Tugu Pancasila', '8.500.000')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-md transition animate-bounce">
+                                        💳 Bayar (QRIS / Transfer)
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- PAGE 5: FITUR CEK STATUS PESANAN (INPUT KODE) -->
+            <section id="page-cek-status" class="hidden py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="text-center space-y-2">
+                    <span class="px-3 py-1 bg-brand-50 text-brand-700 border border-brand-200 rounded-full text-xs font-bold uppercase">Lacak Real-Time</span>
+                    <h1 class="text-3xl font-black text-slate-900">Cek Status Pesanan Videotron</h1>
+                    <p class="text-xs sm:text-sm text-slate-600">Masukkan Kode Pesanan Anda untuk melihat status konfirmasi admin dan melakukan pembayaran.</p>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input type="text" id="status-search-code" placeholder="Masukkan Kode Pesanan (Contoh: SVS-20260805-A101)" class="flex-1 bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-800 text-sm font-mono font-bold focus:outline-none focus:border-brand-500 uppercase">
+                        <button onclick="searchOrderStatus()" class="px-6 py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-2xl shadow-lg shadow-brand-600/25 transition shrink-0">
+                            Cek Status Sekarang &rarr;
+                        </button>
+                    </div>
+
+                    <!-- Status Result Details Container -->
+                    <div id="status-result-card" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+                            <div>
+                                <span class="text-[11px] text-slate-500 uppercase font-bold block">Kode Pesanan Terlacak</span>
+                                <h3 class="text-xl font-mono font-black text-brand-600" id="result-code">SVS-20260805-A101</h3>
+                            </div>
+                            <span id="result-status-badge" class="px-3 py-1 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full font-bold text-xs w-max">
+                                Dikonfirmasi Admin (Siap Bayar)
+                            </span>
+                        </div>
+
+                        <!-- Progress Tracker -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <div class="text-slate-400 text-[10px] uppercase font-bold">1. Pengajuan Pesanan</div>
+                                <div class="text-slate-900 font-bold mt-1">Selesai Dikirim</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <div class="text-slate-400 text-[10px] uppercase font-bold">2. Konfirmasi Admin</div>
+                                <div class="text-emerald-600 font-bold mt-1">✅ Disetujui Admin</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                <div class="text-slate-400 text-[10px] uppercase font-bold">3. Pembayaran</div>
+                                <div class="text-amber-600 font-bold mt-1">Menunggu QRIS / Transfer</div>
+                            </div>
+                        </div>
+
+                        <!-- Order Item Info -->
+                        <div class="space-y-2 text-xs bg-white p-4 rounded-xl border border-slate-200">
+                            <div class="flex justify-between"><span>Lokasi Videotron:</span><strong class="text-slate-900" id="result-loc">Tugu Pancasila Salatiga</strong></div>
+                            <div class="flex justify-between"><span>Total Biaya:</span><strong class="text-amber-600 font-extrabold text-sm" id="result-price">Rp 8.500.000</strong></div>
+                        </div>
+
+                        <!-- Payment Trigger Button -->
+                        <div id="result-payment-box" class="pt-2">
+                            <button onclick="openPaymentModal('SVS-20260805-A101', 'Tugu Pancasila Salatiga', '8.500.000')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                                <span>💳 Bayar Sekarang (Scan QRIS / Transfer Bank)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- PAGE 6: PROFIL DATA DIRI -->
+            <section id="page-profil" class="hidden py-16 max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="border-b border-slate-200 pb-4 text-center space-y-2">
+                    <span class="px-3 py-1 bg-brand-50 text-brand-700 border border-brand-200 rounded-full text-xs font-bold">Verifikasi Identitas</span>
+                    <h1 class="text-3xl font-black text-slate-900">Kelengkapan Data Diri Pemohon</h1>
+                    <p class="text-xs text-slate-500">Lengkapi data berikut agar Anda dapat berlangganan dan memesan videotron di SEVISA.</p>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-xl space-y-6">
+                    <form onsubmit="saveUserProfile(event)" class="space-y-4 text-xs">
+                        <div>
+                            <label class="block text-slate-700 font-bold mb-1.5 uppercase">Nama Lengkap / Nama Instansi</label>
+                            <input type="text" id="prof-name" value="Budi Santoso" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-slate-800 font-medium">
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-700 font-bold mb-1.5 uppercase">Nomor WhatsApp / HP Aktif</label>
+                            <input type="tel" id="prof-phone" value="081234567890" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-slate-800 font-medium">
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-700 font-bold mb-1.5 uppercase">Alamat Lengkap Pemohon</label>
+                            <textarea id="prof-address" rows="3" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-slate-800 font-medium">Jl. Pemuda No. 12, Kota Salatiga</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-700 font-bold mb-1.5 uppercase">Nomor NIK / NPWP (Untuk Kontrak Verifikasi)</label>
+                            <input type="text" id="prof-nik" value="3373012345670001" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-slate-800 font-medium">
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition">
+                            Simpan Data Diri & Aktifkan Izin Pemesanan &rarr;
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="bg-white border-t border-slate-200 py-8 text-xs text-slate-500 mt-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="logo.png" alt="SEVISA Logo" class="w-8 h-8 rounded-lg border border-slate-200">
+                    <span>&copy; 2026 SEVISA (Sewa Videotron Salatiga). Hak Cipta Dilindungi.</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- INTERACTIVE PAYMENT GATEWAY MODAL (SCAN QRIS & TRANSFER BANK) -->
+    <!-- ========================================================================= -->
+    <div id="payment-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 my-auto relative">
+            <button onclick="closePaymentModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+            
+            <div class="text-center space-y-1">
+                <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full font-bold text-[10px] uppercase">Sistem Pembayaran Resmi SEVISA</span>
+                <h3 class="text-xl font-black text-slate-900">Pembayaran Sewa Videotron</h3>
+                <p class="text-xs text-slate-500">Kode Pesanan: <strong id="pay-modal-code" class="font-mono text-brand-600">SVS-20260805-A101</strong></p>
+            </div>
+
+            <!-- Total Nominal Tagihan -->
+            <div class="bg-slate-900 text-white p-4 rounded-2xl text-center space-y-1 shadow-inner">
+                <span class="text-[11px] text-slate-400 font-semibold block uppercase">Total Tagihan Yang Harus Dibayar:</span>
+                <span class="text-3xl font-black text-amber-400 block" id="pay-modal-price">Rp 8.500.000</span>
+            </div>
+
+            <!-- Tab Metode Pembayaran -->
+            <div class="flex bg-slate-100 p-1 rounded-2xl text-xs font-bold border border-slate-200">
+                <button onclick="switchPaymentMethod('qris')" id="pay-tab-qris" class="flex-1 py-3 rounded-xl bg-white text-brand-600 shadow-sm transition flex items-center justify-center gap-1.5">
+                    <span>📱 Scan QRIS</span>
+                </button>
+                <button onclick="switchPaymentMethod('bank')" id="pay-tab-bank" class="flex-1 py-3 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
+                    <span>🏦 Transfer Bank</span>
+                </button>
+            </div>
+
+            <!-- CONTENT METHOD 1: SCAN QRIS -->
+            <div id="pay-content-qris" class="space-y-4 text-center">
+                <div class="bg-white border-2 border-dashed border-slate-300 p-6 rounded-2xl inline-block shadow-inner space-y-3">
+                    <div class="text-[11px] font-bold text-slate-700 uppercase tracking-widest">NMID: ID10293847561 - SEVISA SALATIGA</div>
+                    
+                    <!-- Pure Vector QRIS Code Graphic -->
+                    <div class="w-48 h-48 bg-slate-950 mx-auto p-3 rounded-xl flex flex-col justify-between border border-slate-800 shadow-lg relative">
+                        <div class="grid grid-cols-5 gap-1.5 h-full w-full p-2 bg-white rounded-lg">
+                            <div class="bg-slate-900 rounded-sm"></div><div class="bg-slate-900 rounded-sm"></div><div class="bg-white"></div><div class="bg-slate-900 rounded-sm"></div><div class="bg-slate-900 rounded-sm"></div>
+                            <div class="bg-slate-900 rounded-sm"></div><div class="bg-white"></div><div class="bg-slate-900 rounded-sm"></div><div class="bg-white"></div><div class="bg-slate-900 rounded-sm"></div>
+                            <div class="bg-white"></div><div class="bg-slate-900 rounded-sm"></div><div class="bg-brand-600 rounded-sm"></div><div class="bg-slate-900 rounded-sm"></div><div class="bg-white"></div>
+                            <div class="bg-slate-900 rounded-sm"></div><div class="bg-white"></div><div class="bg-slate-900 rounded-sm"></div><div class="bg-white"></div><div class="bg-slate-900 rounded-sm"></div>
+                            <div class="bg-slate-900 rounded-sm"></div><div class="bg-slate-900 rounded-sm"></div><div class="bg-white"></div><div class="bg-slate-900 rounded-sm"></div><div class="bg-slate-900 rounded-sm"></div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-[11px] text-slate-500 font-semibold">Bisa di-scan menggunakan GoPay, OVO, Dana, ShopeePay, BCA, Mandiri, & Seluruh Aplikasi M-Banking.</p>
+                </div>
+
+                <button onclick="confirmPaymentSuccess('QRIS')" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition">
+                    ✅ Saya Sudah Scan & Bayar QRIS
+                </button>
+            </div>
+
+            <!-- CONTENT METHOD 2: TRANSFER BANK -->
+            <div id="pay-content-bank" class="hidden space-y-4 text-xs">
+                <div class="space-y-3">
+                    <!-- Bank 1: Bank Jateng -->
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Bank Jateng (Pemkot Salatiga)</span>
+                            <span class="font-mono font-black text-slate-900 text-base">1-002-98471-0</span>
+                            <span class="text-[11px] text-slate-500 block">a.n. SEVISA SALATIGA DISKOMINFO</span>
+                        </div>
+                        <button onclick="copyAccount('1-002-98471-0')" class="px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold rounded-lg transition">
+                            Salin No. Rek
+                        </button>
+                    </div>
+
+                    <!-- Bank 2: Bank Mandiri -->
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Bank Mandiri</span>
+                            <span class="font-mono font-black text-slate-900 text-base">138-00-1928374-1</span>
+                            <span class="text-[11px] text-slate-500 block">a.n. SEVISA SALATIGA ONLINE</span>
+                        </div>
+                        <button onclick="copyAccount('138-00-1928374-1')" class="px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold rounded-lg transition">
+                            Salin No. Rek
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-amber-50 border border-amber-200 text-amber-800 rounded-2xl space-y-1 text-[11px]">
+                    <span class="font-bold block">Petunjuk Pembayaran Transfer:</span>
+                    <p>Transfer sesuai nominal presisi. Setelah transfer berhasil, klik tombol verifikasi di bawah.</p>
+                </div>
+
+                <button onclick="confirmPaymentSuccess('Transfer Bank')" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition">
+                    ✅ Konfirmasi Pembayaran Transfer Bank
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let isLoggedIn = false;
+        let isProfileComplete = true; // Set true for demo flow test
+
+        function switchAuthGateTab(tab) {
+            const loginTab = document.getElementById('gate-tab-login');
+            const regTab = document.getElementById('gate-tab-register');
+            const loginForm = document.getElementById('gate-form-login');
+            const regForm = document.getElementById('gate-form-register');
+
+            if (tab === 'login') {
+                loginTab.className = "flex-1 py-2.5 rounded-lg bg-white text-brand-600 shadow-sm transition";
+                regTab.className = "flex-1 py-2.5 rounded-lg text-slate-600 hover:text-slate-900 transition";
+                loginForm.classList.remove('hidden');
+                regForm.classList.add('hidden');
+            } else {
+                regTab.className = "flex-1 py-2.5 rounded-lg bg-white text-brand-600 shadow-sm transition";
+                loginTab.className = "flex-1 py-2.5 rounded-lg text-slate-600 hover:text-slate-900 transition";
+                regForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+        }
+
+        function handleGateAuth(event, type) {
+            event.preventDefault();
+
+            let userName = 'Budi Santoso';
+            if (type === 'register') {
+                const inputName = document.getElementById('reg-name').value;
+                if (inputName) userName = inputName;
+            }
+
+            document.getElementById('user-display-name').innerText = userName;
+            isLoggedIn = true;
+
+            document.getElementById('auth-gate-screen').classList.add('hidden');
+            document.getElementById('main-app-wrapper').classList.remove('hidden');
+            document.getElementById('main-app-wrapper').classList.add('flex');
+
+            updateProfileStatusUI();
+            showPage('home');
+        }
+
+        function handleLogout() {
+            if (confirm('Apakah Anda yakin ingin keluar dari akun?')) {
+                isLoggedIn = false;
+                document.getElementById('main-app-wrapper').classList.add('hidden');
+                document.getElementById('main-app-wrapper').classList.remove('flex');
+                document.getElementById('auth-gate-screen').classList.remove('hidden');
+            }
+        }
+
+        function updateProfileStatusUI() {
+            const badge = document.getElementById('profile-status-badge');
+            const banner = document.getElementById('profile-warning-banner');
+            const lockNotice = document.getElementById('booking-lock-notice');
+            const formControls = document.getElementById('booking-form-controls');
+
+            if (isProfileComplete) {
+                badge.className = "w-2 h-2 rounded-full bg-emerald-500";
+                badge.title = "Profile Lengkap";
+                if (banner) banner.classList.add('hidden');
+                if (lockNotice) lockNotice.classList.add('hidden');
+                if (formControls) formControls.classList.remove('hidden');
+            } else {
+                badge.className = "w-2 h-2 rounded-full bg-rose-500 animate-pulse";
+                badge.title = "Belum Lengkap";
+                if (banner) banner.classList.remove('hidden');
+                if (lockNotice) lockNotice.classList.remove('hidden');
+                if (formControls) formControls.classList.add('hidden');
+            }
+        }
+
+        function attemptBookingFlow(name, size, price) {
+            if (!isProfileComplete) {
+                alert('🚨 PEMESANAN GAGAL!\n\nAnda belum melengkapi Data Diri (No. HP/WA, Alamat, NIK/NPWP).\nSistem akan mengarahkan Anda ke formulir kelengkapan data diri terlebih dahulu.');
+                showPage('profil');
+                return;
+            }
+
+            document.getElementById('selected-loc-name').innerText = name;
+            showPage('detail');
+        }
+
+        function searchOrderStatus() {
+            const codeInput = document.getElementById('status-search-code').value.trim().toUpperCase();
+            if (!codeInput) {
+                alert('Masukkan Kode Pesanan Anda!');
+                return;
+            }
+
+            document.getElementById('result-code').innerText = codeInput;
+            document.getElementById('result-loc').innerText = 'Videotron Tugu Pancasila Salatiga';
+            document.getElementById('result-price').innerText = 'Rp 8.500.000';
+            document.getElementById('status-result-card').classList.remove('hidden');
+
+            window.scrollTo({ top: document.getElementById('status-result-card').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function openPaymentModal(code, loc, price) {
+            document.getElementById('pay-modal-code').innerText = code;
+            document.getElementById('pay-modal-price').innerText = 'Rp ' + price;
+            document.getElementById('payment-modal').classList.remove('hidden');
+            document.getElementById('payment-modal').classList.add('flex');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('payment-modal').classList.add('hidden');
+            document.getElementById('payment-modal').classList.remove('flex');
+        }
+
+        function switchPaymentMethod(method) {
+            const qrisTab = document.getElementById('pay-tab-qris');
+            const bankTab = document.getElementById('pay-tab-bank');
+            const qrisContent = document.getElementById('pay-content-qris');
+            const bankContent = document.getElementById('pay-content-bank');
+
+            if (method === 'qris') {
+                qrisTab.className = "flex-1 py-3 rounded-xl bg-white text-brand-600 shadow-sm transition flex items-center justify-center gap-1.5";
+                bankTab.className = "flex-1 py-3 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5";
+                qrisContent.classList.remove('hidden');
+                bankContent.classList.add('hidden');
+            } else {
+                bankTab.className = "flex-1 py-3 rounded-xl bg-white text-brand-600 shadow-sm transition flex items-center justify-center gap-1.5";
+                qrisTab.className = "flex-1 py-3 rounded-xl text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5";
+                bankContent.classList.remove('hidden');
+                qrisContent.classList.add('hidden');
+            }
+        }
+
+        function copyAccount(accNum) {
+            navigator.clipboard.writeText(accNum);
+            alert('✅ Nomor rekening ' + accNum + ' berhasil disalin!');
+        }
+
+        function confirmPaymentSuccess(method) {
+            alert('🎉 PEMBAYARAN BERHASIL!\n\nPembayaran melalui ' + method + ' telah terverifikasi secara otomatis.\nStatus pesanan Anda kini beralih ke AKTIF TAYANG di Videotron Salatiga!');
+            
+            closePaymentModal();
+
+            document.getElementById('result-status-badge').className = "px-3 py-1 bg-emerald-600 text-white rounded-full font-bold text-xs w-max";
+            document.getElementById('result-status-badge').innerText = "✅ Pembayaran Lunas - Aktif Tayang";
+            document.getElementById('result-payment-box').innerHTML = `
+                <div class="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-center space-y-1">
+                    <span class="font-extrabold text-sm block">🎉 Penayangan Iklan Aktif</span>
+                    <p class="text-xs">Iklan Anda telah masuk ke dalam antrean loop penayangan videotron.</p>
+                </div>
+            `;
+
+            showPage('pesanan');
+        }
+
+        function saveUserProfile(event) {
+            event.preventDefault();
+            isProfileComplete = true;
+            updateProfileStatusUI();
+            alert('✅ DATA DIRI BERHASIL DISIMPAN!');
+            showPage('katalog');
+        }
+
+        function submitUserBooking() {
+            const code = 'SVS-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
+            alert('✅ Pengajuan sewa berhasil dikirim!\nKode Pesanan Anda: ' + code + '\n\nSilakan tunggu konfirmasi Admin atau cek di menu Cek Status.');
+            showPage('pesanan');
+        }
+
+        function showPage(pageId) {
+            if (!isLoggedIn) return;
+
+            const pages = ['home', 'katalog', 'detail', 'pesanan', 'cek-status', 'profil'];
+            pages.forEach(p => {
+                const el = document.getElementById('page-' + p);
+                if (el) el.classList.add('hidden');
+            });
+            const target = document.getElementById('page-' + pageId);
+            if (target) target.classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
