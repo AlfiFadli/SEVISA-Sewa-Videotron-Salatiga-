@@ -7,34 +7,41 @@ use Illuminate\Http\Request;
 
 class PublicController extends Controller
 {
-    /**
-     * Halaman Beranda (Home)
-     */
     public function home()
     {
-        // Ambil 3 videotron unggulan
-        $featuredVideotrons = Videotron::with('hargaSewas')->take(3)->get();
-        
-        return view('home', compact('featuredVideotrons'));
+        $videotrons = Videotron::with('hargaSewa')->take(3)->get();
+        return view('home', compact('videotrons'));
     }
 
-    /**
-     * Halaman Katalog Videotron
-     */
-    public function katalog()
+    public function tentang()
     {
-        $videotrons = Videotron::with('hargaSewas')->paginate(6);
-        
+        return view('tentang');
+    }
+
+    public function lokasi()
+    {
+        $videotrons = Videotron::with('hargaSewa')->get();
         return view('katalog', compact('videotrons'));
     }
 
-    /**
-     * Halaman Detail Videotron & Form Pesan
-     */
+    public function proyek()
+    {
+        return view('proyek');
+    }
+
+    public function press()
+    {
+        return view('press');
+    }
+
+    public function blog()
+    {
+        return view('blog');
+    }
+
     public function detail($id)
     {
-        $videotron = Videotron::with('hargaSewas')->findOrFail($id);
-        
+        $videotron = Videotron::with('hargaSewa')->findOrFail($id);
         return view('detail', compact('videotron'));
     }
 }
