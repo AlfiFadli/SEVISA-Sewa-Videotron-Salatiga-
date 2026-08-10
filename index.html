@@ -1134,20 +1134,20 @@
                 <div class="py-12 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
                     
                     <!-- SEARCH INPUT BOX -->
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4 shadow-lg">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-7 space-y-4 shadow-lg">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Masukkan Kode Transaksi Pemesanan *</label>
-                            <div class="flex gap-2">
-                                <input type="text" id="status-search-code" value="SVS-20260810-101" placeholder="Contoh: SVS-20260810-101" class="flex-grow bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3.5 rounded-xl text-xs font-mono font-bold uppercase text-slate-800 dark:text-slate-100 focus:border-brand-600 focus:outline-none">
-                                <button onclick="searchOrderStatus()" class="px-5 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow-md transition shrink-0">
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="status-search-code" value="" placeholder="Masukkan Kode Transaksi, Contoh: SVS-849201" class="flex-grow bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3.5 rounded-xl text-xs font-mono font-bold uppercase text-slate-800 dark:text-slate-100 focus:border-brand-600 focus:outline-none">
+                                <button onclick="searchOrderStatus()" class="px-6 py-3.5 bg-gradient-to-r from-brand-700 to-blue-600 hover:from-brand-600 hover:to-blue-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-md transition shrink-0">
                                     Cek Status &rarr;
                                 </button>
                             </div>
                         </div>
 
                         <!-- DEMO CODES QUICK SELECTOR -->
-                        <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2 flex-wrap text-xs">
-                            <span class="text-[11px] font-bold text-slate-400">Contoh Status Demo:</span>
+                        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2 flex-wrap text-xs">
+                            <span class="text-[11px] font-bold text-slate-400">Contoh Kode Demo:</span>
                             <div class="flex gap-1.5 flex-wrap">
                                 <button onclick="quickTestStatus('SVS-20260810-101')" class="px-2.5 py-1 bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 font-mono font-bold text-[10px] rounded-lg hover:opacity-80 transition">
                                     🟡 SVS-101 (Menunggu)
@@ -1162,12 +1162,25 @@
                         </div>
                     </div>
 
-                    <!-- DYNAMIC ORDER TRACKER CARD RESULT -->
-                    <div id="status-result-card" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl">
+                    <!-- EMPTY PROMPT STATE (SHOWN BEFORE USER ENTERS CODE) -->
+                    <div id="status-empty-prompt" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 text-center space-y-3 shadow-md">
+                        <div class="w-14 h-14 bg-brand-50 dark:bg-slate-800 text-brand-600 dark:text-sky-400 rounded-2xl flex items-center justify-center font-bold text-2xl mx-auto border border-brand-200 dark:border-slate-700">
+                            🔑
+                        </div>
+                        <div class="max-w-md mx-auto space-y-1">
+                            <h3 class="text-base font-black text-slate-900 dark:text-white">Silakan Masukkan Kode Transaksi Pemesanan</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                Masukkan kode acak transaksi unik yang Anda dapatkan saat menyelesaikan pengajuan penyewaan pada kolom di atas, lalu klik <strong>"Cek Status"</strong> untuk menampilkan rincian dan tahapan pengajuan secara lengkap.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- DYNAMIC ORDER TRACKER CARD RESULT (HIDDEN BY DEFAULT UNTIL SEARCHED) -->
+                    <div id="status-result-card" class="hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl">
                         
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-200 dark:border-slate-800 gap-3">
                             <div>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">KODE TRANSAKSI</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">KODE TRANSAKSI PEMESANAN</span>
                                 <h3 id="track-code-display" class="text-xl font-black font-mono text-brand-600 dark:text-sky-400">SVS-20260810-101</h3>
                             </div>
                             <div id="track-status-badge-container">
@@ -2065,7 +2078,8 @@
 
             const calcResult = calculateBookingPrice();
             const fileName = fileInput.files[0].name;
-            const bookingCode = 'SVS-20260810-' + Math.floor(100 + Math.random() * 900);
+            const randomSuffix = Math.floor(100000 + Math.random() * 900000);
+            const bookingCode = 'SVS-' + randomSuffix;
 
             const newOrder = {
                 code: bookingCode,
@@ -2084,10 +2098,10 @@
             closeModal('booking-modal');
 
             show3DToast(
-                '🎉 PERMOHONAN SEWA DIPROSES!',
-                `Kode Transaksi: <strong class="text-amber-500 font-mono font-black text-sm block my-1">${bookingCode}</strong><br>Permohonan sewa lokasi <strong>${location}</strong> durasi <strong>${calcResult.qty} ${calcResult.unitLabel}</strong> (<strong class="text-amber-400">Rp ${calcResult.totalPrice.toLocaleString('id-ID')}</strong> • ${calcResult.categoryLabel}) telah diterima Diskominfo Salatiga.<br><br>Gunakan kode ini untuk mengecek status permohonan Anda.`,
+                '🎉 PENGAJUAN BERHASIL DISIMPAN!',
+                `Kode Transaksi Pemesanan Anda:<br><strong class="text-xl font-black font-mono text-amber-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-amber-500/40 inline-block my-2 shadow-inner tracking-wider">${bookingCode}</strong><br>Silakan <strong>salin / catat Kode Transaksi</strong> di atas. Anda harus memasukkannya terlebih dahulu ke dalam kolom <strong>"Masukkan Kode Transaksi Pemesanan"</strong> pada Halaman Cek Status untuk menampilkan status & tahapan pengajuan.`,
                 'success',
-                'CEK STATUS PESANAN SEKARANG &rarr;',
+                'MENUJU HALAMAN CEK STATUS &rarr;',
                 `navigateToStatusPage('${bookingCode}')`
             );
         }
@@ -2095,20 +2109,41 @@
         function navigateToStatusPage(code) {
             close3DToast();
             showPage('cek-status');
-            document.getElementById('status-search-code').value = code;
-            searchOrderStatus();
+            
+            const searchInput = document.getElementById('status-search-code');
+            if (searchInput) searchInput.value = code;
+
+            // KEEP RESULT CARD HIDDEN BY DEFAULT UNTIL USER CLICKS "CEK STATUS"
+            const resultCard = document.getElementById('status-result-card');
+            const emptyPrompt = document.getElementById('status-empty-prompt');
+            if (resultCard) resultCard.classList.add('hidden');
+            if (emptyPrompt) emptyPrompt.classList.remove('hidden');
+
+            show3DToast(
+                '🔑 KODE TRANSAKSI DISIAPKAN',
+                `Kode <strong class="font-mono text-amber-500">${code}</strong> telah dimasukkan ke dalam kolom pencarian.<br><br>Klik tombol <strong>"Cek Status &rarr;"</strong> untuk menampilkan status & tahapan pengajuan secara lengkap.`,
+                'info'
+            );
         }
 
         function searchOrderStatus() {
             const inputCode = document.getElementById('status-search-code').value.trim().toUpperCase();
+            const resultCard = document.getElementById('status-result-card');
+            const emptyPrompt = document.getElementById('status-empty-prompt');
+
             if (!inputCode) {
-                show3DToast('⚠️ MASUKKAN KODE', 'Harap masukkan Kode Pesanan Anda!', 'error');
+                if (resultCard) resultCard.classList.add('hidden');
+                if (emptyPrompt) emptyPrompt.classList.remove('hidden');
+                show3DToast('⚠️ MASUKKAN KODE TRANSAKSI', 'Harap masukkan Kode Transaksi Pemesanan Anda terlebih dahulu pada kolom yang tersedia!', 'error');
                 return;
             }
 
             const foundOrder = orderDatabase.find(o => o.code === inputCode);
 
             if (!foundOrder) {
+                if (resultCard) resultCard.classList.add('hidden');
+                if (emptyPrompt) emptyPrompt.classList.remove('hidden');
+
                 show3DToast(
                     '🚨 KODE TIDAK DITEMUKAN',
                     `Kode transaksi <strong>${inputCode}</strong> tidak ditemukan dalam sistem.<br><br>Silakan periksa kembali kode transaksi Anda atau gunakan tombol cepat demo.`,
@@ -2116,6 +2151,9 @@
                 );
                 return;
             }
+
+            if (emptyPrompt) emptyPrompt.classList.add('hidden');
+            if (resultCard) resultCard.classList.remove('hidden');
 
             renderOrderStatusCard(foundOrder);
         }
@@ -2747,7 +2785,15 @@
             }
 
             if (pageId === 'cek-status') {
-                searchOrderStatus();
+                const searchInput = document.getElementById('status-search-code');
+                const resultCard = document.getElementById('status-result-card');
+                const emptyPrompt = document.getElementById('status-empty-prompt');
+                if (searchInput && searchInput.value.trim() !== '') {
+                    searchOrderStatus();
+                } else {
+                    if (resultCard) resultCard.classList.add('hidden');
+                    if (emptyPrompt) emptyPrompt.classList.remove('hidden');
+                }
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2769,7 +2815,6 @@
             renderPortfolioGrid(PORTFOLIO_DATABASE);
             updateUserNavArea();
             updateProfileStatusUI();
-            searchOrderStatus();
         });
     </script>
 </body>
