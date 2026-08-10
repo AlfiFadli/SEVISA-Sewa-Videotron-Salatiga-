@@ -1432,45 +1432,110 @@
             
             <div class="text-center space-y-1">
                 <span class="px-3 py-1 bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 font-extrabold text-[10px] rounded-full uppercase tracking-wider border border-red-200 dark:border-red-800">
-                    Formulir Transaksi Resmi Diskominfo
+                    Kalkulator & Transaksi Resmi Diskominfo
                 </span>
                 <h3 class="text-xl font-black text-slate-900 dark:text-white">Formulir Ajukan Penyewaan Videotron</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Pilih salah satu dari 4 titik lokasi videotron resmi, tanggal sewa, dan lampirkan materi iklan Anda.</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Pilih titik lokasi, jenis produk, dan durasi sewa. Harga otomatis dihitung berdasarkan tarif resmi Pemkot Salatiga.</p>
             </div>
 
             <form onsubmit="submitBookingSewa(event)" class="space-y-4 text-xs">
                 
+                <!-- 1. PILIH TITIK LOKASI VIDEOTRON -->
                 <div>
                     <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">1. Titik Lokasi Videotron Resmi Pemkot *</label>
-                    <select id="book-location" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
-                        <option value="Pasar Rejosari">1. Pasar Rejosari (Jl. Hasanudin) - Rp 2.200.000 / Hari</option>
-                        <option value="Blotongan">2. Blotongan (Jl. Semarang - Surakarta) - Rp 1.268.000 / Hari</option>
-                        <option value="Selasar Kartini">3. Selasar Kartini (Jl. Kartini) - Rp 716.000 / Hari</option>
-                        <option value="Alun-Alun Salatiga">4. Alun-Alun Salatiga (Lapangan Pancasila) - Rp 698.000 / Hari</option>
+                    <select id="book-location" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
+                        <option value="Pasar Rejosari">1. Pasar Rejosari (Jl. Hasanudin - Top Traffic)</option>
+                        <option value="Blotongan">2. Blotongan (Jl. Semarang - Surakarta - Gate Utara)</option>
+                        <option value="Selasar Kartini">3. Selasar Kartini (Jl. Kartini - Pusat Edukasi)</option>
+                        <option value="Alun-Alun Salatiga">4. Alun-Alun Salatiga (Lapangan Pancasila)</option>
                     </select>
                 </div>
 
+                <!-- 2. PILIH KATEGORI PRODUK -->
                 <div>
                     <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">2. Kategori Produk Iklan *</label>
-                    <select id="book-ad-category" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
+                    <select id="book-ad-category" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
                         <option value="nonrokok">Produk Non-Rokok (Tarif Standar Resmi)</option>
                         <option value="rokok">Produk Rokok (+25% Sesuai Perwali No. 49 Tahun 2018)</option>
                     </select>
                 </div>
 
+                <!-- 3. PILIH SATUAN & DURASI SEWA -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">3. Tanggal Mulai Sewa *</label>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">3. Satuan Durasi Sewa *</label>
+                        <select id="book-unit" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
+                            <option value="hari" selected>Harian (Per Hari)</option>
+                            <option value="bulan">Bulanan (Per Bulan)</option>
+                            <option value="jam">Jam-jaman (Per Jam)</option>
+                            <option value="menit">Menit-menitan (Per Menit)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">4. Jumlah Durasi *</label>
+                        <input type="number" id="book-qty" value="1" min="1" oninput="calculateBookingPrice()" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
+                    </div>
+                </div>
+
+                <!-- 4. TANGGAL MULAI & SELESAI -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">5. Tanggal Mulai Sewa *</label>
                         <input type="date" id="book-start-date" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
                     </div>
                     <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">4. Tanggal Selesai Sewa *</label>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">6. Tanggal Selesai Sewa *</label>
                         <input type="date" id="book-end-date" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
                     </div>
                 </div>
 
+                <!-- DYNAMIC REAL-TIME PRICE CALCULATOR CARD -->
+                <div class="bg-gradient-to-tr from-slate-900 via-slate-800 to-blue-950 text-white p-4 sm:p-5 rounded-2xl border border-sky-500/40 shadow-xl space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+                        <span class="text-[10px] font-extrabold text-sky-300 uppercase tracking-widest flex items-center gap-1">
+                            <span>💰 ESTIMASI TARIF RESMI DISKOMINFO</span>
+                        </span>
+                        <span id="calc-rate-badge" class="px-2 py-0.5 bg-sky-500/20 text-sky-300 border border-sky-400/30 text-[9px] font-bold rounded-md uppercase">
+                            Produk Non-Rokok
+                        </span>
+                    </div>
+
+                    <!-- MATRIX TAMPILAN TARIF BROSUR LOKASI TERPILIH -->
+                    <div class="grid grid-cols-4 gap-1.5 text-center text-[10px] bg-slate-950/60 p-2 rounded-xl border border-slate-800">
+                        <div class="space-y-0.5">
+                            <span class="text-slate-400 block font-semibold">1 Bulan</span>
+                            <strong id="calc-rate-month" class="text-amber-400 block font-bold text-[10px]">Rp 59.450k</strong>
+                        </div>
+                        <div class="space-y-0.5 border-l border-slate-800">
+                            <span class="text-slate-400 block font-semibold">1 Hari</span>
+                            <strong id="calc-rate-day" class="text-amber-400 block font-bold text-[10px]">Rp 2.200k</strong>
+                        </div>
+                        <div class="space-y-0.5 border-l border-slate-800">
+                            <span class="text-slate-400 block font-semibold">1 Jam</span>
+                            <strong id="calc-rate-hour" class="text-amber-400 block font-bold text-[10px]">Rp 210k</strong>
+                        </div>
+                        <div class="space-y-0.5 border-l border-slate-800">
+                            <span class="text-slate-400 block font-semibold">1 Menit</span>
+                            <strong id="calc-rate-minute" class="text-amber-400 block font-bold text-[10px]">Rp 3.800</strong>
+                        </div>
+                    </div>
+
+                    <!-- TOTAL PRICE DISPLAY -->
+                    <div class="flex items-center justify-between pt-1">
+                        <div>
+                            <span class="text-[10px] text-slate-300 block font-medium">Total Rincian Biaya Sewa:</span>
+                            <span id="calc-unit-detail" class="text-[11px] font-bold text-sky-200 block">1 Hari x Rp 2.200.000</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[9px] font-bold text-slate-400 block uppercase">TOTAL TARIF SEWA</span>
+                            <span id="calc-total-price" class="text-lg font-black text-amber-400 tracking-tight">Rp 2.200.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. FILE MATERI IKLAN UPLOAD -->
                 <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">5. File Materi Iklan (Video / PPT / Gambar / PDF) *</label>
+                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">7. File Materi Iklan (Video / PPT / Gambar / PDF) *</label>
                     <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-4 text-center bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                         <input type="file" id="book-ad-file" accept="video/*,.ppt,.pptx,image/*,.pdf" required class="hidden" onchange="handleAdFileSelect(event)">
                         <label for="book-ad-file" class="cursor-pointer space-y-2 block">
@@ -1495,8 +1560,9 @@
                     </div>
                 </div>
 
+                <!-- 8. CATATAN MATERI -->
                 <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">6. Keterangan / Catatan Khusus Materi Iklan</label>
+                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">8. Keterangan / Catatan Khusus Materi Iklan</label>
                     <textarea id="book-notes" rows="2" placeholder="Catatan jam tayang khusus, pesan tambahan, atau instruksi penyiaran..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium"></textarea>
                 </div>
 
@@ -1864,6 +1930,70 @@
             show3DToast('ℹ️ BERHASIL KELUAR', 'Anda telah keluar dari akun pengguna SEVISA.', 'info');
         }
 
+        // DYNAMIC REAL-TIME RATE CALCULATOR FOR BOOKING FORM
+        function getRawPriceNumber(priceStr) {
+            if (!priceStr) return 0;
+            return parseInt(priceStr.toString().replace(/\./g, ''), 10);
+        }
+
+        function calculateBookingPrice() {
+            const locEl = document.getElementById('book-location');
+            const catEl = document.getElementById('book-ad-category');
+            const unitEl = document.getElementById('book-unit');
+            const qtyEl = document.getElementById('book-qty');
+
+            if (!locEl || !catEl || !unitEl || !qtyEl) return;
+
+            const locName = locEl.value;
+            const isRokok = catEl.value === 'rokok';
+            const unit = unitEl.value;
+            let qty = parseInt(qtyEl.value) || 1;
+            if (qty < 1) qty = 1;
+
+            const item = VIDEOTRON_DATA.find(v => v.title.toLowerCase().includes(locName.toLowerCase())) || VIDEOTRON_DATA[0];
+
+            const monthRate = getRawPriceNumber(isRokok ? item.monthRokok : item.monthNon);
+            const dayRate = getRawPriceNumber(isRokok ? item.priceRokok : item.priceNon);
+            const hourRate = getRawPriceNumber(isRokok ? item.hourRokok : item.hourNon);
+            const minuteRate = getRawPriceNumber(isRokok ? item.minuteRokok : item.minuteNon);
+
+            // Update 4-column brochure rate matrix
+            const rateMonthEl = document.getElementById('calc-rate-month');
+            const rateDayEl = document.getElementById('calc-rate-day');
+            const rateHourEl = document.getElementById('calc-rate-hour');
+            const rateMinEl = document.getElementById('calc-rate-minute');
+            const badgeEl = document.getElementById('calc-rate-badge');
+
+            if (rateMonthEl) rateMonthEl.innerText = 'Rp ' + (monthRate / 1000).toLocaleString('id-ID') + 'k';
+            if (rateDayEl) rateDayEl.innerText = 'Rp ' + (dayRate / 1000).toLocaleString('id-ID') + 'k';
+            if (rateHourEl) rateHourEl.innerText = 'Rp ' + (hourRate / 1000).toLocaleString('id-ID') + 'k';
+            if (rateMinEl) rateMinEl.innerText = 'Rp ' + minuteRate.toLocaleString('id-ID');
+
+            if (badgeEl) {
+                badgeEl.innerText = isRokok ? 'Produk Rokok (+25%)' : 'Produk Non-Rokok';
+                badgeEl.className = isRokok 
+                    ? 'px-2 py-0.5 bg-rose-500/20 text-rose-300 border border-rose-400/30 text-[9px] font-bold rounded-md uppercase'
+                    : 'px-2 py-0.5 bg-sky-500/20 text-sky-300 border border-sky-400/30 text-[9px] font-bold rounded-md uppercase';
+            }
+
+            let unitRate = dayRate;
+            let unitLabel = 'Hari';
+            if (unit === 'bulan') { unitRate = monthRate; unitLabel = 'Bulan'; }
+            else if (unit === 'hari') { unitRate = dayRate; unitLabel = 'Hari'; }
+            else if (unit === 'jam') { unitRate = hourRate; unitLabel = 'Jam'; }
+            else if (unit === 'menit') { unitRate = minuteRate; unitLabel = 'Menit'; }
+
+            const totalPrice = qty * unitRate;
+
+            const unitDetailEl = document.getElementById('calc-unit-detail');
+            const totalPriceEl = document.getElementById('calc-total-price');
+
+            if (unitDetailEl) unitDetailEl.innerText = `${qty} ${unitLabel} x Rp ${unitRate.toLocaleString('id-ID')}`;
+            if (totalPriceEl) totalPriceEl.innerText = 'Rp ' + totalPrice.toLocaleString('id-ID');
+
+            return { qty, unitLabel, unitRate, totalPrice, categoryLabel: isRokok ? 'Produk Rokok (+25%)' : 'Produk Non-Rokok' };
+        }
+
         // TRIGGER BOOKING FLOW WHEN USER CLICKS "AJUKAN PENYEWAAN" OR "PESAN SEWA SEKARANG"
         function triggerBookingFlow(locationTitle = null) {
             if (!isLoggedIn) {
@@ -1893,6 +2023,7 @@
             document.getElementById('book-end-date').min = today;
 
             openModal('booking-modal');
+            calculateBookingPrice();
         }
 
         function triggerBookingFlowFromPort() {
@@ -1923,7 +2054,6 @@
         function submitBookingSewa(event) {
             event.preventDefault();
             const location = document.getElementById('book-location').value;
-            const adCategory = document.getElementById('book-ad-category').value;
             const startDate = document.getElementById('book-start-date').value;
             const endDate = document.getElementById('book-end-date').value;
             const fileInput = document.getElementById('book-ad-file');
@@ -1933,20 +2063,20 @@
                 return;
             }
 
+            const calcResult = calculateBookingPrice();
             const fileName = fileInput.files[0].name;
             const bookingCode = 'SVS-20260810-' + Math.floor(100 + Math.random() * 900);
-            const categoryLabel = adCategory === 'rokok' ? 'Produk Rokok (+25%)' : 'Produk Non-Rokok';
 
             const newOrder = {
                 code: bookingCode,
                 userName: currentUser ? currentUser.name : 'Pengguna',
                 company: currentUser ? (currentUser.company || 'Personal') : 'Personal',
                 location: location,
-                dates: `${startDate} s.d. ${endDate} (${categoryLabel})`,
+                dates: `${startDate} s.d. ${endDate} (${calcResult.qty} ${calcResult.unitLabel} • ${calcResult.categoryLabel} • Rp ${calcResult.totalPrice.toLocaleString('id-ID')})`,
                 file: fileName,
                 status: 'menunggu',
                 statusLabel: 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO',
-                statusDesc: '📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa Anda sedang berada dalam antrean peninjauan oleh tim admin Diskominfo Kota Salatiga. Estimasi proses verifikasi berkisar 1x24 jam kerja.'
+                statusDesc: `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa lokasi <strong>${location}</strong> (${calcResult.qty} ${calcResult.unitLabel} • Rp ${calcResult.totalPrice.toLocaleString('id-ID')}) sedang dalam antrean verifikasi.`
             };
 
             orderDatabase.unshift(newOrder);
@@ -1955,7 +2085,7 @@
 
             show3DToast(
                 '🎉 PERMOHONAN SEWA DIPROSES!',
-                `Kode Transaksi Anda: <strong class="text-amber-500 font-mono font-black text-sm block my-1">${bookingCode}</strong><br>Permohonan sewa lokasi <strong>${location}</strong> (${startDate} s.d. ${endDate} • ${categoryLabel}) telah diterima Diskominfo Salatiga.<br><br>Gunakan kode ini untuk mengecek status permohonan Anda (Menunggu, Sedang Diproses, atau Terkonfirmasi).`,
+                `Kode Transaksi: <strong class="text-amber-500 font-mono font-black text-sm block my-1">${bookingCode}</strong><br>Permohonan sewa lokasi <strong>${location}</strong> durasi <strong>${calcResult.qty} ${calcResult.unitLabel}</strong> (<strong class="text-amber-400">Rp ${calcResult.totalPrice.toLocaleString('id-ID')}</strong> • ${calcResult.categoryLabel}) telah diterima Diskominfo Salatiga.<br><br>Gunakan kode ini untuk mengecek status permohonan Anda.`,
                 'success',
                 'CEK STATUS PESANAN SEKARANG &rarr;',
                 `navigateToStatusPage('${bookingCode}')`
