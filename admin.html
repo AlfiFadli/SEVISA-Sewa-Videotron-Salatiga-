@@ -630,6 +630,8 @@
                 let selectClass = 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 border-amber-300';
                 if (o.status === 'diproses') {
                     selectClass = 'bg-blue-100 dark:bg-blue-950/80 text-blue-800 border-blue-300';
+                } else if (o.status === 'pembayaran_diverifikasi') {
+                    selectClass = 'bg-amber-100 dark:bg-amber-950/80 text-amber-900 border-amber-400 font-extrabold';
                 } else if (o.status === 'terkonfirmasi') {
                     selectClass = 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 border-emerald-300';
                 }
@@ -643,9 +645,10 @@
                         <td class="p-3.5 font-mono text-[11px] font-bold text-emerald-600">📄 ${o.file}</td>
                         <td class="p-3.5">
                             <select onchange="changeOrderStatusDirect('${o.code}', this.value)" class="p-2 border rounded-xl font-black text-[11px] cursor-pointer shadow-sm ${selectClass}">
-                                <option value="menunggu" ${o.status === 'menunggu' ? 'selected' : ''}>🟡 1. MENUNGGU VERIFIKASI</option>
-                                <option value="diproses" ${o.status === 'diproses' ? 'selected' : ''}>🔵 2. SEDANG DIPROSES / UJI TAYANG</option>
-                                <option value="terkonfirmasi" ${o.status === 'terkonfirmasi' ? 'selected' : ''}>🟢 3. TERKONFIRMASI & TAYANG</option>
+                                <option value="menunggu" ${o.status === 'menunggu' ? 'selected' : ''}>🟡 1. MENUNGGU VERIFIKASI MATERI</option>
+                                <option value="diproses" ${o.status === 'diproses' ? 'selected' : ''}>🔵 2. DISETUJUI / MENUNGGU BAYAR</option>
+                                <option value="pembayaran_diverifikasi" ${o.status === 'pembayaran_diverifikasi' ? 'selected' : ''}>🟠 3. BUKTI BAYAR DIUNGGAH (VERIFIKASI ADMIN)</option>
+                                <option value="terkonfirmasi" ${o.status === 'terkonfirmasi' ? 'selected' : ''}>🟢 4. TERKONFIRMASI LUNAS & TAYANG</option>
                             </select>
                         </td>
                         <td class="p-3.5 text-center flex items-center justify-center gap-1.5 pt-4">
@@ -667,12 +670,14 @@
                     orders[idx].statusLabel = 'MENUNGGU VERIFIKASI DISKOMINFO';
                     orders[idx].statusDesc = '📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa Anda sedang berada dalam antrean peninjauan oleh tim admin Diskominfo Kota Salatiga. Estimasi proses verifikasi berkisar 1x24 jam kerja.';
                 } else if (newStatus === 'diproses') {
-                    orders[idx].statusLabel = 'SEDANG DIPROSES / UJI TAYANG';
-                    orders[idx].statusDesc = '⚙️ <strong>Status: Sedang Diproses / Review Uji Tayang</strong><br>File materi iklan Anda sedang diuji kelayakan resolusi dan dijadwalkan oleh sistem penyiaran videotron Diskominfo Salatiga.';
-                    orders[idx].proofImg = 'header_banner.jpg';
+                    orders[idx].statusLabel = 'DISETUJUI / MENUNGGU PEMBAYARAN USER';
+                    orders[idx].statusDesc = '⚙️ <strong>Status: Disetujui / Menunggu Pembayaran User</strong><br>Permohonan sewa & materi iklan Anda telah disetujui! Silakan selesaikan pembayaran retribusi PAD agar dapat diverifikasi Lunas & ditayangkan.';
+                } else if (newStatus === 'pembayaran_diverifikasi') {
+                    orders[idx].statusLabel = 'BUKTI BAYAR DIUNGGAH (VERIFIKASI BENDAHARA)';
+                    orders[idx].statusDesc = '🟠 <strong>Status: Bukti Pembayaran Diunggah</strong><br>Terima kasih! Bukti pembayaran retribusi Anda telah diterima dan sedang diperiksa oleh Bendahara Diskominfo Kota Salatiga.';
                 } else if (newStatus === 'terkonfirmasi') {
-                    orders[idx].statusLabel = 'TERKONFIRMASI & SIAP PENAYANGAN';
-                    orders[idx].statusDesc = '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong><br>Selamat! Permohonan penyewaan videotron Anda telah disetujui resmi oleh Diskominfo Kota Salatiga. Materi iklan siap ditayangkan sesuai jadwal.';
+                    orders[idx].statusLabel = 'TERKONFIRMASI LUNAS & SIAP PENAYANGAN';
+                    orders[idx].statusDesc = '✅ <strong>Status: Terkonfirmasi Lunas & Siap Penayangan</strong><br>Selamat! Pembayaran retribusi sewa videotron Anda telah diverifikasi LUNAS oleh Diskominfo Salatiga dan materi iklan siap disiarkan.';
                     orders[idx].proofImg = 'header_banner.jpg';
                 }
 

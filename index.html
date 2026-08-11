@@ -240,6 +240,82 @@
     </div>
 
     <!-- ========================================================================= -->
+    <!-- MODAL GERBANG PEMBAYARAN RETRIBUSI & UPLOAD BUKTI BAYAR -->
+    <!-- ========================================================================= -->
+    <div id="payment-gateway-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 my-auto relative">
+            <button onclick="closeModal('payment-gateway-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-xl font-bold p-1">&times;</button>
+
+            <div class="text-center space-y-1">
+                <span class="px-3 py-1 bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-extrabold text-[10px] rounded-full uppercase tracking-wider border border-emerald-300 dark:border-emerald-800">
+                    PEMBAYARAN RESMI RETRIBUSI PAD SALATIGA
+                </span>
+                <h3 class="text-xl font-black text-slate-900 dark:text-white">Pilih Metode Pembayaran</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Kode Transaksi: <strong id="pay-modal-code" class="font-mono text-brand-600 dark:text-sky-400 font-black">SVS-148972</strong></p>
+            </div>
+
+            <!-- TOTAL AMOUNT BADGE -->
+            <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white p-4 rounded-2xl border border-slate-800 text-center space-y-1 shadow-lg">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">TOTAL RETRIBUSI WAJIB DIBAYAR:</span>
+                <div id="pay-modal-amount" class="text-2xl font-black text-amber-400 font-mono">Rp 121.043.750</div>
+                <span class="text-[9px] text-slate-300 italic block">Sudah Termasuk Pajak & Biaya Garansi Penyiaran Official</span>
+            </div>
+
+            <form onsubmit="submitUserPaymentReceipt(event)" class="space-y-4 text-xs">
+                
+                <div class="space-y-2">
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">1. Pilih Metode Pembayaran *</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <label class="p-3 bg-slate-50 dark:bg-slate-800/60 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-brand-500 transition flex items-start gap-2.5">
+                            <input type="radio" name="pay_method" value="bank_kasda" checked class="mt-1">
+                            <div>
+                                <strong class="block text-slate-900 dark:text-white font-extrabold">🏦 Bank Kasda (Bank Jateng)</strong>
+                                <span class="text-[10px] text-slate-500 block font-mono">No. 1-003-01234-5</span>
+                                <span class="text-[9px] text-emerald-600 font-bold block">a.n. Kasda Pemkot Salatiga</span>
+                            </div>
+                        </label>
+
+                        <label class="p-3 bg-slate-50 dark:bg-slate-800/60 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-brand-500 transition flex items-start gap-2.5">
+                            <input type="radio" name="pay_method" value="qris" class="mt-1">
+                            <div>
+                                <strong class="block text-slate-900 dark:text-white font-extrabold">📲 QRIS Pemkot Salatiga</strong>
+                                <span class="text-[10px] text-slate-500 block">Scan via GoPay/OVO/DANA/MBanking</span>
+                            </div>
+                        </label>
+
+                        <label class="p-3 bg-slate-50 dark:bg-slate-800/60 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-brand-500 transition flex items-start gap-2.5">
+                            <input type="radio" name="pay_method" value="va_bank" class="mt-1">
+                            <div>
+                                <strong class="block text-slate-900 dark:text-white font-extrabold">💳 Virtual Account (VA)</strong>
+                                <span class="text-[10px] text-slate-500 block font-mono">VA: 88733-148972</span>
+                                <span class="text-[9px] text-slate-400 block">Mandiri / BNI / BRI / BCA</span>
+                            </div>
+                        </label>
+
+                        <label class="p-3 bg-slate-50 dark:bg-slate-800/60 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-brand-500 transition flex items-start gap-2.5">
+                            <input type="radio" name="pay_method" value="loket_kas" class="mt-1">
+                            <div>
+                                <strong class="block text-slate-900 dark:text-white font-extrabold">🏢 Loket BPKPD Salatiga</strong>
+                                <span class="text-[10px] text-slate-500 block">Bayar Tunai di Balai Kota</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">2. Upload Bukti Transfer / Resi Pembayaran *</label>
+                    <input type="file" id="pay-receipt-file" accept="image/*,.pdf" required class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium focus:outline-none">
+                    <p class="text-[10px] text-slate-500 italic">Lampirkan foto struk ATM, bukti transfer M-Banking, atau resi QRIS Anda.</p>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
+                    📤 KIRIM BUKTI PEMBAYARAN UNTUK VERIFIKASI ADMIN &rarr;
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
     <!-- MODAL CETAK INVOICE & KUITANSI RESMI DISKOMINFO -->
     <!-- ========================================================================= -->
     <div id="official-invoice-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
@@ -1457,14 +1533,9 @@
                             <p class="text-[10px] text-slate-300 italic text-center">Dokumentasi penayangan materi iklan di titik lokasi videotron resmi Diskominfo Salatiga.</p>
                         </div>
 
-                        <!-- ACTION BUTTONS: INVOICE & SUPPORT -->
-                        <div class="pt-2 flex flex-col sm:flex-row gap-3">
-                            <button onclick="openOfficialInvoiceModal()" class="flex-1 py-3.5 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 hover:from-slate-800 hover:to-blue-900 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl border border-sky-400/40 shadow-lg transition flex items-center justify-center gap-2">
-                                <span>📄</span> Cetak Kuitansi / Invoice Resmi (PDF)
-                            </button>
-                            <button onclick="openLiveChatDrawer()" class="py-3.5 px-5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2">
-                                <span>💬</span> Chat Admin Diskominfo
-                            </button>
+                        <!-- ACTION BUTTONS: PAYMENT GATEWAY VS INVOICE & SUPPORT -->
+                        <div id="track-action-buttons-container" class="pt-2">
+                            <!-- DYNAMICALLY POPULATED VIA renderOrderStatusCard -->
                         </div>
 
                     </div>
@@ -2523,11 +2594,25 @@
                 if (icon2) { icon2.className = "w-7 h-7 rounded-full bg-blue-600 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md animate-pulse ring-4 ring-blue-100 dark:ring-blue-900/50"; icon2.innerText = "2"; }
                 if (icon3) { icon3.className = "w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center"; icon3.innerText = "3"; }
 
+            } else if (order.status === 'pembayaran_diverifikasi') {
+                badgeContainer.innerHTML = `
+                    <span class="px-3.5 py-1.5 bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 font-black text-xs uppercase tracking-wider rounded-xl border border-amber-400 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+                        <span>BUKTI BAYAR DIUNGGAH / VERIFIKASI BENDAHARA</span>
+                    </span>
+                `;
+                step1.className = "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-400 rounded-2xl p-3 text-center space-y-1 opacity-80 transition duration-300";
+                step2.className = "bg-amber-50 dark:bg-amber-950/60 border-2 border-amber-500 rounded-2xl p-3 text-center space-y-1 transition duration-300 shadow-lg opacity-100";
+
+                if (icon1) { icon1.className = "w-7 h-7 rounded-full bg-emerald-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-sm"; icon1.innerText = "✓"; }
+                if (icon2) { icon2.className = "w-7 h-7 rounded-full bg-amber-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md animate-bounce"; icon2.innerText = "⏳"; }
+                if (icon3) { icon3.className = "w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center"; icon3.innerText = "3"; }
+
             } else if (order.status === 'terkonfirmasi') {
                 badgeContainer.innerHTML = `
                     <span class="px-3.5 py-1.5 bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-black text-xs uppercase tracking-wider rounded-xl border border-emerald-300 dark:border-emerald-800 flex items-center gap-1.5">
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                        <span>TERKONFIRMASI & SIAP PENAYANGAN</span>
+                        <span>TERKONFIRMASI LUNAS & SIAP PENAYANGAN</span>
                     </span>
                 `;
                 step1.className = "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-400 rounded-2xl p-3 text-center space-y-1 opacity-80 transition duration-300";
@@ -2537,6 +2622,36 @@
                 if (icon1) { icon1.className = "w-7 h-7 rounded-full bg-emerald-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-sm"; icon1.innerText = "✓"; }
                 if (icon2) { icon2.className = "w-7 h-7 rounded-full bg-emerald-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-sm"; icon2.innerText = "✓"; }
                 if (icon3) { icon3.className = "w-7 h-7 rounded-full bg-emerald-600 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md ring-4 ring-emerald-100 dark:ring-emerald-900/50"; icon3.innerText = "✓"; }
+            }
+
+            // RENDER DYNAMIC ACTION BUTTONS (PAYMENT GATEWAY VS INVOICE PRINT)
+            const payBtnContainer = document.getElementById('track-action-buttons-container');
+            if (payBtnContainer) {
+                if (order.status === 'diproses') {
+                    payBtnContainer.innerHTML = `
+                        <button onclick="openPaymentGatewayModal('${order.code}')" class="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-xl transition flex items-center justify-center gap-2 animate-bounce">
+                            <span>💳</span> BAYAR RETRIBUSI SEKARANG (PILIH TRANSAKSI) &rarr;
+                        </button>
+                    `;
+                } else if (order.status === 'pembayaran_diverifikasi') {
+                    payBtnContainer.innerHTML = `
+                        <div class="p-3 bg-amber-50 border border-amber-300 rounded-xl text-xs text-amber-900 font-bold text-center">
+                            ⏳ Bukti Pembayaran Telah Dikirim! Menunggu Verifikasi Lunas Admin Diskominfo.
+                        </div>
+                    `;
+                } else if (order.status === 'terkonfirmasi') {
+                    payBtnContainer.innerHTML = `
+                        <button onclick="openOfficialInvoiceModal()" class="w-full py-3.5 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 hover:from-slate-800 hover:to-blue-900 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl border border-sky-400/40 shadow-lg transition flex items-center justify-center gap-2">
+                            <span>📄</span> CETAK KUITANSI / INVOICE LUNAS RESMI (PDF) &rarr;
+                        </button>
+                    `;
+                } else {
+                    payBtnContainer.innerHTML = `
+                        <div class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs text-slate-500 font-medium text-center">
+                            ℹ️ Kuitansi Lunas & Invoice Resmi akan aktif setelah permohonan disetujui & diverifikasi Lunas oleh Admin Diskominfo.
+                        </div>
+                    `;
+                }
             }
         }
 
@@ -3144,7 +3259,41 @@
                 }
             }
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // OPEN PAYMENT GATEWAY SELECTION MODAL
+        function openPaymentGatewayModal(code) {
+            const found = orderDatabase.find(o => o.code === code) || orderDatabase[0];
+            document.getElementById('pay-modal-code').innerText = found.code;
+            
+            let priceMatch = found.dates.match(/Rp\s*[\d\.]+/);
+            document.getElementById('pay-modal-amount').innerText = priceMatch ? priceMatch[0] : 'Rp 121.043.750';
+            
+            openModal('payment-gateway-modal');
+        }
+
+        function submitUserPaymentReceipt(e) {
+            e.preventDefault();
+            const code = document.getElementById('pay-modal-code').innerText;
+            const fileInput = document.getElementById('pay-receipt-file');
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                show3DToast('⚠️ UPLOAD BUKTI BAYAR', 'Silakan lampirkan file bukti transfer Anda terlebih dahulu.', 'error');
+                return;
+            }
+            
+            let orders = getStoredOrders();
+            const idx = orders.findIndex(o => o.code === code);
+            if (idx !== -1) {
+                orders[idx].status = 'pembayaran_diverifikasi';
+                orders[idx].statusLabel = 'BUKTI BAYAR DIUNGGAH (VERIFIKASI BENDAHARA)';
+                orders[idx].statusDesc = '🟠 <strong>Status: Bukti Pembayaran Diunggah</strong><br>Terima kasih! Bukti pembayaran retribusi Anda telah diterima dan sedang diperiksa oleh Bendahara Diskominfo Kota Salatiga.';
+                orders[idx].paymentReceiptFile = fileInput.files[0].name;
+                
+                saveStoredOrders(orders);
+                closeModal('payment-gateway-modal');
+                renderOrderStatusCard(orders[idx]);
+                
+                show3DToast('✅ BUKTI BAYAR TERKIRIM', 'Bukti pembayaran Anda berhasil diunggah. Menunggu verifikasi Lunas dari Admin Diskominfo.', 'success');
+            }
         }
 
         function openModal(id) {
