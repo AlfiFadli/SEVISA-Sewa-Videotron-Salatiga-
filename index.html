@@ -1900,23 +1900,13 @@
 
         function getStoredOrders() {
             const saved = localStorage.getItem('sevisa_orders');
-            let orders = DEFAULT_INITIAL_ORDERS;
             if (saved) {
-                try { 
-                    orders = JSON.parse(saved); 
-                    // Auto-update SVS-148972 to terkonfirmasi if user requests next stage
-                    const targetIdx = orders.findIndex(o => o.code === 'SVS-148972');
-                    if (targetIdx !== -1) {
-                        orders[targetIdx].status = 'terkonfirmasi';
-                        orders[targetIdx].statusLabel = 'TERKONFIRMASI & SIAP PENAYANGAN';
-                        orders[targetIdx].statusDesc = '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong><br>Selamat! Permohonan penyewaan videotron lokasi Selasar Kartini (5 Bulan) telah disetujui resmi oleh Diskominfo Kota Salatiga dan materi iklan siap disiarkan di layar videotron.';
-                    } else {
-                        orders.unshift(DEFAULT_INITIAL_ORDERS[0]);
-                    }
+                try {
+                    return JSON.parse(saved);
                 } catch(e) {}
             }
-            localStorage.setItem('sevisa_orders', JSON.stringify(orders));
-            return orders;
+            localStorage.setItem('sevisa_orders', JSON.stringify(DEFAULT_INITIAL_ORDERS));
+            return DEFAULT_INITIAL_ORDERS;
         }
 
         function saveStoredOrders(orders) {
