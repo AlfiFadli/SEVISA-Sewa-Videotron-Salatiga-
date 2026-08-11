@@ -2956,11 +2956,28 @@
             }
         }
 
-        // LISTEN FOR CMS DATA UPDATES FROM ADMIN PORTAL (ADMIN.HTML)
+        // LISTEN FOR CMS DATA UPDATES & REAL-TIME STATUS CHANGES FROM ADMIN PORTAL (ADMIN.HTML)
         window.addEventListener('storage', () => {
             orderDatabase = getStoredOrders();
             renderPortfolioGrid(getMergedPortfolioData());
             renderAboutPageCMS();
+
+            // AUTOMATICALLY REFRESH STATUS RESULT CARD IF USER HAS A CODE ENTERED & RESULT IS VISIBLE
+            const searchInput = document.getElementById('status-search-code');
+            const resultCard = document.getElementById('status-result-card');
+            
+            if (searchInput && searchInput.value.trim() !== '') {
+                const inputCode = searchInput.value.trim().toUpperCase();
+                const foundOrder = orderDatabase.find(o => o.code === inputCode);
+                if (foundOrder && resultCard && !resultCard.classList.contains('hidden')) {
+                    renderOrderStatusCard(foundOrder);
+                    show3DToast(
+                        '🔔 STATUS DIPERBARUI ADMIN!',
+                        `Status transaksi <strong class="font-mono text-amber-400 font-black">${foundOrder.code}</strong> baru saja diperbarui oleh Admin Diskominfo menjadi:<br><br><span class="px-3 py-1 bg-sky-950 border border-sky-400/40 text-sky-300 font-extrabold text-xs rounded-xl inline-block my-1 uppercase tracking-wider">${foundOrder.statusLabel || foundOrder.status}</span>`,
+                        'info'
+                    );
+                }
+            }
         });
 
         window.addEventListener('DOMContentLoaded', () => {
