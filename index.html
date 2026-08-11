@@ -1659,9 +1659,26 @@
         let currentUser = null;
         let selectedPortfolioItem = null;
 
-        let registeredUsers = [
+        // USER DATABASE SYNCED WITH LOCALSTORAGE AND ADMIN PORTAL
+        const DEFAULT_INITIAL_USERS = [
             { name: 'Budi Santoso', email: 'budi@gmail.com', password: 'password', company: 'PT Salatiga Digital Indo', phone: '081234567890', nik: '3373012345670001', address: 'Jl. Pemuda No. 12, Salatiga', position: 'Direktur Utama', category: 'perusahaan' }
         ];
+
+        function getStoredUsers() {
+            const saved = localStorage.getItem('sevisa_users');
+            if (saved) {
+                try { return JSON.parse(saved); } catch(e) {}
+            }
+            localStorage.setItem('sevisa_users', JSON.stringify(DEFAULT_INITIAL_USERS));
+            return DEFAULT_INITIAL_USERS;
+        }
+
+        function saveStoredUsers(users) {
+            localStorage.setItem('sevisa_users', JSON.stringify(users));
+            window.dispatchEvent(new Event('storage'));
+        }
+
+        let registeredUsers = getStoredUsers();
 
         // 4 OFFICIAL VIDEOTRON LOCATIONS EXTRACTED FROM OFFICIAL BROSUR DISKOMINFO SALATIGA
         const VIDEOTRON_DATA = [
@@ -2620,6 +2637,7 @@
 
                 const newUser = { name: regName, email: regEmail, password: regPass, company: '', phone: '', nik: '', address: '', position: '', category: 'personal' };
                 registeredUsers.push(newUser);
+                saveStoredUsers(registeredUsers);
 
                 show3DToast(
                     '🎉 PENDAFTARAN AKUN BERHASIL!',
@@ -2791,6 +2809,12 @@
                 currentUser.address = address;
                 currentUser.nik = nik;
                 currentUser.category = category;
+
+                const idx = registeredUsers.findIndex(u => u.email === currentUser.email);
+                if (idx !== -1) {
+                    registeredUsers[idx] = currentUser;
+                }
+                saveStoredUsers(registeredUsers);
             }
 
             isProfileComplete = true;
