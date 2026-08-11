@@ -292,6 +292,11 @@
                         <svg id="header-moon-icon" class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                     </button>
 
+                    <a href="admin.html" target="_blank" class="px-2.5 py-1.5 text-xs font-bold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-slate-800 hover:bg-sky-100 dark:hover:bg-slate-700 border border-sky-200 dark:border-slate-700 rounded-lg transition flex items-center gap-1" title="Buka Portal Admin Diskominfo">
+                        <span>🔒</span>
+                        <span class="hidden xl:inline">Portal Admin</span>
+                    </a>
+
                     <button onclick="openModal('kontak-modal')" class="px-3 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition flex items-center gap-1">
                         <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                         <span class="hidden sm:inline">Kontak</span>
@@ -1289,6 +1294,22 @@
                             📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa Anda sedang berada dalam antrean peninjauan oleh tim admin Diskominfo Kota Salatiga. Estimasi proses verifikasi berkisar 1x24 jam kerja.
                         </div>
 
+                        <!-- FOTO BUKTI PENAYANGAN VIDEOTRON (ADMIN VERIFIED) -->
+                        <div id="track-proof-box" class="hidden p-4 bg-slate-900 text-white rounded-2xl border border-sky-500/40 space-y-3 shadow-lg">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                                <span class="text-[10px] font-extrabold text-sky-400 uppercase tracking-widest flex items-center gap-1.5">
+                                    <span>📷 DOKUMENTASI BUKTI PENAYANGAN LAPANGAN</span>
+                                </span>
+                                <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[9px] font-extrabold rounded-md uppercase">
+                                    VERIFIKASI RESMI DISKOMINFO
+                                </span>
+                            </div>
+                            <div class="relative rounded-xl overflow-hidden border border-slate-800 group max-h-60 bg-slate-950 flex items-center justify-center">
+                                <img id="track-proof-img" src="header_banner.jpg" alt="Foto Bukti Penayangan Videotron" class="w-full h-auto max-h-56 object-cover rounded-xl">
+                            </div>
+                            <p class="text-[10px] text-slate-300 italic text-center">Dokumentasi penayangan materi iklan di titik lokasi videotron resmi Diskominfo Salatiga.</p>
+                        </div>
+
                     </div>
 
                 </div>
@@ -1813,42 +1834,63 @@
             }
         ];
 
-        // IN-MEMORY ORDER DATABASE FOR STATUS TRACKING
-        let orderDatabase = [
+        // DEFAULT INITIAL ORDERS (SYNCED WITH LOCALSTORAGE AND ADMIN PORTAL)
+        const DEFAULT_INITIAL_ORDERS = [
             {
                 code: 'SVS-20260810-101',
                 userName: 'Budi Santoso',
                 company: 'PT Salatiga Digital Indo',
                 location: 'Pasar Rejosari',
-                dates: '2026-08-15 s.d. 2026-08-22',
+                dates: '2026-08-15 s.d. 2026-08-22 (7 Hari • Produk Non-Rokok • Rp 15.400.000)',
                 file: 'Video_Promosi_Produk.mp4',
                 status: 'menunggu',
                 statusLabel: 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO',
-                statusDesc: '📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa Anda sedang berada dalam antrean peninjauan oleh tim admin Diskominfo Kota Salatiga. Estimasi proses verifikasi berkisar 1x24 jam kerja.'
+                statusDesc: '📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa Anda sedang berada dalam antrean peninjauan oleh tim admin Diskominfo Kota Salatiga. Estimasi proses verifikasi berkisar 1x24 jam kerja.',
+                proofImg: 'header_banner.jpg'
             },
             {
                 code: 'SVS-20260810-102',
                 userName: 'Dinas Pariwisata Salatiga',
                 company: 'Pemerintah Kota Salatiga',
                 location: 'Blotongan',
-                dates: '2026-08-18 s.d. 2026-08-25',
+                dates: '2026-08-18 s.d. 2026-08-25 (7 Hari • Produk Non-Rokok • Rp 8.876.000)',
                 file: 'Sosialisasi_Pariwisata.mp4',
                 status: 'diproses',
                 statusLabel: 'SEDANG DIPROSES / UJI TAYANG',
-                statusDesc: '⚙️ <strong>Status: Sedang Diproses</strong><br>File materi iklan Anda sedang diuji kelayakan resolusi dan dijadwalkan oleh sistem penyiaran videotron Diskominfo Salatiga.'
+                statusDesc: '⚙️ <strong>Status: Sedang Diproses / Review Uji Tayang</strong><br>File materi iklan Anda sedang diuji kelayakan resolusi dan dijadwalkan oleh sistem penyiaran videotron Diskominfo Salatiga.',
+                proofImg: 'header_banner.jpg'
             },
             {
                 code: 'SVS-20260810-103',
                 userName: 'Komunitas UMKM Salatiga',
                 company: 'Brand Kuliner Salatiga',
                 location: 'Alun-Alun Salatiga',
-                dates: '2026-08-20 s.d. 2026-08-30',
+                dates: '2026-08-20 s.d. 2026-08-30 (10 Hari • Produk Non-Rokok • Rp 6.980.000)',
                 file: 'Poster_Promo_Event.png',
                 status: 'terkonfirmasi',
                 statusLabel: 'TERKONFIRMASI & SIAP PENAYANGAN',
-                statusDesc: '✅ <strong>Status: Terkonfirmasi</strong><br>Selamat! Permohonan penyewaan videotron Anda telah disetujui resmi oleh Diskominfo Kota Salatiga. Materi iklan siap ditayangkan sesuai jadwal.'
+                statusDesc: '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong><br>Selamat! Permohonan penyewaan videotron Anda telah disetujui resmi oleh Diskominfo Kota Salatiga. Materi iklan siap ditayangkan sesuai jadwal.',
+                proofImg: 'header_banner.jpg'
             }
         ];
+
+        function getStoredOrders() {
+            const saved = localStorage.getItem('sevisa_orders');
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch(e) {}
+            }
+            localStorage.setItem('sevisa_orders', JSON.stringify(DEFAULT_INITIAL_ORDERS));
+            return DEFAULT_INITIAL_ORDERS;
+        }
+
+        function saveStoredOrders(orders) {
+            localStorage.setItem('sevisa_orders', JSON.stringify(orders));
+            window.dispatchEvent(new Event('storage'));
+        }
+
+        let orderDatabase = getStoredOrders();
 
         // DARK MODE TOGGLE SYSTEM WITH LOCAL STORAGE PERSISTENCE
         function toggleDarkMode() {
@@ -2143,6 +2185,7 @@
             };
 
             orderDatabase.unshift(newOrder);
+            saveStoredOrders(orderDatabase);
 
             closeModal('booking-modal');
 
@@ -2176,6 +2219,7 @@
         }
 
         function searchOrderStatus() {
+            orderDatabase = getStoredOrders();
             const inputCode = document.getElementById('status-search-code').value.trim().toUpperCase();
             const resultCard = document.getElementById('status-result-card');
             const emptyPrompt = document.getElementById('status-empty-prompt');
@@ -2219,6 +2263,16 @@
             document.getElementById('track-user').innerText = `${order.userName} (${order.company})`;
             document.getElementById('track-file').innerText = order.file;
             document.getElementById('track-status-message-box').innerHTML = order.statusDesc;
+
+            // RENDER PROOF OF BROADCAST PHOTO FROM ADMIN IF AVAILABLE
+            const proofBox = document.getElementById('track-proof-box');
+            const proofImg = document.getElementById('track-proof-img');
+            if (order.proofImg && (order.status === 'diproses' || order.status === 'terkonfirmasi')) {
+                if (proofImg) proofImg.src = order.proofImg;
+                if (proofBox) proofBox.classList.remove('hidden');
+            } else {
+                if (proofBox) proofBox.classList.add('hidden');
+            }
 
             const badgeContainer = document.getElementById('track-status-badge-container');
             const step1 = document.getElementById('step-track-1');
