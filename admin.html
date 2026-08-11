@@ -992,6 +992,11 @@
             setTimeout(() => { toast.classList.add('hidden'); }, 4000);
         }
 
+        // LISTEN FOR REAL-TIME NEW ORDERS FROM USER PANEL (INDEX.HTML)
+        window.addEventListener('storage', () => {
+            renderAdminTable();
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
             checkAdminSession();
         });
