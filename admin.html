@@ -611,8 +611,12 @@
             document.getElementById('modal-manage-file').innerText = `📁 Materi: ${order.file}`;
 
             document.getElementById('modal-status-select').value = order.status;
-            let cleanDesc = order.statusDesc ? order.statusDesc.replace(/<[^>]*>?/gm, '') : '';
-            document.getElementById('modal-status-notes').value = cleanDesc;
+            let rawNote = order.statusDesc || '';
+            let cleanNote = rawNote.includes('<br>') ? rawNote.split('<br>')[1] : rawNote.replace(/<[^>]*>?/gm, '');
+            if (!cleanNote || cleanNote.length < 5) {
+                cleanNote = 'Permohonan sewa lokasi videotron telah disetujui resmi oleh Diskominfo Salatiga dan materi siap ditayangkan.';
+            }
+            document.getElementById('modal-status-notes').value = cleanNote.trim();
 
             document.getElementById('admin-manage-modal').classList.remove('hidden');
             document.getElementById('admin-manage-modal').classList.add('flex');
@@ -637,7 +641,7 @@
             if (index !== -1) {
                 orders[index].status = newStatus;
                 if (newStatus === 'menunggu') {
-                    orders[index].statusLabel = 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO';
+                    orders[index].statusLabel = 'MENUNGGU VERIFIKASI DISKOMINFO';
                     orders[index].statusDesc = `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>${newNotes}`;
                 } else if (newStatus === 'diproses') {
                     orders[index].statusLabel = 'SEDANG DIPROSES / UJI TAYANG';

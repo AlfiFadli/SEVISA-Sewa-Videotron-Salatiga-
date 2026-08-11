@@ -1849,6 +1849,18 @@
         // DEFAULT INITIAL ORDERS (SYNCED WITH LOCALSTORAGE AND ADMIN PORTAL)
         const DEFAULT_INITIAL_ORDERS = [
             {
+                code: 'SVS-148972',
+                userName: 'Alfi Fadli',
+                company: 'Pt Mencari Cinta sejati',
+                location: 'Selasar Kartini',
+                dates: '2026-08-11 s.d. 2026-09-11 (5 Bulan • Produk Rokok (+25%) • Rp 121.043.750)',
+                file: 'logo savisa.jpeg',
+                status: 'terkonfirmasi',
+                statusLabel: 'TERKONFIRMASI & SIAP PENAYANGAN',
+                statusDesc: '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong><br>Selamat! Permohonan penyewaan videotron lokasi Selasar Kartini (5 Bulan) telah disetujui resmi oleh Diskominfo Kota Salatiga dan materi iklan siap disiarkan di layar videotron.',
+                proofImg: 'header_banner.jpg'
+            },
+            {
                 code: 'SVS-20260810-101',
                 userName: 'Budi Santoso',
                 company: 'PT Salatiga Digital Indo',
@@ -1888,13 +1900,23 @@
 
         function getStoredOrders() {
             const saved = localStorage.getItem('sevisa_orders');
+            let orders = DEFAULT_INITIAL_ORDERS;
             if (saved) {
-                try {
-                    return JSON.parse(saved);
+                try { 
+                    orders = JSON.parse(saved); 
+                    // Auto-update SVS-148972 to terkonfirmasi if user requests next stage
+                    const targetIdx = orders.findIndex(o => o.code === 'SVS-148972');
+                    if (targetIdx !== -1) {
+                        orders[targetIdx].status = 'terkonfirmasi';
+                        orders[targetIdx].statusLabel = 'TERKONFIRMASI & SIAP PENAYANGAN';
+                        orders[targetIdx].statusDesc = '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong><br>Selamat! Permohonan penyewaan videotron lokasi Selasar Kartini (5 Bulan) telah disetujui resmi oleh Diskominfo Kota Salatiga dan materi iklan siap disiarkan di layar videotron.';
+                    } else {
+                        orders.unshift(DEFAULT_INITIAL_ORDERS[0]);
+                    }
                 } catch(e) {}
             }
-            localStorage.setItem('sevisa_orders', JSON.stringify(DEFAULT_INITIAL_ORDERS));
-            return DEFAULT_INITIAL_ORDERS;
+            localStorage.setItem('sevisa_orders', JSON.stringify(orders));
+            return orders;
         }
 
         function saveStoredOrders(orders) {
@@ -2274,7 +2296,31 @@
             document.getElementById('track-dates').innerText = order.dates;
             document.getElementById('track-user').innerText = `${order.userName} (${order.company})`;
             document.getElementById('track-file').innerText = order.file;
-            document.getElementById('track-status-message-box').innerHTML = order.statusDesc;
+
+            // CLEAN MESSAGE BOX FORMATTING
+            let noteContent = order.statusDesc || '';
+            if (noteContent.includes('<br>')) {
+                noteContent = noteContent.split('<br>').slice(1).join('<br>');
+            } else {
+                noteContent = noteContent.replace(/^(📌|⚙️|✅)\s*<strong>.*?<\/strong>\s*/g, '');
+            }
+
+            let boxHeader = '📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong>';
+            let boxClass = 'p-3.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl text-xs text-amber-900 dark:text-amber-200 leading-relaxed font-medium';
+
+            if (order.status === 'diproses') {
+                boxHeader = '⚙️ <strong>Status: Sedang Diproses / Review Uji Tayang</strong>';
+                boxClass = 'p-3.5 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl text-xs text-blue-900 dark:text-blue-200 leading-relaxed font-medium';
+            } else if (order.status === 'terkonfirmasi') {
+                boxHeader = '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong>';
+                boxClass = 'p-3.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs text-emerald-900 dark:text-emerald-200 leading-relaxed font-medium';
+            }
+
+            const messageBoxEl = document.getElementById('track-status-message-box');
+            if (messageBoxEl) {
+                messageBoxEl.className = boxClass;
+                messageBoxEl.innerHTML = `${boxHeader}<br>${noteContent || 'Materi iklan Anda telah disetujui resmi oleh Diskominfo Salatiga dan siap ditayangkan sesuai jadwal.'}`;
+            }
 
             // RENDER PROOF OF BROADCAST PHOTO FROM ADMIN IF AVAILABLE
             const proofBox = document.getElementById('track-proof-box');
