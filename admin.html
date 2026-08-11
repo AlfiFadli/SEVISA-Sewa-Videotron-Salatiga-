@@ -187,6 +187,9 @@
                     <button onclick="switchCMSModule('users')" id="tab-cms-users" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
                         👥 Kelola User Terdaftar
                     </button>
+                    <button onclick="switchCMSModule('chat')" id="tab-cms-chat" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+                        💬 Inbox Live Chat Users
+                    </button>
                 </div>
 
                 <!-- ========================================================================= -->
@@ -422,6 +425,53 @@
                             <tbody id="admin-user-table-body" class="divide-y divide-slate-200 dark:divide-slate-800 font-medium"></tbody>
                         </table>
                     </div>
+                <!-- ========================================================================= -->
+                <!-- MODULE 7: LIVE CHAT KONSULTASI USERS -->
+                <!-- ========================================================================= -->
+                <div id="sec-cms-chat" class="hidden space-y-6">
+                    <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <h3 class="text-base font-black text-slate-900 dark:text-white">Kotak Masuk Live Chat & Konsultasi Real-Time</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Pantau dan balas pesan konsultasi penyewaan dari pengguna publik secara real-time.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2 bg-slate-950 text-white rounded-3xl p-6 border border-slate-800 space-y-4 shadow-xl">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <span class="text-xs font-black text-sky-400 uppercase tracking-widest flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                                    <span>RIWAYAT OBROLAN LIVE CHAT USERS</span>
+                                </span>
+                                <button onclick="renderAdminChatBox()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-extrabold rounded-lg">
+                                    🔄 Refresh Chat
+                                </button>
+                            </div>
+
+                            <div id="admin-chat-messages-container" class="h-72 overflow-y-auto p-4 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3 text-xs font-medium">
+                                <!-- CHAT MESSAGES POPULATE DYNAMICALLY -->
+                            </div>
+
+                            <form onsubmit="sendAdminChatMessage(event)" class="flex gap-2 pt-2">
+                                <input type="text" id="admin-chat-input" required placeholder="Tulis balasan resmi Diskominfo..." class="flex-1 p-3 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-medium focus:outline-none">
+                                <button type="submit" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition">
+                                    Kirim Balasan &rarr;
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 space-y-4">
+                            <h4 class="font-black text-slate-900 dark:text-white text-xs uppercase tracking-wider">💡 Petunjuk Respon Admin:</h4>
+                            <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed">
+                                <li class="flex items-start gap-2">
+                                    <span>•</span>
+                                    <span>Balasan Admin akan **langsung muncul secara real-time** pada widget floating chat pengguna di <strong class="text-emerald-600">index.html</strong>.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span>•</span>
+                                    <span>Gunakan bahasa resmi, ramah, dan informatif mewakili Dinas Komunikasi dan Informatika Kota Salatiga.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -598,8 +648,9 @@
                                 <option value="terkonfirmasi" ${o.status === 'terkonfirmasi' ? 'selected' : ''}>🟢 3. TERKONFIRMASI & TAYANG</option>
                             </select>
                         </td>
-                        <td class="p-3.5 text-center">
-                            <button onclick="openAdminManageModal('${o.code}')" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-[10px] rounded-lg shadow">⚙️ Catatan & Foto</button>
+                        <td class="p-3.5 text-center flex items-center justify-center gap-1.5 pt-4">
+                            <button onclick="openAdminManageModal('${o.code}')" class="px-2.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-[10px] rounded-lg shadow">⚙️ Catatan & Foto</button>
+                            <button onclick="printAdminOrderInvoice('${o.code}')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-[10px] rounded-lg border border-slate-700 shadow">📄 Cetak Invoice</button>
                         </td>
                     </tr>
                 `;
@@ -985,7 +1036,7 @@
 
         // TAB MODULE SWITCHER
         function switchCMSModule(modName) {
-            const modules = ['transaksi', 'lokasi', 'portofolio', 'blog', 'tentang', 'users'];
+            const modules = ['transaksi', 'lokasi', 'portofolio', 'blog', 'tentang', 'users', 'chat'];
             modules.forEach(m => {
                 const sec = document.getElementById('sec-cms-' + m);
                 const tab = document.getElementById('tab-cms-' + m);
@@ -998,6 +1049,80 @@
 
             if (activeSec) activeSec.classList.remove('hidden');
             if (activeTab) activeTab.className = "px-4 py-2.5 rounded-xl bg-slate-900 text-white shadow-md font-black shrink-0";
+            if (modName === 'chat') renderAdminChatBox();
+        }
+
+        // PRINT OFFICIAL INVOICE FROM ADMIN
+        function printAdminOrderInvoice(code) {
+            const orders = getStoredOrders();
+            const order = orders.find(o => o.code === code);
+            if (!order) return;
+
+            window.open(`index.html#status-check`, '_blank');
+            showAdminToast('📄 BUKA FAKTUR INVOICE', `Faktur Invoice ${code} disiapkan di tab pengguna.`);
+        }
+
+        // ADMIN LIVE CHAT MANAGEMENT
+        function renderAdminChatBox() {
+            const container = document.getElementById('admin-chat-messages-container');
+            if (!container) return;
+            const saved = localStorage.getItem('sevisa_chats');
+            let chats = saved ? JSON.parse(saved) : [];
+
+            if (chats.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 text-slate-500 text-xs">
+                        💬 Belum ada percakapan masuk dari pengguna.
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            chats.forEach(msg => {
+                if (msg.sender === 'user') {
+                    html += `
+                        <div class="bg-slate-800 text-slate-100 p-3 rounded-2xl max-w-[85%] space-y-1 shadow-sm border border-slate-700">
+                            <strong class="font-bold text-[10px] text-sky-400 block font-mono">👤 User: ${msg.userName || 'Pengguna'} (${msg.time || ''})</strong>
+                            <p class="text-[11px] leading-relaxed">${msg.text}</p>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="bg-emerald-950 text-emerald-200 p-3 rounded-2xl max-w-[85%] ml-auto space-y-1 shadow-sm border border-emerald-800">
+                            <strong class="font-bold text-[10px] text-emerald-400 block text-right">🛡️ Admin Diskominfo (Anda)</strong>
+                            <p class="text-[11px] leading-relaxed">${msg.text}</p>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendAdminChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('admin-chat-input');
+            const msgText = input.value.trim();
+            if (!msgText) return;
+
+            const saved = localStorage.getItem('sevisa_chats');
+            let chats = saved ? JSON.parse(saved) : [];
+
+            chats.push({
+                sender: 'admin',
+                userName: 'Admin Diskominfo',
+                text: msgText,
+                time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+            });
+
+            localStorage.setItem('sevisa_chats', JSON.stringify(chats));
+            window.dispatchEvent(new Event('storage'));
+
+            input.value = '';
+            renderAdminChatBox();
+            showAdminToast('💬 CHAT TERKIRIM', 'Balasan Admin dikirim ke layar user real-time.');
         }
 
         function toggleDarkMode() {

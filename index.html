@@ -240,6 +240,158 @@
     </div>
 
     <!-- ========================================================================= -->
+    <!-- MODAL CETAK INVOICE & KUITANSI RESMI DISKOMINFO -->
+    <!-- ========================================================================= -->
+    <div id="official-invoice-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-2xl bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 my-auto relative border-4 border-slate-200" id="invoice-print-area">
+            
+            <button onclick="closeModal('official-invoice-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold p-1 print:hidden">&times;</button>
+
+            <!-- INVOICE KOP SURAT RESMI PEMKOT SALATIGA -->
+            <div class="flex items-center justify-between border-b-2 border-slate-900 pb-4 gap-4">
+                <div class="flex items-center gap-3">
+                    <img src="logo.png" alt="Logo Pemkot Salatiga" class="w-14 h-14 object-contain">
+                    <div>
+                        <span class="text-[10px] font-black tracking-widest text-slate-500 uppercase block">PEMERINTAH KOTA SALATIGA</span>
+                        <h2 class="text-lg font-black text-slate-900 leading-tight uppercase">DINAS KOMUNIKASI DAN INFORMATIKA</h2>
+                        <p class="text-[10px] text-slate-600">Jl. Sukowati No. 51 Salatiga • Telp: (0298) 326 767 • Web: salatiga.go.id</p>
+                    </div>
+                </div>
+                <div class="text-right shrink-0">
+                    <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold text-[9px] rounded uppercase tracking-wider block mb-1">TERBAYAR / DISERAHKAN</span>
+                    <strong id="inv-no" class="font-mono text-xs font-black text-blue-700 block">INV/SVS/2026/08/148972</strong>
+                    <span id="inv-date" class="text-[10px] text-slate-500 block font-medium">Tgl: 11 Agustus 2026</span>
+                </div>
+            </div>
+
+            <!-- INVOICE TITLE -->
+            <div class="text-center py-2 bg-slate-100 rounded-xl border border-slate-200 space-y-0.5">
+                <h3 class="text-base font-black uppercase text-slate-900 tracking-wider">KUITANSI & NOTA RESMI PENYEWAAN VIDEOTRON</h3>
+                <p class="text-[10px] text-slate-600 font-medium">Berdasarkan SK Wali Kota Salatiga No. 974/148/2022 & Perwali No. 49 Tahun 2018</p>
+            </div>
+
+            <!-- INVOICE DETAILS GRID -->
+            <div class="grid grid-cols-2 gap-4 text-xs">
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                    <span class="text-[9px] font-extrabold text-slate-400 uppercase block">DATA PEMESAN / KLIEN:</span>
+                    <strong id="inv-client-name" class="font-black text-slate-900 block">Alfi Fadli</strong>
+                    <span id="inv-client-company" class="text-slate-600 block text-[11px]">Pt Mencari Cinta sejati</span>
+                    <span id="inv-client-nik" class="text-slate-500 block font-mono text-[10px]">NIK: 3373012345670001</span>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                    <span class="text-[9px] font-extrabold text-slate-400 uppercase block">RINCIAN OBJEK SEWA:</span>
+                    <strong id="inv-location" class="font-black text-slate-900 block">Videotron Selasar Kartini</strong>
+                    <span id="inv-dates" class="text-slate-600 block text-[11px]">2026-08-11 s.d. 2026-09-11 (5 Bulan)</span>
+                    <span id="inv-file" class="text-emerald-700 block font-mono text-[10px] font-bold">Materi: logo savisa.jpeg</span>
+                </div>
+            </div>
+
+            <!-- PAYMENT BREAKDOWN TABLE -->
+            <div class="overflow-hidden rounded-xl border border-slate-200 text-xs">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px]">
+                            <th class="p-2.5">Deskripsi Layanan DOOH</th>
+                            <th class="p-2.5 text-center">Kategori</th>
+                            <th class="p-2.5 text-right">Jumlah PAD (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 font-medium">
+                        <tr>
+                            <td class="p-2.5" id="inv-table-desc">Sewa Layanan Penyiaran Videotron Selasar Kartini (5 Bulan)</td>
+                            <td class="p-2.5 text-center font-bold text-rose-600" id="inv-table-cat">Produk Rokok (+25%)</td>
+                            <td class="p-2.5 text-right font-black font-mono text-slate-900" id="inv-table-price">Rp 121.043.750</td>
+                        </tr>
+                        <tr class="bg-slate-50 font-bold">
+                            <td colspan="2" class="p-2.5 text-right uppercase text-[10px]">Total Retribusi PAD Salatiga:</td>
+                            <td class="p-2.5 text-right font-black font-mono text-blue-700 text-sm" id="inv-total-final">Rp 121.043.750</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- VERIFICATION STAMP & SIGNATURE -->
+            <div class="flex items-center justify-between pt-2 border-t border-slate-200 text-xs">
+                <div class="space-y-1">
+                    <div class="w-20 h-20 bg-slate-900 text-white p-2 rounded-xl border border-slate-800 flex flex-col items-center justify-center text-center">
+                        <svg class="w-10 h-10 fill-current text-sky-400" viewBox="0 0 24 24"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm13-2h3v2h-3zm-3 0h2v3h-2zm3 3h3v5h-3zm-3 2h2v3h-2zm-3-2h2v2h-2z"/></svg>
+                        <span class="text-[7px] font-mono tracking-widest text-slate-400 mt-1 uppercase">QR AUTENTIK</span>
+                    </div>
+                </div>
+                <div class="text-center space-y-8">
+                    <div>
+                        <span class="text-[10px] text-slate-500 block">Salatiga, 11 Agustus 2026</span>
+                        <strong class="text-xs font-black text-slate-900 uppercase block">An. Kepala Diskominfo Kota Salatiga</strong>
+                        <span class="text-[10px] text-slate-500 block">Bendahara Penerimaan PAD</span>
+                    </div>
+                    <div class="font-bold border-b border-slate-900 inline-block px-4">
+                        ( DISKOMINFO SALATIGA RESMI )
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRINT ACTIONS BUTTONS -->
+            <div class="pt-4 flex gap-3 print:hidden border-t border-slate-200">
+                <button onclick="window.print()" class="flex-1 py-3 bg-gradient-to-r from-blue-700 to-indigo-800 hover:from-blue-800 hover:to-indigo-900 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
+                    🖨️ CETAK / SIMPAN KE PDF &rarr;
+                </button>
+                <button onclick="closeModal('official-invoice-modal')" class="px-5 py-3 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">
+                    Tutup
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- FLOATING LIVE CHAT DRAWER WIDGET (USER ↔️ ADMIN REAL-TIME) -->
+    <!-- ========================================================================= -->
+    <div id="live-chat-drawer" class="fixed bottom-5 right-5 z-50 flex flex-col items-end">
+        
+        <!-- CHAT WINDOW (HIDDEN BY DEFAULT) -->
+        <div id="chat-window-box" class="hidden w-80 sm:w-96 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex-col mb-3 transition-all duration-300">
+            <!-- CHAT HEADER -->
+            <div class="p-4 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-emerald-500 text-white font-black text-xs flex items-center justify-center shadow-md">
+                        💬
+                    </div>
+                    <div>
+                        <h4 class="font-black text-xs text-white">Live Chat Diskominfo Salatiga</h4>
+                        <span class="text-[9px] font-bold text-emerald-400 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Petugas Admin Online
+                        </span>
+                    </div>
+                </div>
+                <button onclick="toggleLiveChatDrawer()" class="text-slate-400 hover:text-white text-lg font-bold p-1">&times;</button>
+            </div>
+
+            <!-- CHAT MESSAGES BODY -->
+            <div id="chat-messages-container" class="p-4 h-64 overflow-y-auto space-y-3 text-xs bg-slate-50 dark:bg-slate-950/60 font-medium">
+                <div class="bg-blue-100 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 text-blue-950 dark:text-blue-200 p-3 rounded-2xl max-w-[85%] space-y-1 shadow-sm">
+                    <strong class="font-bold text-[10px] text-blue-600 block">👤 Admin Diskominfo Salatiga</strong>
+                    <p class="text-[11px] leading-relaxed">Halo! Selamat datang di layanan konsultasi penyewaan videotron resmi Kota Salatiga. Ada yang bisa kami bantu mengenai jadwal slot atau berkas pengajuan?</p>
+                </div>
+            </div>
+
+            <!-- CHAT INPUT FORM -->
+            <form onsubmit="sendUserChatMessage(event)" class="p-3 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex gap-2">
+                <input type="text" id="chat-user-input" required placeholder="Tulis pertanyaan Anda..." class="flex-1 p-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white font-medium focus:outline-none">
+                <button type="submit" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-md transition">
+                    Kirim
+                </button>
+            </form>
+        </div>
+
+        <!-- TOGGLE BUTTON -->
+        <button onclick="toggleLiveChatDrawer()" class="px-4 py-3 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs rounded-full shadow-2xl flex items-center gap-2 border-2 border-white dark:border-slate-800 hover:scale-105 transition duration-300">
+            <span class="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
+            <span>💬 Live Chat Diskominfo</span>
+        </button>
+
+    </div>
+
+    <!-- ========================================================================= -->
     <!-- MAIN APPLICATION WRAPPER -->
     <!-- ========================================================================= -->
     <div id="main-app-wrapper" class="flex flex-col min-h-screen">
@@ -1303,6 +1455,16 @@
                                 <img id="track-proof-img" src="header_banner.jpg" alt="Foto Bukti Penayangan Videotron" class="w-full h-auto max-h-56 object-cover rounded-xl">
                             </div>
                             <p class="text-[10px] text-slate-300 italic text-center">Dokumentasi penayangan materi iklan di titik lokasi videotron resmi Diskominfo Salatiga.</p>
+                        </div>
+
+                        <!-- ACTION BUTTONS: INVOICE & SUPPORT -->
+                        <div class="pt-2 flex flex-col sm:flex-row gap-3">
+                            <button onclick="openOfficialInvoiceModal()" class="flex-1 py-3.5 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 hover:from-slate-800 hover:to-blue-900 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl border border-sky-400/40 shadow-lg transition flex items-center justify-center gap-2">
+                                <span>📄</span> Cetak Kuitansi / Invoice Resmi (PDF)
+                            </button>
+                            <button onclick="openLiveChatDrawer()" class="py-3.5 px-5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                                <span>💬</span> Chat Admin Diskominfo
+                            </button>
                         </div>
 
                     </div>
@@ -3009,11 +3171,105 @@
             }
         }
 
-        // LISTEN FOR CMS DATA UPDATES & REAL-TIME STATUS CHANGES FROM ADMIN PORTAL (ADMIN.HTML)
+        // OPEN PRINTABLE INVOICE MODAL
+        function openOfficialInvoiceModal() {
+            const inputCode = document.getElementById('status-search-code').value.trim().toUpperCase() || 'SVS-148972';
+            const found = orderDatabase.find(o => o.code === inputCode) || orderDatabase[0];
+
+            document.getElementById('inv-no').innerText = `INV/SVS/2026/08/${found.code.replace('SVS-', '')}`;
+            document.getElementById('inv-client-name').innerText = found.userName || 'Alfi Fadli';
+            document.getElementById('inv-client-company').innerText = found.company || 'Personal';
+            document.getElementById('inv-location').innerText = `Videotron ${found.location}`;
+            document.getElementById('inv-dates').innerText = found.dates;
+            document.getElementById('inv-file').innerText = `Materi: ${found.file}`;
+            document.getElementById('inv-table-desc').innerText = `Sewa Layanan Penyiaran Videotron ${found.location} (${found.dates})`;
+
+            openModal('official-invoice-modal');
+        }
+
+        // TOGGLE & SEND LIVE CHAT
+        function toggleLiveChatDrawer() {
+            const box = document.getElementById('chat-window-box');
+            if (box.classList.contains('hidden')) {
+                box.classList.remove('hidden');
+                box.classList.add('flex');
+                renderLiveChatMessages();
+            } else {
+                box.classList.add('hidden');
+                box.classList.remove('flex');
+            }
+        }
+
+        function openLiveChatDrawer() {
+            const box = document.getElementById('chat-window-box');
+            box.classList.remove('hidden');
+            box.classList.add('flex');
+            renderLiveChatMessages();
+        }
+
+        function renderLiveChatMessages() {
+            const container = document.getElementById('chat-messages-container');
+            const saved = localStorage.getItem('sevisa_chats');
+            let chats = saved ? JSON.parse(saved) : [];
+
+            let html = `
+                <div class="bg-blue-100 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 text-blue-950 dark:text-blue-200 p-3 rounded-2xl max-w-[85%] space-y-1 shadow-sm">
+                    <strong class="font-bold text-[10px] text-blue-600 block">👤 Admin Diskominfo Salatiga</strong>
+                    <p class="text-[11px] leading-relaxed">Halo! Selamat datang di layanan konsultasi penyewaan videotron resmi Kota Salatiga. Ada yang bisa kami bantu mengenai jadwal slot atau berkas pengajuan?</p>
+                </div>
+            `;
+
+            chats.forEach(msg => {
+                if (msg.sender === 'user') {
+                    html += `
+                        <div class="bg-emerald-600 text-white p-3 rounded-2xl max-w-[85%] ml-auto space-y-1 shadow-sm">
+                            <strong class="font-bold text-[10px] text-emerald-200 block text-right">${msg.userName || 'Anda'}</strong>
+                            <p class="text-[11px] leading-relaxed">${msg.text}</p>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="bg-blue-100 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 text-blue-950 dark:text-blue-200 p-3 rounded-2xl max-w-[85%] space-y-1 shadow-sm">
+                            <strong class="font-bold text-[10px] text-blue-600 block">👤 Admin Diskominfo Salatiga</strong>
+                            <p class="text-[11px] leading-relaxed">${msg.text}</p>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendUserChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-user-input');
+            const msgText = input.value.trim();
+            if (!msgText) return;
+
+            const saved = localStorage.getItem('sevisa_chats');
+            let chats = saved ? JSON.parse(saved) : [];
+
+            chats.push({
+                sender: 'user',
+                userName: currentUser ? currentUser.name : 'Pengguna',
+                text: msgText,
+                time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+            });
+
+            localStorage.setItem('sevisa_chats', JSON.stringify(chats));
+            window.dispatchEvent(new Event('storage'));
+
+            input.value = '';
+            renderLiveChatMessages();
+        }
+
+        // LISTEN FOR CMS DATA UPDATES & REAL-TIME STATUS / CHAT CHANGES FROM ADMIN PORTAL (ADMIN.HTML)
         window.addEventListener('storage', () => {
             orderDatabase = getStoredOrders();
             renderPortfolioGrid(getMergedPortfolioData());
             renderAboutPageCMS();
+            renderLiveChatMessages();
 
             // AUTOMATICALLY REFRESH STATUS RESULT CARD IF USER HAS A CODE ENTERED & RESULT IS VISIBLE
             const searchInput = document.getElementById('status-search-code');
@@ -3024,11 +3280,6 @@
                 const foundOrder = orderDatabase.find(o => o.code === inputCode);
                 if (foundOrder && resultCard && !resultCard.classList.contains('hidden')) {
                     renderOrderStatusCard(foundOrder);
-                    show3DToast(
-                        '🔔 STATUS DIPERBARUI ADMIN!',
-                        `Status transaksi <strong class="font-mono text-amber-400 font-black">${foundOrder.code}</strong> baru saja diperbarui oleh Admin Diskominfo menjadi:<br><br><span class="px-3 py-1 bg-sky-950 border border-sky-400/40 text-sky-300 font-extrabold text-xs rounded-xl inline-block my-1 uppercase tracking-wider">${foundOrder.statusLabel || foundOrder.status}</span>`,
-                        'info'
-                    );
                 }
             }
         });
