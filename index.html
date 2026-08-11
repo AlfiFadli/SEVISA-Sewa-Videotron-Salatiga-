@@ -292,11 +292,6 @@
                         <svg id="header-moon-icon" class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                     </button>
 
-                    <a href="admin.html" target="_blank" class="px-2.5 py-1.5 text-xs font-bold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-slate-800 hover:bg-sky-100 dark:hover:bg-slate-700 border border-sky-200 dark:border-slate-700 rounded-lg transition flex items-center gap-1" title="Buka Portal Admin Diskominfo">
-                        <span>🔒</span>
-                        <span class="hidden xl:inline">Portal Admin</span>
-                    </a>
-
                     <button onclick="openModal('kontak-modal')" class="px-3 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition flex items-center gap-1">
                         <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                         <span class="hidden sm:inline">Kontak</span>
@@ -2838,13 +2833,24 @@
             }
         };
 
+        // DYNAMIC PORTFOLIO MERGER FROM LOCALSTORAGE CMS
+        function getMergedPortfolioData() {
+            let customSaved = localStorage.getItem('sevisa_portfolio');
+            let customItems = customSaved ? JSON.parse(customSaved) : [];
+            return [...customItems, ...PORTFOLIO_DATABASE];
+        }
+
         function openBlogArticleDetail(articleKey) {
-            const data = BLOG_ARTICLES_CONTENT[articleKey] || BLOG_ARTICLES_CONTENT['VDT-01'];
+            let savedBlogs = localStorage.getItem('sevisa_blogs');
+            let customBlogs = savedBlogs ? JSON.parse(savedBlogs) : [];
+            let customFound = customBlogs.find(b => b.id === articleKey);
+
+            let data = customFound || BLOG_ARTICLES_CONTENT[articleKey] || BLOG_ARTICLES_CONTENT['VDT-01'];
             
-            document.getElementById('art-det-subheading').innerText = data.subheading;
+            document.getElementById('art-det-subheading').innerText = data.subheading || data.title;
             document.getElementById('art-det-p1').innerText = data.p1;
             document.getElementById('art-det-p2').innerText = data.p2;
-            document.getElementById('art-det-p3').innerText = data.p3;
+            document.getElementById('art-det-p3').innerText = data.p3 || '';
 
             document.getElementById('blog-list-view').classList.add('hidden');
             document.getElementById('blog-detail-view').classList.remove('hidden');
@@ -2880,7 +2886,7 @@
             }
 
             if (pageId === 'proyek') {
-                renderPortfolioGrid(PORTFOLIO_DATABASE);
+                renderPortfolioGrid(getMergedPortfolioData());
             }
 
             if (pageId === 'blog') {
@@ -2912,10 +2918,16 @@
             document.getElementById(id).classList.remove('flex');
         }
 
+        // LISTEN FOR CMS DATA UPDATES FROM ADMIN PORTAL (ADMIN.HTML)
+        window.addEventListener('storage', () => {
+            orderDatabase = getStoredOrders();
+            renderPortfolioGrid(getMergedPortfolioData());
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
             renderVideotronCards(VIDEOTRON_DATA);
-            renderPortfolioGrid(PORTFOLIO_DATABASE);
+            renderPortfolioGrid(getMergedPortfolioData());
             updateUserNavArea();
             updateProfileStatusUI();
         });

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Admin Diskominfo - SEVISA (Sewa Videotron Salatiga)</title>
+    <title>Portal CMS Admin Diskominfo - SEVISA (Sewa Videotron Salatiga)</title>
     
     <!-- TAILWIND CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -41,296 +41,390 @@
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
 
     <!-- ========================================================================= -->
-    <!-- TOP HEADER NAVBAR ADMIN DISKOMINFO -->
+    <!-- SCREEN 1: GERBANG LOGIN KHUSUS ADMIN DISKOMINFO -->
     <!-- ========================================================================= -->
-    <header class="sticky top-0 z-40 bg-slate-900/95 dark:bg-slate-950/95 text-white border-b border-slate-800 glass-header shadow-xl">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+    <div id="admin-login-screen" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-white text-center relative">
             
-            <!-- LOGO & BRAND TITLE -->
-            <div class="flex items-center gap-3">
-                <img src="logo.png" alt="SEVISA Admin Logo" class="h-10 w-10 rounded-xl object-contain border-2 border-brand-500 bg-slate-900 shadow-md">
-                <div>
-                    <div class="flex items-center gap-2">
-                        <span class="px-2 py-0.5 bg-red-600 text-white font-extrabold text-[9px] rounded uppercase tracking-widest">PORTAL UTAMA</span>
-                        <span class="text-xs font-mono font-bold text-sky-400">PEMKOT SALATIGA</span>
-                    </div>
-                    <h1 class="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
-                        <span>Dashboard Admin Diskominfo</span>
-                        <span class="text-xs text-amber-400 font-medium">SEVISA</span>
-                    </h1>
-                </div>
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-red-600 via-brand-600 to-sky-400 p-3.5 mx-auto shadow-xl border-2 border-slate-700">
+                <img src="logo.png" alt="SEVISA Admin" class="w-full h-full object-contain">
             </div>
 
-            <!-- RIGHT ACTION BUTTONS -->
-            <div class="flex items-center gap-3">
-                
-                <!-- DARK MODE TOGGLE -->
-                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition border border-slate-700" title="Ubah Mode Tampilan">
-                    <svg id="admin-moon-icon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-                    <svg id="admin-sun-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                </button>
-
-                <!-- LINK KE WEBSITE PUBLIK SEVISA -->
-                <a href="index.html" target="_blank" class="px-3.5 py-2 bg-gradient-to-r from-sky-600 to-brand-600 hover:from-sky-500 hover:to-brand-500 text-white font-extrabold text-xs rounded-xl shadow-lg transition flex items-center gap-1.5 border border-sky-400/40">
-                    <span>🌐</span>
-                    <span class="hidden sm:inline">Lihat Website Publik</span>
-                    <span class="sm:hidden">Publik</span>
-                </a>
-
-                <!-- ADMIN PROFILE BADGE -->
-                <div class="hidden lg:flex items-center gap-2 pl-3 border-l border-slate-800">
-                    <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow">
-                        🏛️
-                    </div>
-                    <div class="text-left text-xs">
-                        <span class="font-extrabold text-white block">Tim Diskominfo</span>
-                        <span class="text-[10px] text-emerald-400 block font-mono">Status: Online</span>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </header>
-
-    <!-- ========================================================================= -->
-    <!-- MAIN ADMIN DASHBOARD CONTENT -->
-    <!-- ========================================================================= -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        
-        <!-- WELCOME BANNER DISKOMINFO -->
-        <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-2xl relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div class="space-y-2 relative z-10 max-w-2xl">
-                <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-extrabold text-[10px] rounded-full uppercase tracking-wider">
-                    SISTEM PENGELOLAAN MEDIA REKLAME DISKOMINFO KOTA SALATIGA
+            <div class="space-y-1">
+                <span class="px-3 py-1 bg-red-600/30 text-red-400 border border-red-500/40 text-[10px] font-black rounded-full uppercase tracking-widest">
+                    AKSES KHUSUS INTERNAL
                 </span>
-                <h2 class="text-2xl sm:text-3xl font-black text-white">Panel Pusat Pengawasan & Verifikasi SEVISA</h2>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    Kelola permohonan penyewaan videotron dari masyarakat & pelaku usaha, verifikasi materi iklan, perbarui status tayang real-time, dan unggah foto bukti penayangan.
-                </p>
+                <h2 class="text-xl sm:text-2xl font-black text-white">Portal CMS Admin Diskominfo</h2>
+                <p class="text-xs text-slate-400">Masuk dengan akun terotorisasi untuk mengelola seluruh konten & transaksi SEVISA Kota Salatiga.</p>
             </div>
-            
-            <div class="shrink-0 flex gap-2 relative z-10">
-                <button onclick="syncAndRefreshAdminData()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-xs rounded-xl border border-slate-700 transition flex items-center gap-2 shadow-md">
-                    <span>🔄</span> Refresh Data Real-Time
+
+            <form onsubmit="handleAdminLoginSubmit(event)" class="space-y-4 text-left text-xs">
+                <div>
+                    <label class="block font-bold mb-1 text-slate-300 uppercase tracking-wider">Email Staf Diskominfo *</label>
+                    <input type="email" id="admin-login-email" value="admin@salatiga.go.id" required placeholder="admin@salatiga.go.id" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono font-bold focus:border-sky-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1 text-slate-300 uppercase tracking-wider">Kata Sandi Akses *</label>
+                    <input type="password" id="admin-login-pass" value="admin123" required placeholder="••••••••" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono font-bold focus:border-sky-500 focus:outline-none">
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-red-600 via-brand-600 to-sky-600 hover:from-red-700 hover:to-sky-500 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
+                    MASUK KANTOOR CMS ADMIN DISKOMINFO &rarr;
+                </button>
+            </form>
+
+            <div class="pt-2 border-t border-slate-800">
+                <button onclick="quickAdminLogin()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-[11px] rounded-xl border border-slate-700 transition">
+                    ⚡ Masuk Demo Otomatis (1-Klik)
                 </button>
             </div>
+
+            <p class="text-[10px] text-slate-500">SEVISA • Pengelolaan Resmi Dinas Komunikasi dan Informatika Kota Salatiga</p>
         </div>
+    </div>
 
-        <!-- ========================================================================= -->
-        <!-- METRIK REKAPITULASI REAL-TIME (5 CARDS 3D) -->
-        <!-- ========================================================================= -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 text-xs">
-            
-            <!-- CARD 1: TOTAL PENGAJUAN -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-lg space-y-2">
-                <div class="flex items-center justify-between text-slate-400">
-                    <span class="font-extrabold uppercase text-[10px] tracking-wider">Total Pengajuan</span>
-                    <span class="text-lg">📋</span>
-                </div>
-                <div id="stat-total-orders" class="text-2xl font-black text-slate-900 dark:text-white">0</div>
-                <span class="text-[10px] text-slate-400 block font-medium">Permohonan Terdaftar</span>
-            </div>
-
-            <!-- CARD 2: MENUNGGU VERIFIKASI -->
-            <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 rounded-2xl p-5 shadow-lg space-y-2">
-                <div class="flex items-center justify-between text-amber-500">
-                    <span class="font-extrabold uppercase text-[10px] tracking-wider text-amber-600 dark:text-amber-400">Menunggu Verifikasi</span>
-                    <span class="text-lg">🟡</span>
-                </div>
-                <div id="stat-pending-orders" class="text-2xl font-black text-amber-600 dark:text-amber-400">0</div>
-                <span class="text-[10px] text-slate-400 block font-medium">Butuh Peninjauan Admin</span>
-            </div>
-
-            <!-- CARD 3: SEDANG DIPROSES -->
-            <div class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 rounded-2xl p-5 shadow-lg space-y-2">
-                <div class="flex items-center justify-between text-blue-500">
-                    <span class="font-extrabold uppercase text-[10px] tracking-wider text-blue-600 dark:text-blue-400">Uji Tayang / Proses</span>
-                    <span class="text-lg">🔵</span>
-                </div>
-                <div id="stat-processing-orders" class="text-2xl font-black text-blue-600 dark:text-blue-400">0</div>
-                <span class="text-[10px] text-slate-400 block font-medium">Jadwal Review Teknis</span>
-            </div>
-
-            <!-- CARD 4: TERKONFIRMASI TAYANG -->
-            <div class="bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/50 rounded-2xl p-5 shadow-lg space-y-2">
-                <div class="flex items-center justify-between text-emerald-500">
-                    <span class="font-extrabold uppercase text-[10px] tracking-wider text-emerald-600 dark:text-emerald-400">Terkonfirmasi Tayang</span>
-                    <span class="text-lg">🟢</span>
-                </div>
-                <div id="stat-approved-orders" class="text-2xl font-black text-emerald-600 dark:text-emerald-400">0</div>
-                <span class="text-[10px] text-slate-400 block font-medium">Iklan Aktif Disiarkan</span>
-            </div>
-
-            <!-- CARD 5: TOTAL EST. PAD -->
-            <div class="bg-gradient-to-tr from-slate-900 via-slate-800 to-blue-950 text-white rounded-2xl p-5 shadow-lg space-y-2 border border-sky-500/40">
-                <div class="flex items-center justify-between text-sky-300">
-                    <span class="font-extrabold uppercase text-[10px] tracking-widest">Est. Nilai Sewa (PAD)</span>
-                    <span class="text-lg">💰</span>
-                </div>
-                <div id="stat-total-revenue" class="text-lg font-black text-amber-400">Rp 0</div>
-                <span class="text-[10px] text-slate-300 block font-medium">Potensi Pendapatan Daerah</span>
-            </div>
-
-        </div>
-
-        <!-- ========================================================================= -->
-        <!-- TABBED NAVIGATION & MANAGEMENT SYSTEM -->
-        <!-- ========================================================================= -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
-            
-            <!-- CONTROL BAR: TABS & SEARCH -->
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+    <!-- ========================================================================= -->
+    <!-- SCREEN 2: MAIN DASHBOARD CMS ADMIN (SHOWN ON LOGIN) -->
+    <!-- ========================================================================= -->
+    <div id="admin-main-wrapper" class="hidden flex-col min-h-screen">
+        
+        <!-- HEADER NAVBAR ADMIN -->
+        <header class="sticky top-0 z-40 bg-slate-900/95 text-white border-b border-slate-800 glass-header shadow-xl">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
                 
-                <!-- TAB BUTTONS -->
-                <div class="flex gap-2 bg-slate-100 dark:bg-slate-800/80 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs font-bold w-full md:w-auto overflow-x-auto">
-                    <button onclick="switchAdminTab('transaksi')" id="admin-tab-transaksi" class="px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 text-brand-600 dark:text-sky-400 shadow-md transition font-black">
-                        📥 Kelola Permohonan Sewa
-                    </button>
-                    <button onclick="switchAdminTab('portofolio')" id="admin-tab-portofolio" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition">
-                        📸 Kelola Portofolio Iklan Publik
-                    </button>
-                </div>
-
-                <!-- SEARCH & FILTER CONTROLS -->
-                <div class="flex items-center gap-2 w-full md:w-auto">
-                    <select id="admin-status-filter" onchange="applyAdminFilter()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-2.5 rounded-xl text-xs font-bold focus:outline-none">
-                        <option value="all">Semua Status</option>
-                        <option value="menunggu">🟡 Menunggu Verifikasi</option>
-                        <option value="diproses">🔵 Uji Tayang / Diproses</option>
-                        <option value="terkonfirmasi">🟢 Terkonfirmasi Tayang</option>
-                    </select>
-
-                    <input type="text" id="admin-search-input" onkeyup="applyAdminFilter()" placeholder="Cari kode, pemesan, lokasi..." class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-2.5 rounded-xl text-xs font-medium text-slate-800 dark:text-slate-100 focus:outline-none w-full md:w-60">
-                </div>
-
-            </div>
-
-            <!-- ========================================================================= -->
-            <!-- TAB 1: KELOLA TRANSAKSI PENYEWAAN VIDEOTRON -->
-            <!-- ========================================================================= -->
-            <div id="admin-sec-transaksi" class="space-y-4">
-                
-                <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
-                                <th class="p-3.5">Kode & Tanggal</th>
-                                <th class="p-3.5">Pemesan / Perusahaan</th>
-                                <th class="p-3.5">Titik Lokasi</th>
-                                <th class="p-3.5">Rincian Durasi & Biaya</th>
-                                <th class="p-3.5">File Materi</th>
-                                <th class="p-3.5">Status Pengajuan</th>
-                                <th class="p-3.5 text-center">Aksi Admin</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-order-table-body" class="divide-y divide-slate-200 dark:divide-slate-800 font-medium">
-                            <!-- DYNAMICALLY POPULATED VIA JS -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- EMPTY STATE -->
-                <div id="admin-empty-table-notice" class="hidden p-8 text-center bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 space-y-2">
-                    <span class="text-3xl">🔍</span>
-                    <h4 class="font-extrabold text-slate-900 dark:text-white text-sm">Tidak Ada Transaksi Ditemukan</h4>
-                    <p class="text-xs text-slate-400">Tidak ada permohonan sewa yang cocok dengan kriteria filter atau pencarian Anda.</p>
-                </div>
-
-            </div>
-
-            <!-- ========================================================================= -->
-            <!-- TAB 2: KELOLA PORTOFOLIO IKLAN PUBLIK (ADD NEW SHOWCASE) -->
-            <!-- ========================================================================= -->
-            <div id="admin-sec-portofolio" class="hidden space-y-6">
-                
-                <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <img src="logo.png" alt="SEVISA Admin Logo" class="h-10 w-10 rounded-xl object-contain border-2 border-brand-500 bg-slate-900 shadow-md">
                     <div>
-                        <h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Portofolio Iklan Publik SEVISA</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Tambah atau perbarui contoh iklan videotron yang pernah ditayangkan untuk ditampilkan pada Halaman Portofolio website publik.</p>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 bg-red-600 text-white font-extrabold text-[9px] rounded uppercase tracking-widest">CMS RESMI</span>
+                            <span class="text-xs font-mono font-bold text-sky-400">PEMKOT SALATIGA</span>
+                        </div>
+                        <h1 class="text-base sm:text-lg font-black text-white tracking-tight">
+                            Portal CMS Pengelolaan Web SEVISA
+                        </h1>
                     </div>
                 </div>
 
-                <form onsubmit="submitNewPortfolioAdmin(event)" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
-                    <h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2">➕ Tambah Item Portofolio Baru</h4>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block font-bold mb-1">Judul Iklan / Kampanye *</label>
-                            <input type="text" id="port-admin-title" required placeholder="Contoh: Campaign Sosialisasi Kesehatan 2026" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                        </div>
-                        <div>
-                            <label class="block font-bold mb-1">Nama Klien / Instansi *</label>
-                            <input type="text" id="port-admin-client" required placeholder="Contoh: Dinas Kesehatan Kota Salatiga" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block font-bold mb-1">Titik Lokasi Videotron *</label>
-                            <select id="port-admin-location" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                                <option value="Pasar Rejosari">Pasar Rejosari</option>
-                                <option value="Selasar Kartini">Selasar Kartini</option>
-                                <option value="Blotongan">Blotongan</option>
-                                <option value="Alun-Alun Salatiga">Alun-Alun Salatiga</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block font-bold mb-1">Kategori Konten *</label>
-                            <select id="port-admin-category" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                                <option value="pemkot">Iklan Layanan Pemkot</option>
-                                <option value="komersial">Iklan Komersial / Ritel</option>
-                                <option value="event">Event & Kebudayaan</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block font-bold mb-1">Jenis Media *</label>
-                            <select id="port-admin-type" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                                <option value="video">🎥 Video Motion HD</option>
-                                <option value="image">🖼️ Poster Digital HD</option>
-                                <option value="layanan">🏛️ Iklan Layanan Publik</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block font-bold mb-1">Periode Tayang *</label>
-                            <input type="text" id="port-admin-dates" required placeholder="Contoh: 1 - 15 Oktober 2026" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
-                        </div>
-                        <div>
-                            <label class="block font-bold mb-1">Frekuensi Penyiaran *</label>
-                            <input type="text" id="port-admin-freq" required placeholder="Contoh: 60x / Hari (30 Detik)" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block font-bold mb-1">Deskripsi Singkat Penayangan *</label>
-                        <textarea id="port-admin-desc" rows="2" required placeholder="Jelaskan cakupan penayangan, target audiens, dan dampak promosi..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium"></textarea>
-                    </div>
-
-                    <button type="submit" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
-                        ➕ TERBITKAN KE PORTOFOLIO PUBLIK &rarr;
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition border border-slate-700">
+                        <svg id="admin-moon-icon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                        <svg id="admin-sun-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     </button>
-                </form>
 
-                <!-- CURRENT PORTFOLIO PREVIEW TABLE -->
-                <div class="space-y-3">
-                    <h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider">Daftar Portofolio Aktif Saat Ini:</h4>
-                    <div id="admin-portfolio-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                    <button onclick="handleAdminLogout()" class="px-3.5 py-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white font-extrabold text-xs rounded-xl border border-rose-500/40 transition">
+                        🚪 Keluar Admin
+                    </button>
+                </div>
+
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+            
+            <!-- WELCOME STATS BAR -->
+            <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="space-y-1.5">
+                    <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-extrabold text-[10px] rounded-full uppercase tracking-wider">
+                        SISTEM MANAGEMENT KONTEN & VERIFIKASI RESMI
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white">Panel Pusat Pengelolaan Web SEVISA</h2>
+                    <p class="text-xs text-slate-300">Edit Halaman Tentang Kami, Lokasi & Peta Maps, Portofolio Video/PPT, Blog, serta Status Permohonan Sewa.</p>
+                </div>
+                <button onclick="syncAllCMSData()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-xs rounded-xl border border-slate-700 transition flex items-center gap-2 shadow-md">
+                    <span>🔄</span> Sync Data Real-Time
+                </button>
+            </div>
+
+            <!-- SUMMARY METRICS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 text-xs">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-md space-y-1">
+                    <span class="text-slate-400 font-bold text-[10px] uppercase">Permohonan Sewa</span>
+                    <div id="stat-total-orders" class="text-xl font-black text-slate-900 dark:text-white">0</div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 rounded-2xl p-4 shadow-md space-y-1">
+                    <span class="text-amber-500 font-bold text-[10px] uppercase">Menunggu Verifikasi</span>
+                    <div id="stat-pending-orders" class="text-xl font-black text-amber-600 dark:text-amber-400">0</div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 rounded-2xl p-4 shadow-md space-y-1">
+                    <span class="text-blue-500 font-bold text-[10px] uppercase">Sedang Uji Tayang</span>
+                    <div id="stat-processing-orders" class="text-xl font-black text-blue-600 dark:text-blue-400">0</div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/50 rounded-2xl p-4 shadow-md space-y-1">
+                    <span class="text-emerald-500 font-bold text-[10px] uppercase">Terkonfirmasi Tayang</span>
+                    <div id="stat-approved-orders" class="text-xl font-black text-emerald-600 dark:text-emerald-400">0</div>
+                </div>
+                <div class="bg-gradient-to-tr from-slate-900 to-blue-950 text-white rounded-2xl p-4 shadow-md space-y-1 border border-sky-500/40">
+                    <span class="text-sky-300 font-bold text-[10px] uppercase">Estimasi PAD</span>
+                    <div id="stat-total-revenue" class="text-lg font-black text-amber-400">Rp 0</div>
+                </div>
+            </div>
+
+            <!-- NAVIGATION MODULE TABS SYSTEM -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+                
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 dark:border-slate-800 text-xs font-bold">
+                    <button onclick="switchCMSModule('transaksi')" id="tab-cms-transaksi" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white shadow-md font-black shrink-0">
+                        📥 Kelola Transaksi & Cek Status
+                    </button>
+                    <button onclick="switchCMSModule('lokasi')" id="tab-cms-lokasi" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+                        🗺️ Lokasi & Peta Interactive
+                    </button>
+                    <button onclick="switchCMSModule('portofolio')" id="tab-cms-portofolio" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+                        📸 Full CRUD Portofolio Video/PPT
+                    </button>
+                    <button onclick="switchCMSModule('blog')" id="tab-cms-blog" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+                        📰 Full CRUD Blog & Berita
+                    </button>
+                    <button onclick="switchCMSModule('tentang')" id="tab-cms-tentang" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+                        📜 Edit Teks Tentang Kami
+                    </button>
+                    <button onclick="switchCMSModule('users')" id="tab-cms-users" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+                        👥 Kelola User Terdaftar
+                    </button>
+                </div>
+
+                <!-- ========================================================================= -->
+                <!-- MODULE 1: KELOLA TRANSAKSI & CEK STATUS -->
+                <!-- ========================================================================= -->
+                <div id="sec-cms-transaksi" class="space-y-4">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                        <h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Status Transaksi & Upload Foto Bukti Penayangan</h3>
+                        <div class="flex gap-2 w-full md:w-auto">
+                            <select id="admin-status-filter" onchange="renderAdminTable()" class="p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold">
+                                <option value="all">Semua Status</option>
+                                <option value="menunggu">🟡 Menunggu Verifikasi</option>
+                                <option value="diproses">🔵 Uji Tayang</option>
+                                <option value="terkonfirmasi">🟢 Terkonfirmasi</option>
+                            </select>
+                            <input type="text" id="admin-search-input" onkeyup="renderAdminTable()" placeholder="Cari kode, nama, lokasi..." class="p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium w-full md:w-60">
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
+                                    <th class="p-3.5">Kode</th>
+                                    <th class="p-3.5">Pemesan / Instansi</th>
+                                    <th class="p-3.5">Lokasi</th>
+                                    <th class="p-3.5">Durasi & Biaya</th>
+                                    <th class="p-3.5">File Materi</th>
+                                    <th class="p-3.5">Status</th>
+                                    <th class="p-3.5 text-center">Aksi Admin</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-order-table-body" class="divide-y divide-slate-200 dark:divide-slate-800 font-medium"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ========================================================================= -->
+                <!-- MODULE 2: KELOLA LOKASI & PETA INTERACTIVE MAPS -->
+                <!-- ========================================================================= -->
+                <div id="sec-cms-lokasi" class="hidden space-y-6">
+                    <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <h3 class="text-base font-black text-slate-900 dark:text-white">Kelola 4 Titik Lokasi Videotron & Embed Peta Google Maps</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Atur rincian lokasi, tarif harian/bulanan, dan link embed peta Google Maps untuk masing-masing videotron.</p>
+                    </div>
+
+                    <div id="cms-locations-list" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
                         <!-- DYNAMICALLY POPULATED -->
                     </div>
                 </div>
 
+                <!-- ========================================================================= -->
+                <!-- MODULE 3: FULL CRUD PORTOFOLIO -->
+                <!-- ========================================================================= -->
+                <div id="sec-cms-portofolio" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <div>
+                            <h3 class="text-base font-black text-slate-900 dark:text-white">Full CRUD Portofolio Penayangan Iklan (Video, PPT, Gambar)</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Tambah, Edit, Update, dan Hapus contoh hasil penayangan videotron di website publik.</p>
+                        </div>
+                    </div>
+
+                    <form onsubmit="savePortfolioAdminForm(event)" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
+                        <input type="hidden" id="port-edit-id" value="">
+                        <h4 id="port-form-title-label" class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2">➕ Form Tambah / Edit Item Portofolio</h4>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold mb-1">Judul Iklan / Kampanye *</label>
+                                <input type="text" id="port-admin-title" required placeholder="Contoh: Campaign Sosialisasi Kesehatan 2026" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Nama Klien / Instansi *</label>
+                                <input type="text" id="port-admin-client" required placeholder="Contoh: Dinas Kesehatan Kota Salatiga" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block font-bold mb-1">Titik Lokasi Videotron *</label>
+                                <select id="port-admin-location" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                                    <option value="Pasar Rejosari">Pasar Rejosari</option>
+                                    <option value="Selasar Kartini">Selasar Kartini</option>
+                                    <option value="Blotongan">Blotongan</option>
+                                    <option value="Alun-Alun Salatiga">Alun-Alun Salatiga</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Kategori Konten *</label>
+                                <select id="port-admin-category" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                                    <option value="pemkot">Iklan Layanan Pemkot</option>
+                                    <option value="komersial">Iklan Komersial / Ritel</option>
+                                    <option value="event">Event & Kebudayaan</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Jenis Media Materi *</label>
+                                <select id="port-admin-type" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                                    <option value="video">🎥 Video Motion HD (MP4/MOV)</option>
+                                    <option value="ppt">📊 Presentasi Slide (PPT/PPTX)</option>
+                                    <option value="image">🖼️ Poster Digital HD (JPG/PNG)</option>
+                                    <option value="layanan">🏛️ Iklan Layanan Publik</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold mb-1">Periode Tayang *</label>
+                                <input type="text" id="port-admin-dates" required placeholder="Contoh: 1 - 15 Oktober 2026" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Frekuensi Penyiaran *</label>
+                                <input type="text" id="port-admin-freq" required placeholder="Contoh: 60x / Hari (30 Detik)" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold mb-1">Deskripsi Penayangan Materi *</label>
+                            <textarea id="port-admin-desc" rows="2" required placeholder="Jelaskan cakupan penayangan, target audiens, dan dampak promosi..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium"></textarea>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button type="submit" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
+                                💾 SIMPAN PORTOFOLIO &rarr;
+                            </button>
+                            <button type="button" onclick="resetPortfolioForm()" class="px-4 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl">
+                                Batal
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="admin-portfolio-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs"></div>
+                </div>
+
+                <!-- ========================================================================= -->
+                <!-- MODULE 4: FULL CRUD BLOG -->
+                <!-- ========================================================================= -->
+                <div id="sec-cms-blog" class="hidden space-y-6">
+                    <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <h3 class="text-base font-black text-slate-900 dark:text-white">Full CRUD Halaman Blog & Berita Publikasi Diskominfo</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Kelola artikel panduan sewa, berita periklanan daerah, dan regulasi terkini.</p>
+                    </div>
+
+                    <form onsubmit="saveBlogAdminForm(event)" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
+                        <input type="hidden" id="blog-edit-id" value="">
+                        <h4 id="blog-form-title-label" class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2">➕ Form Tambah / Edit Artikel Blog</h4>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold mb-1">Judul Artikel Blog *</label>
+                                <input type="text" id="blog-admin-title" required placeholder="Judul berita / artikel publik..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Sub-Judul / Sub-heading *</label>
+                                <input type="text" id="blog-admin-subheading" required placeholder="Sub-judul penjelas..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold mb-1">Isi Paragraf 1 *</label>
+                            <textarea id="blog-admin-p1" rows="2" required placeholder="Paragraf pertama..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium"></textarea>
+                        </div>
+                        <div>
+                            <label class="block font-bold mb-1">Isi Paragraf 2 *</label>
+                            <textarea id="blog-admin-p2" rows="2" required placeholder="Paragraf kedua (Rincian tarif & regulasi)..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium"></textarea>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button type="submit" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
+                                💾 SIMPAN ARTIKEL BLOG &rarr;
+                            </button>
+                            <button type="button" onclick="resetBlogForm()" class="px-4 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl">
+                                Batal
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="admin-blog-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs"></div>
+                </div>
+
+                <!-- ========================================================================= -->
+                <!-- MODULE 5: EDIT TENTANG KAMI -->
+                <!-- ========================================================================= -->
+                <div id="sec-cms-tentang" class="hidden space-y-6">
+                    <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <h3 class="text-base font-black text-slate-900 dark:text-white">Edit Teks & Informasi Halaman "Tentang Kami"</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Perbarui deskripsi operasional, pesan pimpinan Diskominfo, dan rincian dasar hukum periklanan.</p>
+                    </div>
+
+                    <form onsubmit="saveAboutAdminCMS(event)" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
+                        <div>
+                            <label class="block font-bold mb-1">Sub-Judul Utama Halaman Tentang Kami *</label>
+                            <input type="text" id="about-admin-title" required value="Layanan Publik Sewa Videotron Kota Salatiga" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                        </div>
+
+                        <div>
+                            <label class="block font-bold mb-1">Deskripsi Singkat SEVISA *</label>
+                            <textarea id="about-admin-desc" rows="3" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">Pengelolaan media periklanan videotron luar ruang (DOOH) resmi di bawah Dinas Komunikasi dan Informatika Kota Salatiga yang mengelola 4 lokasi videotron strategis (Pasar Rejosari, Selasar Kartini, Blotongan, dan Alun-Alun Salatiga).</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold mb-1">Catatan Tambahan Koordinasi Pajak BPKPD *</label>
+                            <input type="text" id="about-admin-tax" required value="Penghitungan Pajak dapat berkoordinasi dengan BPKPD Kota Salatiga (Badan Pengelola Keuangan dan Pendapatan Daerah)" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                        </div>
+
+                        <button type="submit" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
+                            💾 UPDATE HALAMAN TENTANG KAMI &rarr;
+                        </button>
+                    </form>
+                </div>
+
+                <!-- ========================================================================= -->
+                <!-- MODULE 6: KELOLA USER TERDAFTAR -->
+                <!-- ========================================================================= -->
+                <div id="sec-cms-users" class="hidden space-y-6">
+                    <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Pengguna Terdaftar & Verifikasi Profil</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Daftar pengguna yang telah mendaftar dan melengkapi data identitas (NIK, Instansi, WhatsApp).</p>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
+                                    <th class="p-3.5">Nama & Email</th>
+                                    <th class="p-3.5">Perusahaan / Instansi</th>
+                                    <th class="p-3.5">NIK KTP</th>
+                                    <th class="p-3.5">No. WhatsApp</th>
+                                    <th class="p-3.5">Status Profil</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-user-table-body" class="divide-y divide-slate-200 dark:divide-slate-800 font-medium"></tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
 
-        </div>
+        </main>
+    </div>
 
-    </main>
-
-    <!-- ========================================================================= -->
-    <!-- MODAL KELOLA STATUS & UNGGAH BUKTI PENAYANGAN VIDEOTRON -->
-    <!-- ========================================================================= -->
+    <!-- MODAL EDIT STATUS TRANSAKSI -->
     <div id="admin-manage-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
         <div class="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 my-auto relative text-slate-800 dark:text-slate-100">
             <button onclick="closeAdminModal('admin-manage-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-xl font-bold p-1">&times;</button>
@@ -344,42 +438,34 @@
             </div>
 
             <form onsubmit="saveAdminStatusUpdate(event)" class="space-y-4 text-xs">
-                
-                <!-- INFORMASI PEMESAN -->
                 <div class="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-1 text-xs">
                     <span id="modal-manage-user" class="font-black text-slate-900 dark:text-white block">Budi Santoso (PT Salatiga Digital Indo)</span>
                     <span id="modal-manage-location" class="text-slate-600 dark:text-slate-300 block font-semibold">Pasar Rejosari • 2026-08-15 s.d. 2026-08-22</span>
                     <span id="modal-manage-file" class="text-emerald-600 dark:text-emerald-400 font-mono font-bold block text-[11px]">📁 Materi: Video_Promosi.mp4</span>
                 </div>
 
-                <!-- 1. PILIH STATUS BARU -->
                 <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">1. Ubah Status Pengajuan *</label>
-                    <select id="modal-status-select" required class="w-full p-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-extrabold rounded-xl focus:border-brand-600 focus:outline-none">
+                    <label class="block font-bold mb-1 uppercase tracking-wider">1. Ubah Status Pengajuan *</label>
+                    <select id="modal-status-select" required class="w-full p-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-extrabold rounded-xl focus:outline-none">
                         <option value="menunggu">🟡 MENUNGGU VERIFIKASI DISKOMINFO (Tahap 1)</option>
                         <option value="diproses">🔵 SEDANG DIPROSES / UJI TAYANG (Tahap 2)</option>
                         <option value="terkonfirmasi">🟢 TERKONFIRMASI & SIAP PENAYANGAN (Tahap 3)</option>
                     </select>
                 </div>
 
-                <!-- 2. INPUT PESAN / CATATAN RESMI ADMIN -->
                 <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">2. Pesan / Catatan Resmi Diskominfo untuk Pemesan *</label>
-                    <textarea id="modal-status-notes" rows="3" required placeholder="Tuliskan catatan verifikasi materi, jadwal penyiaran, atau instruksi resmi..." class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-xl font-medium focus:border-brand-600 focus:outline-none"></textarea>
+                    <label class="block font-bold mb-1 uppercase tracking-wider">2. Pesan / Catatan Resmi Diskominfo untuk Pemesan *</label>
+                    <textarea id="modal-status-notes" rows="3" required placeholder="Tuliskan catatan verifikasi materi, jadwal penyiaran, atau instruksi resmi..." class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-xl font-medium focus:outline-none"></textarea>
                 </div>
 
-                <!-- 3. BUKTI FOTO PENAYANGAN VIDEOTRON PRESETS / UPLOAD -->
                 <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">3. Foto Bukti Penayangan Videotron di Lapangan</label>
-                    <div class="space-y-2">
-                        <select id="modal-proof-preset" class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold rounded-xl focus:outline-none">
-                            <option value="header_banner.jpg">📸 Foto Standar Penayangan Videotron Diskominfo</option>
-                            <option value="header_banner.jpg">📸 Videotron Pasar Rejosari (Kawasan Pasar)</option>
-                            <option value="header_banner.jpg">📸 Videotron Selasar Kartini (Pusat Kota)</option>
-                            <option value="header_banner.jpg">📸 Videotron Blotongan (Gate Utara)</option>
-                        </select>
-                        <p class="text-[10px] text-slate-400">Foto bukti penayangan ini akan muncul pada kartu status pemesan di website publik.</p>
-                    </div>
+                    <label class="block font-bold mb-1 uppercase tracking-wider">3. Foto Bukti Penayangan Videotron di Lapangan</label>
+                    <select id="modal-proof-preset" class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold rounded-xl focus:outline-none">
+                        <option value="header_banner.jpg">📸 Foto Standar Penayangan Videotron Diskominfo</option>
+                        <option value="header_banner.jpg">📸 Videotron Pasar Rejosari (Kawasan Pasar)</option>
+                        <option value="header_banner.jpg">📸 Videotron Selasar Kartini (Pusat Kota)</option>
+                        <option value="header_banner.jpg">📸 Videotron Blotongan (Gate Utara)</option>
+                    </select>
                 </div>
 
                 <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
@@ -389,215 +475,132 @@
         </div>
     </div>
 
-    <!-- CUSTOM TOAST NOTIFICATION -->
+    <!-- TOAST NOTIFICATION -->
     <div id="admin-toast" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border border-slate-700 max-w-sm space-y-1">
         <h4 id="admin-toast-title" class="font-extrabold text-xs text-sky-400">INFO ADMIN</h4>
         <p id="admin-toast-msg" class="text-xs text-slate-200 font-medium">Pesan admin berhasil disimpan.</p>
     </div>
 
-    <!-- JAVASCRIPT CONTROL LOGIC FOR ADMIN DASHBOARD -->
+    <!-- JAVASCRIPT LOGIC CMS ADMIN -->
     <script>
         let currentTargetOrderCode = null;
 
-        // DEFAULT DEMO ORDERS (SYNCED WITH LOCALSTORAGE)
-        const DEFAULT_INITIAL_ORDERS = [
-            {
-                code: 'SVS-20260810-101',
-                userName: 'Budi Santoso',
-                company: 'PT Salatiga Digital Indo',
-                location: 'Pasar Rejosari',
-                dates: '2026-08-15 s.d. 2026-08-22 (7 Hari • Produk Non-Rokok • Rp 15.400.000)',
-                file: 'Video_Promosi_Produk.mp4',
-                status: 'menunggu',
-                statusLabel: 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO',
-                statusDesc: '📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa Anda sedang berada dalam antrean peninjauan oleh tim admin Diskominfo Kota Salatiga. Estimasi proses verifikasi berkisar 1x24 jam kerja.',
-                proofImg: 'header_banner.jpg'
-            },
-            {
-                code: 'SVS-20260810-102',
-                userName: 'Dinas Pariwisata Salatiga',
-                company: 'Pemerintah Kota Salatiga',
-                location: 'Blotongan',
-                dates: '2026-08-18 s.d. 2026-08-25 (7 Hari • Produk Non-Rokok • Rp 8.876.000)',
-                file: 'Sosialisasi_Pariwisata.mp4',
-                status: 'diproses',
-                statusLabel: 'SEDANG DIPROSES / UJI TAYANG',
-                statusDesc: '⚙️ <strong>Status: Sedang Diproses / Review Uji Tayang</strong><br>File materi iklan Anda sedang diuji kelayakan resolusi dan dijadwalkan oleh sistem penyiaran videotron Diskominfo Salatiga.',
-                proofImg: 'header_banner.jpg'
-            },
-            {
-                code: 'SVS-20260810-103',
-                userName: 'Komunitas UMKM Salatiga',
-                company: 'Brand Kuliner Salatiga',
-                location: 'Alun-Alun Salatiga',
-                dates: '2026-08-20 s.d. 2026-08-30 (10 Hari • Produk Non-Rokok • Rp 6.980.000)',
-                file: 'Poster_Promo_Event.png',
-                status: 'terkonfirmasi',
-                statusLabel: 'TERKONFIRMASI & SIAP PENAYANGAN',
-                statusDesc: '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong><br>Selamat! Permohonan penyewaan videotron Anda telah disetujui resmi oleh Diskominfo Kota Salatiga. Materi iklan siap ditayangkan sesuai jadwal.',
-                proofImg: 'header_banner.jpg'
-            }
-        ];
+        // CHECK ADMIN LOGIN STATUS
+        function checkAdminSession() {
+            const logged = sessionStorage.getItem('sevisa_admin_logged');
+            const loginScreen = document.getElementById('admin-login-screen');
+            const mainWrapper = document.getElementById('admin-main-wrapper');
 
-        // LOAD ORDERS FROM LOCALSTORAGE OR INITIALIZE
-        function getStoredAdminOrders() {
+            if (logged === 'true') {
+                loginScreen.classList.add('hidden');
+                mainWrapper.classList.remove('hidden');
+                mainWrapper.classList.add('flex');
+                initAdminCMSData();
+            } else {
+                loginScreen.classList.remove('hidden');
+                mainWrapper.classList.add('hidden');
+                mainWrapper.classList.remove('flex');
+            }
+        }
+
+        function handleAdminLoginSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('admin-login-email').value.trim();
+            const pass = document.getElementById('admin-login-pass').value.trim();
+
+            if (email === 'admin@salatiga.go.id' && pass === 'admin123') {
+                sessionStorage.setItem('sevisa_admin_logged', 'true');
+                checkAdminSession();
+                showAdminToast('✅ AKSES DITERIMA', 'Selamat datang di Portal CMS Admin Diskominfo Salatiga.');
+            } else {
+                alert('Email atau Kata Sandi Admin Salah! (Gunakan: admin@salatiga.go.id / admin123)');
+            }
+        }
+
+        function quickAdminLogin() {
+            sessionStorage.setItem('sevisa_admin_logged', 'true');
+            checkAdminSession();
+            showAdminToast('⚡ LOGIN DEMO OTOMATIS', 'Akses Admin Diskominfo Aktif.');
+        }
+
+        function handleAdminLogout() {
+            sessionStorage.removeItem('sevisa_admin_logged');
+            checkAdminSession();
+        }
+
+        // INITIALIZE ALL DATA FROM LOCALSTORAGE OR SET DEFAULTS
+        function initAdminCMSData() {
+            getStoredOrders();
+            renderAdminTable();
+            renderCMSLocations();
+            renderCMSPortfolio();
+            renderCMSBlog();
+            renderCMSUsers();
+        }
+
+        // 1. ORDERS DATA MANAGEMENT
+        function getStoredOrders() {
             const saved = localStorage.getItem('sevisa_orders');
             if (saved) {
-                try {
-                    return JSON.parse(saved);
-                } catch (e) {
-                    console.error("Error parsing stored orders", e);
-                }
-            }
-            localStorage.setItem('sevisa_orders', JSON.stringify(DEFAULT_INITIAL_ORDERS));
-            return DEFAULT_INITIAL_ORDERS;
-        }
-
-        function saveAdminOrders(orders) {
-            localStorage.setItem('sevisa_orders', JSON.stringify(orders));
-            window.dispatchEvent(new Event('storage'));
-        }
-
-        // LOAD PORTFOLIO FROM LOCALSTORAGE OR INITIALIZE
-        function getStoredAdminPortfolio() {
-            const saved = localStorage.getItem('sevisa_portfolio');
-            if (saved) {
-                try {
-                    return JSON.parse(saved);
-                } catch(e) {}
+                try { return JSON.parse(saved); } catch(e) {}
             }
             return [];
         }
 
-        function saveAdminPortfolio(portfolio) {
-            localStorage.setItem('sevisa_portfolio', JSON.stringify(portfolio));
+        function saveStoredOrders(orders) {
+            localStorage.setItem('sevisa_orders', JSON.stringify(orders));
             window.dispatchEvent(new Event('storage'));
         }
 
-        // RENDER ADMIN METRICS & TABLE
-        function renderAdminDashboard() {
-            const orders = getStoredAdminOrders();
-
-            const totalCount = orders.length;
-            const pendingCount = orders.filter(o => o.status === 'menunggu').length;
-            const processingCount = orders.filter(o => o.status === 'diproses').length;
-            const approvedCount = orders.filter(o => o.status === 'terkonfirmasi').length;
-
-            document.getElementById('stat-total-orders').innerText = totalCount;
-            document.getElementById('stat-pending-orders').innerText = pendingCount;
-            document.getElementById('stat-processing-orders').innerText = processingCount;
-            document.getElementById('stat-approved-orders').innerText = approvedCount;
-
-            // Calculate Est Revenue
-            let totalRevenue = 0;
-            orders.forEach(o => {
-                const match = o.dates.match(/Rp\s*([\d\.]+)/);
-                if (match && match[1]) {
-                    const priceNum = parseInt(match[1].replace(/\./g, ''), 10);
-                    if (!isNaN(priceNum)) totalRevenue += priceNum;
-                }
-            });
-            document.getElementById('stat-total-revenue').innerText = 'Rp ' + totalRevenue.toLocaleString('id-ID');
-
-            renderAdminTable(orders);
-            renderAdminPortfolioList();
-        }
-
-        function renderAdminTable(orders) {
-            const tbody = document.getElementById('admin-order-table-body');
+        function renderAdminTable() {
+            const orders = getStoredOrders();
             const filterStatus = document.getElementById('admin-status-filter').value;
-            const searchKeyword = document.getElementById('admin-search-input').value.trim().toLowerCase();
-            const emptyNotice = document.getElementById('admin-empty-table-notice');
+            const keyword = document.getElementById('admin-search-input').value.trim().toLowerCase();
+            const tbody = document.getElementById('admin-order-table-body');
+
+            // Update stats
+            document.getElementById('stat-total-orders').innerText = orders.length;
+            document.getElementById('stat-pending-orders').innerText = orders.filter(o => o.status === 'menunggu').length;
+            document.getElementById('stat-processing-orders').innerText = orders.filter(o => o.status === 'diproses').length;
+            document.getElementById('stat-approved-orders').innerText = orders.filter(o => o.status === 'terkonfirmasi').length;
 
             let filtered = orders.filter(o => {
                 const matchStatus = (filterStatus === 'all') || (o.status === filterStatus);
-                const matchSearch = !searchKeyword || 
-                    o.code.toLowerCase().includes(searchKeyword) ||
-                    o.userName.toLowerCase().includes(searchKeyword) ||
-                    o.company.toLowerCase().includes(searchKeyword) ||
-                    o.location.toLowerCase().includes(searchKeyword);
+                const matchSearch = !keyword || o.code.toLowerCase().includes(keyword) || o.userName.toLowerCase().includes(keyword) || o.location.toLowerCase().includes(keyword);
                 return matchStatus && matchSearch;
             });
 
-            if (filtered.length === 0) {
-                tbody.innerHTML = '';
-                emptyNotice.classList.remove('hidden');
-                return;
-            }
-
-            emptyNotice.classList.add('hidden');
             let html = '';
-
             filtered.forEach(o => {
-                let badgeClass = 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border-amber-300';
+                let badgeClass = 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 border-amber-300';
                 let badgeText = '🟡 MENUNGGU';
                 if (o.status === 'diproses') {
-                    badgeClass = 'bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border-blue-300';
+                    badgeClass = 'bg-blue-100 dark:bg-blue-950/80 text-blue-800 border-blue-300';
                     badgeText = '🔵 UJI TAYANG';
                 } else if (o.status === 'terkonfirmasi') {
-                    badgeClass = 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-emerald-300';
+                    badgeClass = 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 border-emerald-300';
                     badgeText = '🟢 TERKONFIRMASI';
                 }
 
                 html += `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/60 transition border-b border-slate-200 dark:border-slate-800">
-                        <td class="p-3.5">
-                            <strong class="font-mono font-black text-brand-600 dark:text-sky-400 block text-xs">${o.code}</strong>
-                            <span class="text-[10px] text-slate-400 block">Terdaftar Resmi</span>
-                        </td>
-                        <td class="p-3.5">
-                            <strong class="text-slate-900 dark:text-white font-bold block text-xs">${o.userName}</strong>
-                            <span class="text-[11px] text-slate-500 dark:text-slate-400 block font-medium">${o.company}</span>
-                        </td>
-                        <td class="p-3.5">
-                            <span class="px-2.5 py-1 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold rounded-lg text-[11px]">
-                                📍 ${o.location}
-                            </span>
-                        </td>
-                        <td class="p-3.5 max-w-xs leading-relaxed text-[11px]">
-                            ${o.dates}
-                        </td>
-                        <td class="p-3.5">
-                            <div class="flex items-center gap-1.5 font-mono text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
-                                <span>📄</span>
-                                <span class="truncate max-w-[120px]" title="${o.file}">${o.file}</span>
-                            </div>
-                        </td>
-                        <td class="p-3.5">
-                            <span class="px-2.5 py-1 text-[10px] font-extrabold rounded-lg border ${badgeClass}">
-                                ${badgeText}
-                            </span>
-                        </td>
+                        <td class="p-3.5"><strong class="font-mono text-brand-600 dark:text-sky-400 font-black">${o.code}</strong></td>
+                        <td class="p-3.5"><strong>${o.userName}</strong><br><span class="text-[10px] text-slate-400">${o.company}</span></td>
+                        <td class="p-3.5"><span class="px-2 py-0.5 bg-slate-200 dark:bg-slate-800 font-bold rounded text-[10px]">📍 ${o.location}</span></td>
+                        <td class="p-3.5 leading-relaxed text-[11px]">${o.dates}</td>
+                        <td class="p-3.5 font-mono text-[11px] font-bold text-emerald-600">📄 ${o.file}</td>
+                        <td class="p-3.5"><span class="px-2.5 py-1 text-[10px] font-extrabold rounded border ${badgeClass}">${badgeText}</span></td>
                         <td class="p-3.5 text-center">
-                            <div class="flex items-center justify-center gap-1.5">
-                                <button onclick="openAdminManageModal('${o.code}')" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-[10px] rounded-lg shadow transition" title="Kelola Status & Foto Bukti">
-                                    ⚙️ Kelola
-                                </button>
-                                <button onclick="deleteAdminOrder('${o.code}')" class="p-1.5 text-rose-500 hover:bg-rose-100 dark:hover:bg-rose-950/60 rounded-lg transition" title="Hapus Transaksi">
-                                    🗑️
-                                </button>
-                            </div>
+                            <button onclick="openAdminManageModal('${o.code}')" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-[10px] rounded-lg shadow">⚙️ Kelola</button>
                         </td>
                     </tr>
                 `;
             });
-
             tbody.innerHTML = html;
         }
 
-        function applyAdminFilter() {
-            const orders = getStoredAdminOrders();
-            renderAdminTable(orders);
-        }
-
-        function syncAndRefreshAdminData() {
-            renderAdminDashboard();
-            showAdminToast('🔄 DATA DISINKRONKAN', 'Data transaksi & portofolio berhasil diperbarui real-time.');
-        }
-
-        // OPEN ADMIN MANAGE MODAL
         function openAdminManageModal(code) {
-            const orders = getStoredAdminOrders();
+            const orders = getStoredOrders();
             const order = orders.find(o => o.code === code);
             if (!order) return;
 
@@ -608,8 +611,6 @@
             document.getElementById('modal-manage-file').innerText = `📁 Materi: ${order.file}`;
 
             document.getElementById('modal-status-select').value = order.status;
-            
-            // Clean text tags for edit box
             let cleanDesc = order.statusDesc ? order.statusDesc.replace(/<[^>]*>?/gm, '') : '';
             document.getElementById('modal-status-notes').value = cleanDesc;
 
@@ -622,15 +623,15 @@
             document.getElementById(id).classList.remove('flex');
         }
 
-        function saveAdminStatusUpdate(event) {
-            event.preventDefault();
+        function saveAdminStatusUpdate(e) {
+            e.preventDefault();
             if (!currentTargetOrderCode) return;
 
             const newStatus = document.getElementById('modal-status-select').value;
             const newNotes = document.getElementById('modal-status-notes').value.trim();
             const selectedProofImg = document.getElementById('modal-proof-preset').value;
 
-            let orders = getStoredAdminOrders();
+            let orders = getStoredOrders();
             const index = orders.findIndex(o => o.code === currentTargetOrderCode);
 
             if (index !== -1) {
@@ -648,27 +649,97 @@
 
                 orders[index].proofImg = selectedProofImg;
 
-                saveAdminOrders(orders);
+                saveStoredOrders(orders);
                 closeAdminModal('admin-manage-modal');
-                renderAdminDashboard();
-
-                showAdminToast('✅ STATUS BERHASIL DIPERBARUI', `Transaksi ${currentTargetOrderCode} kini berstatus: ${orders[index].statusLabel}`);
+                renderAdminTable();
+                showAdminToast('✅ STATUS TERSIMPAN', `Status ${currentTargetOrderCode} berhasil diperbarui.`);
             }
         }
 
-        function deleteAdminOrder(code) {
-            if (confirm(`Apakah Anda yakin ingin menghapus permohonan transaksi ${code}?`)) {
-                let orders = getStoredAdminOrders();
-                orders = orders.filter(o => o.code !== code);
-                saveAdminOrders(orders);
-                renderAdminDashboard();
-                showAdminToast('🗑️ TRANSAKSI DIHAPUS', `Kode transaksi ${code} telah dihapus dari sistem.`);
-            }
+        // 2. LOCATIONS & GOOGLE MAPS CMS MANAGEMENT
+        const DEFAULT_LOCATIONS = [
+            { id: 'VDT-01', name: 'Pasar Rejosari', address: 'Jl. Hasanudin, Salatiga', mapsUrl: 'https://maps.google.com/?q=Pasar+Rejosari+Salatiga', priceDay: '2.200.000' },
+            { id: 'VDT-02', name: 'Selasar Kartini', address: 'Jl. Kartini, Salatiga', mapsUrl: 'https://maps.google.com/?q=Selasar+Kartini+Salatiga', priceDay: '716.000' },
+            { id: 'VDT-03', name: 'Blotongan', address: 'Jl. Semarang - Surakarta, Blotongan', mapsUrl: 'https://maps.google.com/?q=Blotongan+Salatiga', priceDay: '1.268.000' },
+            { id: 'VDT-04', name: 'Alun-Alun Salatiga', address: 'Lapangan Pancasila, Salatiga', mapsUrl: 'https://maps.google.com/?q=Alun-Alun+Salatiga', priceDay: '698.000' }
+        ];
+
+        function renderCMSLocations() {
+            const container = document.getElementById('cms-locations-list');
+            let saved = localStorage.getItem('sevisa_locations');
+            let locs = saved ? JSON.parse(saved) : DEFAULT_LOCATIONS;
+
+            let html = '';
+            locs.forEach((loc, idx) => {
+                html += `
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl space-y-3 shadow-md">
+                        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                            <strong class="font-extrabold text-slate-900 dark:text-white text-sm">📍 ${loc.name}</strong>
+                            <span class="font-mono text-[10px] text-sky-400 font-bold">${loc.id}</span>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-[11px] text-slate-400 mb-1">Alamat Titik Lokasi:</label>
+                            <input type="text" id="loc-addr-${idx}" value="${loc.address}" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-xs">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-[11px] text-slate-400 mb-1">Link Embed Peta Google Maps:</label>
+                            <input type="text" id="loc-maps-${idx}" value="${loc.mapsUrl}" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-[11px]">
+                        </div>
+                        <button onclick="saveLocationCMSItem(${idx})" class="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow transition">
+                            💾 Update Peta & Lokasi Ini
+                        </button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
         }
 
-        // PORTFOLIO MANAGEMENT FOR ADMIN
-        function submitNewPortfolioAdmin(event) {
-            event.preventDefault();
+        function saveLocationCMSItem(idx) {
+            let saved = localStorage.getItem('sevisa_locations');
+            let locs = saved ? JSON.parse(saved) : DEFAULT_LOCATIONS;
+
+            locs[idx].address = document.getElementById(`loc-addr-${idx}`).value.trim();
+            locs[idx].mapsUrl = document.getElementById(`loc-maps-${idx}`).value.trim();
+
+            localStorage.setItem('sevisa_locations', JSON.stringify(locs));
+            window.dispatchEvent(new Event('storage'));
+            showAdminToast('🗺️ PETA LOKASI TERPERBARUI', `Informasi & peta ${locs[idx].name} telah diperbarui di website publik.`);
+        }
+
+        // 3. FULL CRUD PORTFOLIO
+        function renderCMSPortfolio() {
+            const container = document.getElementById('admin-portfolio-list-container');
+            let saved = localStorage.getItem('sevisa_portfolio');
+            let items = saved ? JSON.parse(saved) : [];
+
+            if (items.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 italic text-xs col-span-3">Belum ada portofolio tambahan. Gunakan form di atas untuk menambah.</p>';
+                return;
+            }
+
+            let html = '';
+            items.forEach(item => {
+                html += `
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl space-y-2 shadow-sm">
+                        <div class="flex items-center justify-between text-[10px]">
+                            <span class="font-mono font-bold text-sky-400">${item.id}</span>
+                            <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-bold">${item.location}</span>
+                        </div>
+                        <h5 class="font-extrabold text-slate-900 dark:text-white text-xs truncate">${item.title}</h5>
+                        <p class="text-[10px] text-slate-500 truncate">${item.client} • ${item.mediaLabel}</p>
+                        <div class="pt-2 flex gap-2 border-t border-slate-100 dark:border-slate-800">
+                            <button onclick="editPortfolioItem('${item.id}')" class="text-sky-600 font-bold text-[10px] hover:underline">✏️ Edit</button>
+                            <button onclick="deletePortfolioItem('${item.id}')" class="text-rose-500 font-bold text-[10px] hover:underline">🗑️ Hapus</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function savePortfolioAdminForm(e) {
+            e.preventDefault();
+            const editId = document.getElementById('port-edit-id').value;
             const title = document.getElementById('port-admin-title').value.trim();
             const client = document.getElementById('port-admin-client').value.trim();
             const location = document.getElementById('port-admin-location').value;
@@ -679,96 +750,220 @@
             const description = document.getElementById('port-admin-desc').value.trim();
 
             let mediaLabel = '🎥 Video Motion 1080p';
+            if (type === 'ppt') mediaLabel = '📊 Presentasi Slide (PPT)';
             if (type === 'image') mediaLabel = '🖼️ Poster Digital HD';
             if (type === 'layanan') mediaLabel = '🏛️ Iklan Layanan Publik';
 
-            const newItem = {
-                id: 'PORT-' + Math.floor(100 + Math.random() * 900),
-                title,
-                client,
-                location,
-                type,
-                mediaLabel,
-                category,
-                dates,
-                freq,
-                imgUrl: 'header_banner.jpg',
-                description
-            };
+            let saved = localStorage.getItem('sevisa_portfolio');
+            let items = saved ? JSON.parse(saved) : [];
 
-            let portfolio = getStoredAdminPortfolio();
-            portfolio.unshift(newItem);
-            saveAdminPortfolio(portfolio);
+            if (editId) {
+                const idx = items.findIndex(p => p.id === editId);
+                if (idx !== -1) {
+                    items[idx] = { ...items[idx], title, client, location, category, type, mediaLabel, dates, freq, description };
+                }
+            } else {
+                const newItem = {
+                    id: 'PORT-' + Math.floor(100 + Math.random() * 900),
+                    title, client, location, category, type, mediaLabel, dates, freq, imgUrl: 'header_banner.jpg', description
+                };
+                items.unshift(newItem);
+            }
 
-            // Reset form
+            localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
+            window.dispatchEvent(new Event('storage'));
+            resetPortfolioForm();
+            renderCMSPortfolio();
+            showAdminToast('💾 PORTOFOLIO TERSIMPAN', `Item portofolio "${title}" telah disimpan.`);
+        }
+
+        function editPortfolioItem(id) {
+            let saved = localStorage.getItem('sevisa_portfolio');
+            let items = saved ? JSON.parse(saved) : [];
+            const item = items.find(p => p.id === id);
+            if (!item) return;
+
+            document.getElementById('port-edit-id').value = item.id;
+            document.getElementById('port-form-title-label').innerText = `✏️ Edit Item Portofolio (${item.id})`;
+            document.getElementById('port-admin-title').value = item.title;
+            document.getElementById('port-admin-client').value = item.client;
+            document.getElementById('port-admin-location').value = item.location;
+            document.getElementById('port-admin-category').value = item.category;
+            document.getElementById('port-admin-type').value = item.type;
+            document.getElementById('port-admin-dates').value = item.dates;
+            document.getElementById('port-admin-freq').value = item.freq;
+            document.getElementById('port-admin-desc').value = item.description;
+        }
+
+        function deletePortfolioItem(id) {
+            if (confirm(`Apakah Anda yakin ingin menghapus portofolio ${id}?`)) {
+                let saved = localStorage.getItem('sevisa_portfolio');
+                let items = saved ? JSON.parse(saved) : [];
+                items = items.filter(p => p.id !== id);
+                localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
+                window.dispatchEvent(new Event('storage'));
+                renderCMSPortfolio();
+                showAdminToast('🗑️ PORTOFOLIO DIHAPUS', `Item portofolio ${id} telah dihapus.`);
+            }
+        }
+
+        function resetPortfolioForm() {
+            document.getElementById('port-edit-id').value = '';
+            document.getElementById('port-form-title-label').innerText = '➕ Form Tambah / Edit Item Portofolio';
             document.getElementById('port-admin-title').value = '';
             document.getElementById('port-admin-client').value = '';
             document.getElementById('port-admin-dates').value = '';
             document.getElementById('port-admin-freq').value = '';
             document.getElementById('port-admin-desc').value = '';
-
-            renderAdminPortfolioList();
-            showAdminToast('🎉 PORTOFOLIO DITERBITKAN', `Item "${title}" kini aktif di halaman portofolio website publik.`);
         }
 
-        function renderAdminPortfolioList() {
-            const container = document.getElementById('admin-portfolio-list-container');
-            const items = getStoredAdminPortfolio();
+        // 4. FULL CRUD BLOG
+        function renderCMSBlog() {
+            const container = document.getElementById('admin-blog-list-container');
+            let saved = localStorage.getItem('sevisa_blogs');
+            let blogs = saved ? JSON.parse(saved) : [];
 
-            if (!container) return;
-
-            if (items.length === 0) {
-                container.innerHTML = '<p class="text-slate-400 italic text-xs col-span-3">Belum ada portofolio kustom tambahan dari admin.</p>';
+            if (blogs.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 italic text-xs col-span-2">Belum ada artikel blog kustom tambahan.</p>';
                 return;
             }
 
             let html = '';
-            items.forEach(item => {
+            blogs.forEach(b => {
                 html += `
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4 rounded-2xl space-y-2 shadow-sm">
-                        <div class="flex items-center justify-between text-[10px]">
-                            <span class="font-mono font-bold text-sky-400">${item.id}</span>
-                            <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded font-bold">${item.location}</span>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl space-y-2 shadow-sm">
+                        <span class="font-mono text-[10px] text-sky-400 font-bold">${b.id}</span>
+                        <h5 class="font-extrabold text-slate-900 dark:text-white text-xs truncate">${b.title}</h5>
+                        <p class="text-[11px] text-slate-500 truncate">${b.subheading}</p>
+                        <div class="pt-2 flex gap-2 border-t border-slate-100 dark:border-slate-800">
+                            <button onclick="editBlogItem('${b.id}')" class="text-blue-600 font-bold text-[10px]">✏️ Edit Artikel</button>
+                            <button onclick="deleteBlogItem('${b.id}')" class="text-rose-500 font-bold text-[10px]">🗑️ Hapus</button>
                         </div>
-                        <h5 class="font-extrabold text-slate-900 dark:text-white text-xs truncate">${item.title}</h5>
-                        <p class="text-[10px] text-slate-500 truncate">${item.client}</p>
-                        <button onclick="deleteAdminPortfolio('${item.id}')" class="text-rose-500 font-bold text-[10px] hover:underline pt-1 block">Hapus Portofolio</button>
                     </div>
                 `;
             });
             container.innerHTML = html;
         }
 
-        function deleteAdminPortfolio(id) {
-            let portfolio = getStoredAdminPortfolio();
-            portfolio = portfolio.filter(p => p.id !== id);
-            saveAdminPortfolio(portfolio);
-            renderAdminPortfolioList();
-            showAdminToast('🗑️ PORTOFOLIO DIHAPUS', `Item portofolio ${id} telah dihapus.`);
+        function saveBlogAdminForm(e) {
+            e.preventDefault();
+            const editId = document.getElementById('blog-edit-id').value;
+            const title = document.getElementById('blog-admin-title').value.trim();
+            const subheading = document.getElementById('blog-admin-subheading').value.trim();
+            const p1 = document.getElementById('blog-admin-p1').value.trim();
+            const p2 = document.getElementById('blog-admin-p2').value.trim();
+
+            let saved = localStorage.getItem('sevisa_blogs');
+            let blogs = saved ? JSON.parse(saved) : [];
+
+            if (editId) {
+                const idx = blogs.findIndex(b => b.id === editId);
+                if (idx !== -1) {
+                    blogs[idx] = { ...blogs[idx], title, subheading, p1, p2 };
+                }
+            } else {
+                const newBlog = {
+                    id: 'BLOG-' + Math.floor(100 + Math.random() * 900),
+                    title, subheading, p1, p2, p3: 'Publikasi resmi oleh Dinas Komunikasi dan Informatika Kota Salatiga.'
+                };
+                blogs.unshift(newBlog);
+            }
+
+            localStorage.setItem('sevisa_blogs', JSON.stringify(blogs));
+            window.dispatchEvent(new Event('storage'));
+            resetBlogForm();
+            renderCMSBlog();
+            showAdminToast('📰 BLOG TERSIMPAN', `Artikel "${title}" telah diterbitkan di website publik.`);
         }
 
-        // TABS SWITCHER
-        function switchAdminTab(tabName) {
-            const secTransaksi = document.getElementById('admin-sec-transaksi');
-            const secPortofolio = document.getElementById('admin-sec-portofolio');
+        function editBlogItem(id) {
+            let saved = localStorage.getItem('sevisa_blogs');
+            let blogs = saved ? JSON.parse(saved) : [];
+            const b = blogs.find(x => x.id === id);
+            if (!b) return;
 
-            const tabTransaksi = document.getElementById('admin-tab-transaksi');
-            const tabPortofolio = document.getElementById('admin-tab-portofolio');
+            document.getElementById('blog-edit-id').value = b.id;
+            document.getElementById('blog-form-title-label').innerText = `✏️ Edit Artikel Blog (${b.id})`;
+            document.getElementById('blog-admin-title').value = b.title;
+            document.getElementById('blog-admin-subheading').value = b.subheading;
+            document.getElementById('blog-admin-p1').value = b.p1;
+            document.getElementById('blog-admin-p2').value = b.p2;
+        }
 
-            if (tabName === 'transaksi') {
-                secTransaksi.classList.remove('hidden');
-                secPortofolio.classList.add('hidden');
-                tabTransaksi.className = "px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 text-brand-600 dark:text-sky-400 shadow-md transition font-black";
-                tabPortofolio.className = "px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition";
-            } else {
-                secTransaksi.classList.add('hidden');
-                secPortofolio.classList.remove('hidden');
-                tabPortofolio.className = "px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 text-brand-600 dark:text-sky-400 shadow-md transition font-black";
-                tabTransaksi.className = "px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition";
+        function deleteBlogItem(id) {
+            if (confirm(`Apakah Anda yakin ingin menghapus artikel blog ${id}?`)) {
+                let saved = localStorage.getItem('sevisa_blogs');
+                let blogs = saved ? JSON.parse(saved) : [];
+                blogs = blogs.filter(b => b.id !== id);
+                localStorage.setItem('sevisa_blogs', JSON.stringify(blogs));
+                window.dispatchEvent(new Event('storage'));
+                renderCMSBlog();
+                showAdminToast('🗑️ BLOG DIHAPUS', `Artikel blog ${id} telah dihapus.`);
             }
         }
 
-        // DARK MODE TOGGLE FOR ADMIN
+        function resetBlogForm() {
+            document.getElementById('blog-edit-id').value = '';
+            document.getElementById('blog-form-title-label').innerText = '➕ Form Tambah / Edit Artikel Blog';
+            document.getElementById('blog-admin-title').value = '';
+            document.getElementById('blog-admin-subheading').value = '';
+            document.getElementById('blog-admin-p1').value = '';
+            document.getElementById('blog-admin-p2').value = '';
+        }
+
+        // 5. TENTANG KAMI CMS EDIT
+        function saveAboutAdminCMS(e) {
+            e.preventDefault();
+            const title = document.getElementById('about-admin-title').value.trim();
+            const desc = document.getElementById('about-admin-desc').value.trim();
+            const tax = document.getElementById('about-admin-tax').value.trim();
+
+            const aboutObj = { title, desc, tax };
+            localStorage.setItem('sevisa_about', JSON.stringify(aboutObj));
+            window.dispatchEvent(new Event('storage'));
+            showAdminToast('📜 TENTANG KAMI UPDATED', 'Informasi Halaman Tentang Kami berhasil diperbarui.');
+        }
+
+        // 6. USERS MANAGEMENT
+        function renderCMSUsers() {
+            const tbody = document.getElementById('admin-user-table-body');
+            const saved = localStorage.getItem('sevisa_users');
+            let users = saved ? JSON.parse(saved) : [
+                { name: 'Budi Santoso', email: 'budi@gmail.com', company: 'PT Salatiga Digital Indo', phone: '081234567890', nik: '3373012345670001', verified: true }
+            ];
+
+            let html = '';
+            users.forEach(u => {
+                html += `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800">
+                        <td class="p-3.5"><strong class="text-slate-900 dark:text-white">${u.name}</strong><br><span class="text-[10px] text-slate-400">${u.email}</span></td>
+                        <td class="p-3.5 font-bold">${u.company || 'Personal'}</td>
+                        <td class="p-3.5 font-mono text-[11px]">${u.nik || '-'}</td>
+                        <td class="p-3.5 font-mono text-[11px] text-emerald-600">${u.phone || '-'}</td>
+                        <td class="p-3.5"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[9px] rounded">VERIFIED</span></td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // TAB MODULE SWITCHER
+        function switchCMSModule(modName) {
+            const modules = ['transaksi', 'lokasi', 'portofolio', 'blog', 'tentang', 'users'];
+            modules.forEach(m => {
+                const sec = document.getElementById('sec-cms-' + m);
+                const tab = document.getElementById('tab-cms-' + m);
+                if (sec) sec.classList.add('hidden');
+                if (tab) tab.className = "px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0";
+            });
+
+            const activeSec = document.getElementById('sec-cms-' + modName);
+            const activeTab = document.getElementById('tab-cms-' + modName);
+
+            if (activeSec) activeSec.classList.remove('hidden');
+            if (activeTab) activeTab.className = "px-4 py-2.5 rounded-xl bg-slate-900 text-white shadow-md font-black shrink-0";
+        }
+
         function toggleDarkMode() {
             const html = document.documentElement;
             if (html.classList.contains('dark')) {
@@ -784,27 +979,21 @@
             }
         }
 
-        // SHOW TOAST
+        function syncAllCMSData() {
+            initAdminCMSData();
+            showAdminToast('🔄 CMS SYNCHRONIZED', 'Seluruh data CMS & transaksi berhasil diperbarui.');
+        }
+
         function showAdminToast(title, msg) {
             const toast = document.getElementById('admin-toast');
             document.getElementById('admin-toast-title').innerText = title;
             document.getElementById('admin-toast-msg').innerHTML = msg;
-
             toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 4000);
+            setTimeout(() => { toast.classList.add('hidden'); }, 4000);
         }
 
-        // LISTEN FOR REALTIME STORAGE EVENTS (WHEN PUBLIC INDEX.HTML ADDS A NEW ORDER)
-        window.addEventListener('storage', () => {
-            renderAdminDashboard();
-        });
-
-        // INIT ON LOAD
         window.addEventListener('DOMContentLoaded', () => {
-            getStoredAdminOrders();
-            renderAdminDashboard();
+            checkAdminSession();
         });
     </script>
 </body>
