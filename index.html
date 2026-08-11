@@ -1245,17 +1245,17 @@
                             
                             <div class="grid grid-cols-3 gap-2 relative">
                                 <div id="step-track-1" class="bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-400 rounded-2xl p-3 text-center space-y-1 transition duration-300">
-                                    <div class="w-7 h-7 rounded-full bg-amber-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md">1</div>
+                                    <div id="step-track-1-icon" class="w-7 h-7 rounded-full bg-amber-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md">1</div>
                                     <strong class="text-slate-900 dark:text-white text-[11px] block font-bold">Menunggu</strong>
                                     <span class="text-[9px] text-slate-500 dark:text-slate-400 block">Antrean Diskominfo</span>
                                 </div>
                                 <div id="step-track-2" class="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 text-center space-y-1 opacity-50 transition duration-300">
-                                    <div class="w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center">2</div>
+                                    <div id="step-track-2-icon" class="w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center">2</div>
                                     <strong class="text-slate-900 dark:text-white text-[11px] block font-bold">Sedang Diproses</strong>
                                     <span class="text-[9px] text-slate-500 dark:text-slate-400 block">Review Uji Tayang</span>
                                 </div>
                                 <div id="step-track-3" class="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 text-center space-y-1 opacity-50 transition duration-300">
-                                    <div class="w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center">3</div>
+                                    <div id="step-track-3-icon" class="w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center">3</div>
                                     <strong class="text-slate-900 dark:text-white text-[11px] block font-bold">Terkonfirmasi</strong>
                                     <span class="text-[9px] text-slate-500 dark:text-slate-400 block">Jadwal Penyiaran</span>
                                 </div>
@@ -2327,6 +2327,10 @@
             const step2 = document.getElementById('step-track-2');
             const step3 = document.getElementById('step-track-3');
 
+            const icon1 = document.getElementById('step-track-1-icon');
+            const icon2 = document.getElementById('step-track-2-icon');
+            const icon3 = document.getElementById('step-track-3-icon');
+
             [step1, step2, step3].forEach(step => {
                 step.className = "bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 text-center space-y-1 opacity-50 transition duration-300";
             });
@@ -2338,7 +2342,11 @@
                         <span>MENUNGGU VERIFIKASI DISKOMINFO</span>
                     </span>
                 `;
-                step1.className = "bg-amber-50 dark:bg-amber-950/60 border-2 border-amber-500 rounded-2xl p-3 text-center space-y-1 transition duration-300 shadow-md";
+                step1.className = "bg-amber-50 dark:bg-amber-950/60 border-2 border-amber-500 rounded-2xl p-3 text-center space-y-1 transition duration-300 shadow-md opacity-100";
+                if (icon1) { icon1.className = "w-7 h-7 rounded-full bg-amber-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md animate-bounce"; icon1.innerText = "1"; }
+                if (icon2) { icon2.className = "w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center"; icon2.innerText = "2"; }
+                if (icon3) { icon3.className = "w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center"; icon3.innerText = "3"; }
+
             } else if (order.status === 'diproses') {
                 badgeContainer.innerHTML = `
                     <span class="px-3.5 py-1.5 bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-black text-xs uppercase tracking-wider rounded-xl border border-blue-300 dark:border-blue-800 flex items-center gap-1.5">
@@ -2347,7 +2355,12 @@
                     </span>
                 `;
                 step1.className = "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-400 rounded-2xl p-3 text-center space-y-1 opacity-80 transition duration-300";
-                step2.className = "bg-blue-50 dark:bg-blue-950/60 border-2 border-blue-500 rounded-2xl p-3 text-center space-y-1 transition duration-300 shadow-md";
+                step2.className = "bg-blue-50 dark:bg-blue-950/60 border-2 border-blue-500 rounded-2xl p-3 text-center space-y-1 transition duration-300 shadow-lg opacity-100 scale-102";
+
+                if (icon1) { icon1.className = "w-7 h-7 rounded-full bg-emerald-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-sm"; icon1.innerText = "✓"; }
+                if (icon2) { icon2.className = "w-7 h-7 rounded-full bg-blue-600 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md animate-pulse ring-4 ring-blue-100 dark:ring-blue-900/50"; icon2.innerText = "2"; }
+                if (icon3) { icon3.className = "w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center"; icon3.innerText = "3"; }
+
             } else if (order.status === 'terkonfirmasi') {
                 badgeContainer.innerHTML = `
                     <span class="px-3.5 py-1.5 bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-black text-xs uppercase tracking-wider rounded-xl border border-emerald-300 dark:border-emerald-800 flex items-center gap-1.5">
@@ -2357,7 +2370,11 @@
                 `;
                 step1.className = "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-400 rounded-2xl p-3 text-center space-y-1 opacity-80 transition duration-300";
                 step2.className = "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-400 rounded-2xl p-3 text-center space-y-1 opacity-80 transition duration-300";
-                step3.className = "bg-emerald-50 dark:bg-emerald-950/60 border-2 border-emerald-500 rounded-2xl p-3 text-center space-y-1 transition duration-300 shadow-md";
+                step3.className = "bg-emerald-50 dark:bg-emerald-950/60 border-2 border-emerald-500 rounded-2xl p-3 text-center space-y-1 transition duration-300 shadow-lg opacity-100";
+
+                if (icon1) { icon1.className = "w-7 h-7 rounded-full bg-emerald-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-sm"; icon1.innerText = "✓"; }
+                if (icon2) { icon2.className = "w-7 h-7 rounded-full bg-emerald-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-sm"; icon2.innerText = "✓"; }
+                if (icon3) { icon3.className = "w-7 h-7 rounded-full bg-emerald-600 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md ring-4 ring-emerald-100 dark:ring-emerald-900/50"; icon3.innerText = "✓"; }
             }
         }
 
