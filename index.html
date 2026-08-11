@@ -476,10 +476,10 @@
 
                             <div class="md:col-span-7 space-y-3">
                                 <span class="text-xs font-bold text-rose-600 dark:text-rose-500 uppercase tracking-widest block">Landasan Operasional</span>
-                                <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
+                                <h2 id="about-page-title" class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
                                     Penyewaan Videotron Resmi Berdasarkan Peraturan Wali Kota Salatiga
                                 </h2>
-                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <p id="about-page-desc" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                                     <strong>SEVISA (Sewa Videotron Salatiga)</strong> mengelola 4 lokasi videotron strategis milik Pemkot Salatiga yang tersebar di <strong>Pasar Rejosari, Blotongan, Selasar Kartini, dan Alun-Alun Salatiga</strong>.
                                 </p>
                                 <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -2918,16 +2918,32 @@
             document.getElementById(id).classList.remove('flex');
         }
 
+        // SYNC TENTANG KAMI FROM ADMIN CMS (LOCALSTORAGE)
+        function renderAboutPageCMS() {
+            let saved = localStorage.getItem('sevisa_about');
+            if (saved) {
+                try {
+                    let about = JSON.parse(saved);
+                    const titleEl = document.getElementById('about-page-title');
+                    const descEl = document.getElementById('about-page-desc');
+                    if (titleEl && about.title) titleEl.innerText = about.title;
+                    if (descEl && about.desc) descEl.innerText = about.desc;
+                } catch(e) {}
+            }
+        }
+
         // LISTEN FOR CMS DATA UPDATES FROM ADMIN PORTAL (ADMIN.HTML)
         window.addEventListener('storage', () => {
             orderDatabase = getStoredOrders();
             renderPortfolioGrid(getMergedPortfolioData());
+            renderAboutPageCMS();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
             renderVideotronCards(VIDEOTRON_DATA);
             renderPortfolioGrid(getMergedPortfolioData());
+            renderAboutPageCMS();
             updateUserNavArea();
             updateProfileStatusUI();
         });
