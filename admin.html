@@ -131,9 +131,14 @@
                     <h2 class="text-2xl sm:text-3xl font-black text-white">Panel Pusat Pengelolaan Web SEVISA</h2>
                     <p class="text-xs text-slate-300">Edit Halaman Tentang Kami, Lokasi & Peta Maps, Portofolio Video/PPT, Blog, serta Status Permohonan Sewa.</p>
                 </div>
-                <button onclick="syncAllCMSData()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-xs rounded-xl border border-slate-700 transition flex items-center gap-2 shadow-md">
-                    <span>🔄</span> Sync Data Real-Time
-                </button>
+                <div class="flex items-center gap-2">
+                    <button onclick="resetAllTestOrders()" class="px-3.5 py-2.5 bg-rose-600/30 hover:bg-rose-600 text-rose-300 hover:text-white font-extrabold text-xs rounded-xl border border-rose-500/40 transition shadow-md">
+                        ⚡ Reset Status Demo
+                    </button>
+                    <button onclick="syncAllCMSData()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-xs rounded-xl border border-slate-700 transition flex items-center gap-2 shadow-md">
+                        <span>🔄</span> Sync Data Real-Time
+                    </button>
+                </div>
             </div>
 
             <!-- SUMMARY METRICS -->
@@ -572,14 +577,11 @@
 
             let html = '';
             filtered.forEach(o => {
-                let badgeClass = 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 border-amber-300';
-                let badgeText = '🟡 MENUNGGU';
+                let selectClass = 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 border-amber-300';
                 if (o.status === 'diproses') {
-                    badgeClass = 'bg-blue-100 dark:bg-blue-950/80 text-blue-800 border-blue-300';
-                    badgeText = '🔵 UJI TAYANG';
+                    selectClass = 'bg-blue-100 dark:bg-blue-950/80 text-blue-800 border-blue-300';
                 } else if (o.status === 'terkonfirmasi') {
-                    badgeClass = 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 border-emerald-300';
-                    badgeText = '🟢 TERKONFIRMASI';
+                    selectClass = 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 border-emerald-300';
                 }
 
                 html += `
@@ -589,14 +591,44 @@
                         <td class="p-3.5"><span class="px-2 py-0.5 bg-slate-200 dark:bg-slate-800 font-bold rounded text-[10px]">📍 ${o.location}</span></td>
                         <td class="p-3.5 leading-relaxed text-[11px]">${o.dates}</td>
                         <td class="p-3.5 font-mono text-[11px] font-bold text-emerald-600">📄 ${o.file}</td>
-                        <td class="p-3.5"><span class="px-2.5 py-1 text-[10px] font-extrabold rounded border ${badgeClass}">${badgeText}</span></td>
+                        <td class="p-3.5">
+                            <select onchange="changeOrderStatusDirect('${o.code}', this.value)" class="p-2 border rounded-xl font-black text-[11px] cursor-pointer shadow-sm ${selectClass}">
+                                <option value="menunggu" ${o.status === 'menunggu' ? 'selected' : ''}>🟡 1. MENUNGGU VERIFIKASI</option>
+                                <option value="diproses" ${o.status === 'diproses' ? 'selected' : ''}>🔵 2. SEDANG DIPROSES / UJI TAYANG</option>
+                                <option value="terkonfirmasi" ${o.status === 'terkonfirmasi' ? 'selected' : ''}>🟢 3. TERKONFIRMASI & TAYANG</option>
+                            </select>
+                        </td>
                         <td class="p-3.5 text-center">
-                            <button onclick="openAdminManageModal('${o.code}')" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-[10px] rounded-lg shadow">⚙️ Kelola</button>
+                            <button onclick="openAdminManageModal('${o.code}')" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-[10px] rounded-lg shadow">⚙️ Catatan & Foto</button>
                         </td>
                     </tr>
                 `;
             });
             tbody.innerHTML = html;
+        }
+
+        function changeOrderStatusDirect(code, newStatus) {
+            let orders = getStoredOrders();
+            const idx = orders.findIndex(o => o.code === code);
+            if (idx !== -1) {
+                orders[idx].status = newStatus;
+                if (newStatus === 'menunggu') {
+                    orders[idx].statusLabel = 'MENUNGGU VERIFIKASI DISKOMINFO';
+                    orders[idx].statusDesc = '📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa Anda sedang berada dalam antrean peninjauan oleh tim admin Diskominfo Kota Salatiga. Estimasi proses verifikasi berkisar 1x24 jam kerja.';
+                } else if (newStatus === 'diproses') {
+                    orders[idx].statusLabel = 'SEDANG DIPROSES / UJI TAYANG';
+                    orders[idx].statusDesc = '⚙️ <strong>Status: Sedang Diproses / Review Uji Tayang</strong><br>File materi iklan Anda sedang diuji kelayakan resolusi dan dijadwalkan oleh sistem penyiaran videotron Diskominfo Salatiga.';
+                    orders[idx].proofImg = 'header_banner.jpg';
+                } else if (newStatus === 'terkonfirmasi') {
+                    orders[idx].statusLabel = 'TERKONFIRMASI & SIAP PENAYANGAN';
+                    orders[idx].statusDesc = '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong><br>Selamat! Permohonan penyewaan videotron Anda telah disetujui resmi oleh Diskominfo Kota Salatiga. Materi iklan siap ditayangkan sesuai jadwal.';
+                    orders[idx].proofImg = 'header_banner.jpg';
+                }
+
+                saveStoredOrders(orders);
+                renderAdminTable();
+                showAdminToast('✅ STATUS BERHASIL DIUBAH', `Status ${code} diubah menjadi ${newStatus.toUpperCase()}`);
+            }
         }
 
         function openAdminManageModal(code) {
@@ -981,6 +1013,63 @@
                 document.getElementById('admin-moon-icon').classList.remove('hidden');
                 document.getElementById('admin-sun-icon').classList.add('hidden');
             }
+        }
+
+        function resetAllTestOrders() {
+            const DEFAULT_TEST_ORDERS = [
+                {
+                    code: 'SVS-148972',
+                    userName: 'Alfi Fadli',
+                    company: 'Pt Mencari Cinta sejati',
+                    location: 'Selasar Kartini',
+                    dates: '2026-08-11 s.d. 2026-09-11 (5 Bulan • Produk Rokok (+25%) • Rp 121.043.750)',
+                    file: 'logo savisa.jpeg',
+                    status: 'diproses',
+                    statusLabel: 'SEDANG DIPROSES / UJI TAYANG',
+                    statusDesc: '⚙️ <strong>Status: Sedang Diproses / Review Uji Tayang</strong><br>File materi iklan Anda sedang diuji kelayakan resolusi dan dijadwalkan oleh sistem penyiaran videotron Diskominfo Salatiga.',
+                    proofImg: 'header_banner.jpg'
+                },
+                {
+                    code: 'SVS-20260810-101',
+                    userName: 'Budi Santoso',
+                    company: 'PT Salatiga Digital Indo',
+                    location: 'Pasar Rejosari',
+                    dates: '2026-08-15 s.d. 2026-08-22 (7 Hari • Produk Non-Rokok • Rp 15.400.000)',
+                    file: 'Video_Promosi_Produk.mp4',
+                    status: 'menunggu',
+                    statusLabel: 'MENUNGGU VERIFIKASI DISKOMINFO',
+                    statusDesc: '📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa Anda sedang berada dalam antrean peninjauan oleh tim admin Diskominfo Kota Salatiga. Estimasi proses verifikasi berkisar 1x24 jam kerja.',
+                    proofImg: 'header_banner.jpg'
+                },
+                {
+                    code: 'SVS-20260810-102',
+                    userName: 'Dinas Pariwisata Salatiga',
+                    company: 'Pemerintah Kota Salatiga',
+                    location: 'Blotongan',
+                    dates: '2026-08-18 s.d. 2026-08-25 (7 Hari • Produk Non-Rokok • Rp 8.876.000)',
+                    file: 'Sosialisasi_Pariwisata.mp4',
+                    status: 'diproses',
+                    statusLabel: 'SEDANG DIPROSES / UJI TAYANG',
+                    statusDesc: '⚙️ <strong>Status: Sedang Diproses / Review Uji Tayang</strong><br>File materi iklan Anda sedang diuji kelayakan resolusi dan dijadwalkan oleh sistem penyiaran videotron Diskominfo Salatiga.',
+                    proofImg: 'header_banner.jpg'
+                },
+                {
+                    code: 'SVS-20260810-103',
+                    userName: 'Komunitas UMKM Salatiga',
+                    company: 'Brand Kuliner Salatiga',
+                    location: 'Alun-Alun Salatiga',
+                    dates: '2026-08-20 s.d. 2026-08-30 (10 Hari • Produk Non-Rokok • Rp 6.980.000)',
+                    file: 'Poster_Promo_Event.png',
+                    status: 'terkonfirmasi',
+                    statusLabel: 'TERKONFIRMASI & SIAP PENAYANGAN',
+                    statusDesc: '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong><br>Selamat! Permohonan penyewaan videotron Anda telah disetujui resmi oleh Diskominfo Kota Salatiga. Materi iklan siap ditayangkan sesuai jadwal.',
+                    proofImg: 'header_banner.jpg'
+                }
+            ];
+
+            saveStoredOrders(DEFAULT_TEST_ORDERS);
+            renderAdminTable();
+            showAdminToast('⚡ RESET DATA DEMO', 'Data pengajuan telah di-reset ke status awal beragam.');
         }
 
         function syncAllCMSData() {
