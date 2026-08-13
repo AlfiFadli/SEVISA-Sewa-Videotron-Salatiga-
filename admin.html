@@ -307,6 +307,17 @@
                             </div>
                         </div>
 
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold mb-1">📁 Upload File Materi (Foto / Video MP4 / PPT / PDF) *</label>
+                                <input type="file" id="port-admin-file" accept="image/*,video/*,.ppt,.pptx,.pdf" class="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">🔗 Atau Masukkan URL Gambar/Video</label>
+                                <input type="text" id="port-admin-url" placeholder="Opsional, contoh: header_banner.jpg" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
+                            </div>
+                        </div>
+
                         <div>
                             <label class="block font-bold mb-1">Deskripsi Penayangan Materi *</label>
                             <textarea id="port-admin-desc" rows="2" required placeholder="Jelaskan cakupan penayangan, target audiens, dan dampak promosi..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium"></textarea>
@@ -840,33 +851,57 @@
             const dates = document.getElementById('port-admin-dates').value.trim();
             const freq = document.getElementById('port-admin-freq').value.trim();
             const description = document.getElementById('port-admin-desc').value.trim();
+            const fileInput = document.getElementById('port-admin-file');
+            const urlInput = document.getElementById('port-admin-url');
+            const customUrl = urlInput ? urlInput.value.trim() : '';
 
             let mediaLabel = '🎥 Video Motion 1080p';
             if (type === 'ppt') mediaLabel = '📊 Presentasi Slide (PPT)';
             if (type === 'image') mediaLabel = '🖼️ Poster Digital HD';
             if (type === 'layanan') mediaLabel = '🏛️ Iklan Layanan Publik';
 
-            let saved = localStorage.getItem('sevisa_portfolio');
-            let items = saved ? JSON.parse(saved) : [];
+            const commitSave = (mediaDataUrl) => {
+                let saved = localStorage.getItem('sevisa_portfolio');
+                let items = saved ? JSON.parse(saved) : [];
 
-            if (editId) {
-                const idx = items.findIndex(p => p.id === editId);
-                if (idx !== -1) {
-                    items[idx] = { ...items[idx], title, client, location, category, type, mediaLabel, dates, freq, description };
+                const finalMedia = mediaDataUrl || customUrl || 'header_banner.jpg';
+
+                if (editId) {
+                    const idx = items.findIndex(p => p.id === editId);
+                    if (idx !== -1) {
+                        items[idx] = { 
+                            ...items[idx], 
+                            title, client, location, category, type, mediaLabel, dates, freq, description,
+                            imgUrl: finalMedia,
+                            mediaUrl: finalMedia
+                        };
+                    }
+                } else {
+                    const newItem = {
+                        id: 'PORT-' + Math.floor(100 + Math.random() * 900),
+                        title, client, location, category, type, mediaLabel, dates, freq, description,
+                        imgUrl: finalMedia,
+                        mediaUrl: finalMedia
+                    };
+                    items.unshift(newItem);
                 }
-            } else {
-                const newItem = {
-                    id: 'PORT-' + Math.floor(100 + Math.random() * 900),
-                    title, client, location, category, type, mediaLabel, dates, freq, imgUrl: 'header_banner.jpg', description
-                };
-                items.unshift(newItem);
-            }
 
-            localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
-            window.dispatchEvent(new Event('storage'));
-            resetPortfolioForm();
-            renderCMSPortfolio();
-            showAdminToast('💾 PORTOFOLIO TERSIMPAN', `Item portofolio "${title}" telah disimpan.`);
+                localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
+                window.dispatchEvent(new Event('storage'));
+                resetPortfolioForm();
+                renderCMSPortfolio();
+                showAdminToast('💾 PORTOFOLIO TERSIMPAN', `Item portofolio "${title}" telah disimpan & otomatis aktif di website publik.`);
+            };
+
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    commitSave(evt.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                commitSave(null);
+            }
         }
 
         function editPortfolioItem(id) {

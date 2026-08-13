@@ -2795,7 +2795,8 @@
         }
 
         function openPortfolioModal(id) {
-            const item = PORTFOLIO_DATABASE.find(p => p.id === id);
+            const allPort = getMergedPortfolioData();
+            const item = allPort.find(p => p.id === id);
             if (!item) return;
 
             selectedPortfolioItem = item;
@@ -2808,7 +2809,33 @@
             document.getElementById('port-modal-dates').innerText = item.dates;
             document.getElementById('port-modal-freq').innerText = item.freq;
             document.getElementById('port-modal-desc').innerText = item.description;
-            document.getElementById('port-modal-img').src = item.imgUrl;
+
+            const mediaWrapper = document.getElementById('port-modal-media-wrapper');
+            const mediaSource = item.mediaUrl || item.imgUrl || 'header_banner.jpg';
+
+            if (mediaWrapper) {
+                if (item.type === 'video' || mediaSource.startsWith('data:video') || mediaSource.endsWith('.mp4')) {
+                    mediaWrapper.innerHTML = `<video src="${mediaSource}" controls autoplay loop class="w-full h-full object-cover rounded-2xl"></video>`;
+                } else if (item.type === 'ppt' || mediaSource.endsWith('.ppt') || mediaSource.endsWith('.pptx')) {
+                    mediaWrapper.innerHTML = `
+                        <div class="w-full h-full bg-slate-900 flex flex-col items-center justify-center p-6 text-center space-y-3 relative">
+                            <img src="${mediaSource.startsWith('data:image') ? mediaSource : 'header_banner.jpg'}" class="absolute inset-0 w-full h-full object-cover opacity-30">
+                            <div class="w-16 h-16 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-black text-2xl shadow-xl relative z-10">📊</div>
+                            <span class="text-sm font-black text-amber-400 relative z-10 uppercase tracking-wider">Presentasi Slide (PPT / PPTX)</span>
+                            <span class="text-xs text-slate-300 relative z-10 font-medium">${item.title}</span>
+                        </div>
+                    `;
+                } else {
+                    mediaWrapper.innerHTML = `
+                        <img id="port-modal-img" src="${mediaSource}" alt="${item.title}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-slate-950/40 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-red-600/90 text-white flex items-center justify-center shadow-2xl border border-white/40 cursor-pointer hover:scale-110 transition">
+                                <svg class="w-8 h-8 fill-current ml-1" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
 
             openModal('portfolio-modal-viewer');
         }
