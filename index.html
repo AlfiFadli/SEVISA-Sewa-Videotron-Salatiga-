@@ -896,7 +896,19 @@
 
                 <div class="py-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
                     
-                    <!-- TABEL PERBANDINGAN TARIF BROSUR (SEMUA 4 TITIK) -->
+                    <!-- MASTER OVERVIEW MAP BANNER -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+                            <div>
+                                <span class="px-2.5 py-0.5 bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-extrabold text-[10px] rounded-md uppercase">PETA SEBARAN SALATIGA</span>
+                                <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">🗺️ Peta Interaktif Sebaran 4 Titik Videotron Diskominfo</h3>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Klik marker untuk melihat rincian lokasi & navigasi Google Maps GPS</span>
+                        </div>
+                        <div id="master-salatiga-map" class="w-full h-80 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-md relative z-0"></div>
+                    </div>
+
+                    <!-- TABEL PERBANDINGAN TARIF BROSUR (SEMUA 4 TITIK METALLIC CARDS WITH MAPS) -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         
                         <!-- CARD 1: PASAR REJOSARI -->
@@ -907,8 +919,13 @@
                                     <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">PASAR REJOSARI</h3>
                                     <p class="text-xs text-slate-500 dark:text-slate-400">Jl. Hasanudin, Salatiga</p>
                                 </div>
-                                <button onclick="triggerBookingFlow('Pasar Rejosari')" class="px-3 py-1.5 bg-brand-600 text-white font-bold text-xs rounded-xl shadow-md">Sewa &rarr;</button>
+                                <span class="px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px] rounded-lg border border-emerald-500/30">
+                                    -7.3305, 110.5084
+                                </span>
                             </div>
+
+                            <!-- CARD LEAFLET MAP CONTAINER -->
+                            <div id="card-map-rejosari" class="w-full h-44 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
 
                             <div class="grid grid-cols-2 gap-3 text-xs">
                                 <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
@@ -931,6 +948,18 @@
                                     </ul>
                                 </div>
                             </div>
+
+                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                                <a href="https://maps.google.com/?q=-7.3305,110.5084" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
+                                    📍 Google Maps GPS
+                                </a>
+                                <button onclick="openDetailLokasi('Pasar Rejosari', 'Jl. Hasanudin, Salatiga', '8 x 4 Meter', '2.200.000', '2.750.000', '59.450.000', '74.312.500', '210.000', '262.500', '3.800', '4.750')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
+                                    🔍 Detail Brosur
+                                </button>
+                                <button onclick="triggerBookingFlow('Pasar Rejosari')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
+                                    Sewa &rarr;
+                                </button>
+                            </div>
                         </div>
 
                         <!-- CARD 2: BLOTONGAN -->
@@ -941,8 +970,13 @@
                                     <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">BLOTONGAN</h3>
                                     <p class="text-xs text-slate-500 dark:text-slate-400">Jl. Semarang - Surakarta, Blotongan</p>
                                 </div>
-                                <button onclick="triggerBookingFlow('Blotongan')" class="px-3 py-1.5 bg-brand-600 text-white font-bold text-xs rounded-xl shadow-md">Sewa &rarr;</button>
+                                <span class="px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px] rounded-lg border border-emerald-500/30">
+                                    -7.3150, 110.4910
+                                </span>
                             </div>
+
+                            <!-- CARD LEAFLET MAP CONTAINER -->
+                            <div id="card-map-blotongan" class="w-full h-44 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
 
                             <div class="grid grid-cols-2 gap-3 text-xs">
                                 <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
@@ -965,6 +999,18 @@
                                     </ul>
                                 </div>
                             </div>
+
+                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                                <a href="https://maps.google.com/?q=-7.3150,110.4910" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
+                                    📍 Google Maps GPS
+                                </a>
+                                <button onclick="openDetailLokasi('Blotongan', 'Jl. Semarang - Surakarta, Blotongan', '8 x 4 Meter', '1.268.000', '1.585.000', '34.315.000', '42.893.750', '120.500', '150.625', '2.200', '2.750')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
+                                    🔍 Detail Brosur
+                                </button>
+                                <button onclick="triggerBookingFlow('Blotongan')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
+                                    Sewa &rarr;
+                                </button>
+                            </div>
                         </div>
 
                         <!-- CARD 3: SELASAR KARTINI -->
@@ -975,8 +1021,13 @@
                                     <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">SELASAR KARTINI</h3>
                                     <p class="text-xs text-slate-500 dark:text-slate-400">Jl. Kartini, Salatiga</p>
                                 </div>
-                                <button onclick="triggerBookingFlow('Selasar Kartini')" class="px-3 py-1.5 bg-brand-600 text-white font-bold text-xs rounded-xl shadow-md">Sewa &rarr;</button>
+                                <span class="px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px] rounded-lg border border-emerald-500/30">
+                                    -7.3275, 110.5012
+                                </span>
                             </div>
+
+                            <!-- CARD LEAFLET MAP CONTAINER -->
+                            <div id="card-map-kartini" class="w-full h-44 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
 
                             <div class="grid grid-cols-2 gap-3 text-xs">
                                 <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
@@ -999,18 +1050,35 @@
                                     </ul>
                                 </div>
                             </div>
+
+                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                                <a href="https://maps.google.com/?q=-7.3275,110.5012" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
+                                    📍 Google Maps GPS
+                                </a>
+                                <button onclick="openDetailLokasi('Selasar Kartini', 'Jl. Kartini, Salatiga', '8 x 4 Meter', '716.000', '895.000', '19.367.000', '24.208.750', '68.000', '85.000', '1.300', '1.625')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
+                                    🔍 Detail Brosur
+                                </button>
+                                <button onclick="triggerBookingFlow('Selasar Kartini')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
+                                    Sewa &rarr;
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- CARD 4: ALUN-ALUN SALATIGA -->
+                        <!-- CARD 4: ALUN-ALUN SALATIGA / SIMPANG ABC -->
                         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-lg space-y-4">
                             <div class="flex justify-between items-start border-b border-slate-200 dark:border-slate-800 pb-3">
                                 <div>
                                     <span class="px-2.5 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[10px] rounded-md">LOKASI 4 (ALUN-ALUN PANCASILA)</span>
                                     <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">ALUN-ALUN SALATIGA</h3>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Lapangan Pancasila, Salatiga</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Lapangan Pancasila / Simpang ABC, Salatiga</p>
                                 </div>
-                                <button onclick="triggerBookingFlow('Alun-Alun Salatiga')" class="px-3 py-1.5 bg-brand-600 text-white font-bold text-xs rounded-xl shadow-md">Sewa &rarr;</button>
+                                <span class="px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px] rounded-lg border border-emerald-500/30">
+                                    -7.3392, 110.5025
+                                </span>
                             </div>
+
+                            <!-- CARD LEAFLET MAP CONTAINER -->
+                            <div id="card-map-alunalun" class="w-full h-44 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
 
                             <div class="grid grid-cols-2 gap-3 text-xs">
                                 <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
@@ -1032,6 +1100,18 @@
                                         <li><strong>Menit:</strong> Rp 1.500</li>
                                     </ul>
                                 </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                                <a href="https://maps.google.com/?q=-7.3392,110.5025" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
+                                    📍 Google Maps GPS
+                                </a>
+                                <button onclick="openDetailLokasi('Simpang ABC', 'Lapangan Pancasila / Simpang ABC, Salatiga', '8 x 4 Meter', '698.000', '872.500', '18.881.000', '23.601.250', '66.200', '82.750', '1.200', '1.500')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
+                                    🔍 Detail Brosur
+                                </button>
+                                <button onclick="triggerBookingFlow('Alun-Alun Salatiga')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
+                                    Sewa &rarr;
+                                </button>
                             </div>
                         </div>
 
@@ -3011,6 +3091,110 @@
             }, 150);
         }
 
+        let masterSalatigaMapInstance = null;
+        const cardMapInstances = {};
+
+        function initPageLokasiMaps() {
+            setTimeout(() => {
+                const masterContainer = document.getElementById('master-salatiga-map');
+                if (masterContainer) {
+                    if (masterSalatigaMapInstance) {
+                        masterSalatigaMapInstance.remove();
+                        masterSalatigaMapInstance = null;
+                    }
+
+                    try {
+                        masterSalatigaMapInstance = L.map('master-salatiga-map').setView([-7.3280, 110.5010], 14);
+
+                        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+                            subdomains: 'abcd',
+                            maxZoom: 19
+                        }).addTo(masterSalatigaMapInstance);
+
+                        const locKeys = Object.keys(LOCATION_COORDINATES);
+                        locKeys.forEach(k => {
+                            const loc = LOCATION_COORDINATES[k];
+                            if (!loc || !loc.lat) return;
+
+                            const customIcon = L.divIcon({
+                                className: 'custom-leaflet-marker',
+                                html: `
+                                    <div class="relative flex items-center justify-center w-8 h-8">
+                                        <span class="absolute w-8 h-8 rounded-full bg-brand-500/40 animate-ping"></span>
+                                        <div class="w-8 h-8 rounded-full bg-brand-600 text-white font-black text-xs flex items-center justify-center shadow-xl border-2 border-white">
+                                            📍
+                                        </div>
+                                    </div>
+                                `,
+                                iconSize: [32, 32],
+                                iconAnchor: [16, 32],
+                                popupAnchor: [0, -32]
+                            });
+
+                            const marker = L.marker([loc.lat, loc.lng], { icon: customIcon }).addTo(masterSalatigaMapInstance);
+                            marker.bindPopup(`
+                                <div class="p-1.5 space-y-1 text-xs font-sans">
+                                    <strong class="font-black text-slate-900 block text-xs">${k}</strong>
+                                    <span class="text-[10px] text-slate-500 block font-medium">${loc.orientation}</span>
+                                    <a href="${loc.googleMaps}" target="_blank" class="px-2.5 py-1 bg-emerald-600 text-white font-extrabold text-[9px] rounded inline-block mt-1">
+                                        📍 Buka Google Maps GPS &rarr;
+                                    </a>
+                                </div>
+                            `);
+                        });
+
+                        masterSalatigaMapInstance.invalidateSize();
+                    } catch(e) {}
+                }
+
+                const cards = [
+                    { id: 'card-map-rejosari', title: 'Pasar Rejosari', lat: -7.3305, lng: 110.5084 },
+                    { id: 'card-map-blotongan', title: 'Blotongan', lat: -7.3150, lng: 110.4910 },
+                    { id: 'card-map-kartini', title: 'Selasar Kartini', lat: -7.3275, lng: 110.5012 },
+                    { id: 'card-map-alunalun', title: 'Simpang ABC', lat: -7.3392, lng: 110.5025 }
+                ];
+
+                cards.forEach(c => {
+                    const container = document.getElementById(c.id);
+                    if (!container) return;
+
+                    if (cardMapInstances[c.id]) {
+                        cardMapInstances[c.id].remove();
+                        delete cardMapInstances[c.id];
+                    }
+
+                    try {
+                        const map = L.map(c.id, { zoomControl: false }).setView([c.lat, c.lng], 15);
+                        cardMapInstances[c.id] = map;
+
+                        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                            subdomains: 'abcd',
+                            maxZoom: 19
+                        }).addTo(map);
+
+                        const customIcon = L.divIcon({
+                            className: 'custom-leaflet-marker',
+                            html: `
+                                <div class="relative flex items-center justify-center w-7 h-7">
+                                    <span class="absolute w-7 h-7 rounded-full bg-sky-500/40 animate-ping"></span>
+                                    <div class="w-7 h-7 rounded-full bg-brand-600 text-white font-black text-xs flex items-center justify-center shadow-lg border-2 border-white">
+                                        📍
+                                    </div>
+                                </div>
+                            `,
+                            iconSize: [28, 28],
+                            iconAnchor: [14, 28]
+                        });
+
+                        L.marker([c.lat, c.lng], { icon: customIcon }).addTo(map);
+                        map.invalidateSize();
+                    } catch(e) {}
+                });
+
+            }, 200);
+        }
+
         function openDetailLokasi(title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok) {
             selectedLocationData = { title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok };
             document.getElementById('det-title').innerText = title;
@@ -3375,6 +3559,10 @@
             const activeNav = document.getElementById('nav-' + pageId);
             if (activeNav) {
                 activeNav.className = "px-2.5 py-1.5 rounded-lg text-brand-600 dark:text-sky-400 bg-brand-50 dark:bg-slate-800 font-black transition";
+            }
+
+            if (pageId === 'lokasi') {
+                initPageLokasiMaps();
             }
 
             if (pageId === 'proyek') {
