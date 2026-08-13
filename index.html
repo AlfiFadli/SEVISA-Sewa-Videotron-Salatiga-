@@ -1330,7 +1330,7 @@
                         
                         <!-- VIEW 1: BLOG CARDS GRID LIST -->
                         <div id="blog-list-view" class="block space-y-8">
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+                            <div id="user-blog-grid-container" class="grid grid-cols-1 md:grid-cols-4 gap-5">
                                 
                                 <div onclick="openBlogArticleDetail('VDT-01')" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group flex flex-col justify-between">
                                     <div>
@@ -3981,7 +3981,52 @@
             document.getElementById(id).classList.remove('flex');
         }
 
-        // SYNC TENTANG KAMI FROM ADMIN CMS (LOCALSTORAGE)
+        // SYNC BLOG & TENTANG KAMI FROM ADMIN CMS (LOCALSTORAGE)
+        function renderUserBlogPageCards() {
+            const container = document.getElementById('user-blog-grid-container');
+            if (!container) return;
+
+            let saved = localStorage.getItem('sevisa_blogs');
+            let customBlogs = saved ? JSON.parse(saved) : [];
+
+            const defaultBlogs = [
+                { id: 'VDT-01', title: 'Pasang Iklan Videotron Pasar Rejosari Salatiga, Cek Tarif Resmi Diskominfo', tag: 'PASAR REJOSARI', img: 'header_banner.jpg' },
+                { id: 'VDT-02', title: 'Pasang Iklan Videotron Blotongan Gate Utara Salatiga, Cek Tarif dan Lokasi', tag: 'BLOTONGAN', img: 'header_banner.jpg' },
+                { id: 'VDT-03', title: 'Pasang Iklan Videotron Selasar Kartini Pusat Kota, Cek Tarif Harian & Bulanan', tag: 'SELASAR KARTINI', img: 'header_banner.jpg' },
+                { id: 'VDT-04', title: 'Pasang Iklan Videotron Alun-Alun Pancasila Salatiga, Cek Tarif Resmi Diskominfo', tag: 'ALUN-ALUN SALATIGA', img: 'header_banner.jpg' }
+            ];
+
+            const allBlogs = [...customBlogs.map(b => ({
+                id: b.id,
+                title: b.title,
+                tag: b.tag || 'PUBLIKASI DISKOMINFO',
+                img: b.imgUrl || 'header_banner.jpg'
+            })), ...defaultBlogs];
+
+            let html = '';
+            allBlogs.forEach(b => {
+                html += `
+                    <div onclick="openBlogArticleDetail('${b.id}')" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group flex flex-col justify-between">
+                        <div>
+                            <div class="w-full h-36 bg-slate-900 relative flex items-center justify-center p-3 text-center overflow-hidden">
+                                <img src="${b.img}" alt="${b.title}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
+                                <span class="px-2.5 py-1 bg-red-600 text-white text-[8px] font-extrabold uppercase rounded-full shadow-lg relative z-10 border border-red-400">
+                                    ${b.tag}
+                                </span>
+                            </div>
+                            <div class="p-4 space-y-1.5">
+                                <h3 class="font-extrabold text-slate-900 dark:text-white text-xs leading-snug group-hover:text-red-600 transition">
+                                    ${b.title}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
         function renderAboutPageCMS() {
             let saved = localStorage.getItem('sevisa_about');
             if (saved) {
@@ -3989,8 +4034,10 @@
                     let about = JSON.parse(saved);
                     const titleEl = document.getElementById('about-page-title');
                     const descEl = document.getElementById('about-page-desc');
+                    const taxEl = document.getElementById('about-page-tax');
                     if (titleEl && about.title) titleEl.innerText = about.title;
                     if (descEl && about.desc) descEl.innerText = about.desc;
+                    if (taxEl && about.tax) taxEl.innerText = about.tax;
                 } catch(e) {}
             }
         }
@@ -4144,6 +4191,8 @@
                 orderDatabase = getStoredOrders();
                 renderPortfolioGrid(getMergedPortfolioData());
                 renderAboutPageCMS();
+                renderUserBlogPageCards();
+                renderUserLokasiPageCards();
                 renderLiveChatMessages();
 
                 const searchInput = document.getElementById('status-search-code');
@@ -4169,9 +4218,10 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
-            renderVideotronCards(VIDEOTRON_DATA);
+            renderUserLokasiPageCards();
             renderPortfolioGrid(getMergedPortfolioData());
             renderAboutPageCMS();
+            renderUserBlogPageCards();
             updateUserNavArea();
             updateProfileStatusUI();
         });
