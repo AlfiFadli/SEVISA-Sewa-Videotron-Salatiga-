@@ -3399,10 +3399,27 @@
             renderLiveChatMessages();
         }
 
+        const DEFAULT_SAMPLE_CHATS = [
+            { sender: 'user', userName: 'Alfi Fadli', text: 'Halo Admin Diskominfo! Mau tanya apakah slot Videotron Selasar Kartini untuk bulan September 2026 masih tersedia?', time: '10:15' },
+            { sender: 'admin', userName: 'Admin Diskominfo', text: 'Halo Sdr/i Alfi Fadli! Slot Videotron Selasar Kartini masih tersedia. Silakan melakukan booking pengajuan sewa pada website.', time: '10:18' },
+            { sender: 'user', userName: 'Budi Santoso', text: 'Selamat pagi Admin, berapa lama proses verifikasi bukti bayar retribusi PAD?', time: '10:45' }
+        ];
+
+        function getStoredChats() {
+            const saved = localStorage.getItem('sevisa_chats');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                } catch(e) {}
+            }
+            localStorage.setItem('sevisa_chats', JSON.stringify(DEFAULT_SAMPLE_CHATS));
+            return DEFAULT_SAMPLE_CHATS;
+        }
+
         function renderLiveChatMessages() {
             const container = document.getElementById('chat-messages-container');
-            const saved = localStorage.getItem('sevisa_chats');
-            let chats = saved ? JSON.parse(saved) : [];
+            let chats = getStoredChats();
 
             let html = `
                 <div class="bg-blue-100 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 text-blue-950 dark:text-blue-200 p-3 rounded-2xl max-w-[85%] space-y-1 shadow-sm">
@@ -3439,8 +3456,7 @@
             const msgText = input.value.trim();
             if (!msgText) return;
 
-            const saved = localStorage.getItem('sevisa_chats');
-            let chats = saved ? JSON.parse(saved) : [];
+            let chats = getStoredChats();
 
             chats.push({
                 sender: 'user',
