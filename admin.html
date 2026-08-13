@@ -233,14 +233,114 @@
                 </div>
 
                 <!-- ========================================================================= -->
-                <!-- MODULE 2: KELOLA LOKASI & PETA INTERACTIVE MAPS -->
+                <!-- MODULE 2: FULL CRUD KELOLA LOKASI VIDEOTRON & TARIF RETRIBUSI -->
                 <!-- ========================================================================= -->
                 <div id="sec-cms-lokasi" class="hidden space-y-6">
-                    <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <h3 class="text-base font-black text-slate-900 dark:text-white">Kelola 4 Titik Lokasi Videotron & Embed Peta Google Maps</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Atur rincian lokasi, tarif harian/bulanan, dan link embed peta Google Maps untuk masing-masing videotron.</p>
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <div>
+                            <h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Titik Lokasi Videotron & Tarif Retribusi (Full CRUD)</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Tambah, Edit, dan Hapus data lokasi videotron beserta rincian tarif retribusi Perwali & koordinat peta.</p>
+                        </div>
                     </div>
 
+                    <!-- FORM TAMBAH / EDIT LOKASI -->
+                    <form onsubmit="saveLocationAdminForm(event)" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
+                        <input type="hidden" id="loc-edit-id" value="">
+                        <h4 id="loc-form-title-label" class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2">➕ Form Tambah / Edit Titik Lokasi Videotron</h4>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block font-bold mb-1">Nama Titik Lokasi *</label>
+                                <input type="text" id="loc-admin-title" required placeholder="Contoh: Pasar Rejosari" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Alamat Lengkap *</label>
+                                <input type="text" id="loc-admin-address" required placeholder="Contoh: Jl. Hasanudin, Salatiga" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Koordinat GPS Digital (Lat, Lng) *</label>
+                                <input type="text" id="loc-admin-coords" required placeholder="-7.3305, 110.5084" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-brand-600 dark:text-sky-400 font-bold">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block font-bold mb-1">Ukuran Display (Meter)</label>
+                                <input type="text" id="loc-admin-size" placeholder="8 x 4 Meter" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Estimasi Trafik Kendaraan</label>
+                                <input type="text" id="loc-admin-traffic" placeholder="120.000 Kendaraan/Hari" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Badge Kategori Lokasi</label>
+                                <input type="text" id="loc-admin-badge" placeholder="LOKASI 1 (TOP TRAFFIC)" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Orientasi & Viewing Angle</label>
+                                <input type="text" id="loc-admin-orientation" placeholder="Utara - Selatan" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-200 dark:border-slate-700">
+                            <!-- TARIF NON ROKOK -->
+                            <div class="p-4 bg-blue-50/60 dark:bg-blue-950/30 rounded-xl border border-blue-200 dark:border-blue-800 space-y-2">
+                                <h5 class="font-extrabold text-blue-700 dark:text-blue-300 text-xs uppercase">Rincian Tarif Non-Rokok (Standar)</h5>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Bulan (Rp)</label>
+                                        <input type="text" id="loc-admin-month-non" placeholder="59.450.000" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Hari (Rp)</label>
+                                        <input type="text" id="loc-admin-day-non" placeholder="2.200.000" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Jam (Rp)</label>
+                                        <input type="text" id="loc-admin-hour-non" placeholder="210.000" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Menit (Rp)</label>
+                                        <input type="text" id="loc-admin-minute-non" placeholder="3.800" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TARIF ROKOK -->
+                            <div class="p-4 bg-rose-50/60 dark:bg-rose-950/30 rounded-xl border border-rose-200 dark:border-rose-800 space-y-2">
+                                <h5 class="font-extrabold text-rose-700 dark:text-rose-300 text-xs uppercase">Rincian Tarif Rokok (+25% Perwali)</h5>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Bulan (Rp)</label>
+                                        <input type="text" id="loc-admin-month-rokok" placeholder="74.312.500" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Hari (Rp)</label>
+                                        <input type="text" id="loc-admin-day-rokok" placeholder="2.750.000" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Jam (Rp)</label>
+                                        <input type="text" id="loc-admin-hour-rokok" placeholder="262.500" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Menit (Rp)</label>
+                                        <input type="text" id="loc-admin-minute-rokok" placeholder="4.750" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 flex gap-2">
+                            <button type="submit" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
+                                💾 SIMPAN DATA LOKASI & TARIF &rarr;
+                            </button>
+                            <button type="button" onclick="resetLocationForm()" class="px-5 py-3 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl">
+                                ❌ Batal / Reset
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- LISTING CARDS LOKASI CMS -->
                     <div id="cms-locations-list" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
                         <!-- DYNAMICALLY POPULATED -->
                     </div>
@@ -957,54 +1057,284 @@
             }
         }
 
-        // 2. LOCATIONS & GOOGLE MAPS CMS MANAGEMENT
+        // 2. LOCATIONS & GOOGLE MAPS CMS MANAGEMENT (FULL CRUD)
         const DEFAULT_LOCATIONS = [
-            { id: 'VDT-01', name: 'Pasar Rejosari', address: 'Jl. Hasanudin, Salatiga', mapsUrl: 'https://maps.google.com/?q=Pasar+Rejosari+Salatiga', priceDay: '2.200.000' },
-            { id: 'VDT-02', name: 'Selasar Kartini', address: 'Jl. Kartini, Salatiga', mapsUrl: 'https://maps.google.com/?q=Selasar+Kartini+Salatiga', priceDay: '716.000' },
-            { id: 'VDT-03', name: 'Blotongan', address: 'Jl. Semarang - Surakarta, Blotongan', mapsUrl: 'https://maps.google.com/?q=Blotongan+Salatiga', priceDay: '1.268.000' },
-            { id: 'VDT-04', name: 'Alun-Alun Salatiga', address: 'Lapangan Pancasila, Salatiga', mapsUrl: 'https://maps.google.com/?q=Alun-Alun+Salatiga', priceDay: '698.000' }
+            {
+                id: 'VDT-01',
+                title: 'PASAR REJOSARI',
+                address: 'Jl. Hasanudin, Salatiga',
+                coords: '-7.3305, 110.5084',
+                orientation: 'Utara - Selatan (Kawasan Pasar & Komersial Rejosari)',
+                size: '8 x 4 Meter',
+                traffic: '120.000 Kendaraan/Hari',
+                badgeText: 'LOKASI 1 (TOP TRAFFIC)',
+                priceNon: '2.200.000',
+                priceRokok: '2.750.000',
+                monthNon: '59.450.000',
+                monthRokok: '74.312.500',
+                hourNon: '210.000',
+                hourRokok: '262.500',
+                minuteNon: '3.800',
+                minuteRokok: '4.750'
+            },
+            {
+                id: 'VDT-02',
+                title: 'BLOTONGAN',
+                address: 'Jl. Semarang - Surakarta, Blotongan',
+                coords: '-7.3150, 110.4910',
+                orientation: 'Utara - Selatan (Gate Masuk Salatiga dari Semarang)',
+                size: '8 x 4 Meter',
+                traffic: '110.000 Kendaraan/Hari',
+                badgeText: 'LOKASI 2 (GATE UTARA)',
+                priceNon: '1.268.000',
+                priceRokok: '1.585.000',
+                monthNon: '34.315.000',
+                monthRokok: '42.893.750',
+                hourNon: '120.500',
+                hourRokok: '150.625',
+                minuteNon: '2.200',
+                minuteRokok: '2.750'
+            },
+            {
+                id: 'VDT-03',
+                title: 'SELASAR KARTINI',
+                address: 'Jl. Kartini, Salatiga',
+                coords: '-7.3275, 110.5012',
+                orientation: 'Barat - Timur (Pusat Kota & Kawasan Kuliner Kartini)',
+                size: '8 x 4 Meter',
+                traffic: '85.000 Kendaraan/Hari',
+                badgeText: 'LOKASI 3 (PUSAT EDUKASI)',
+                priceNon: '716.000',
+                priceRokok: '895.000',
+                monthNon: '19.367.000',
+                monthRokok: '24.208.750',
+                hourNon: '68.000',
+                hourRokok: '85.000',
+                minuteNon: '1.300',
+                minuteRokok: '1.625'
+            },
+            {
+                id: 'VDT-04',
+                title: 'ALUN-ALUN SALATIGA',
+                address: 'Lapangan Pancasila / Simpang ABC, Salatiga',
+                coords: '-7.3392, 110.5025',
+                orientation: 'Timur - Barat (Persimpangan Jl. Jend. Sudirman & Argoyuwono)',
+                size: '8 x 4 Meter',
+                traffic: '95.000 Kendaraan/Hari',
+                badgeText: 'LOKASI 4 (ALUN-ALUN PANCASILA)',
+                priceNon: '698.000',
+                priceRokok: '872.500',
+                monthNon: '18.881.000',
+                monthRokok: '23.601.250',
+                hourNon: '66.200',
+                hourRokok: '82.750',
+                minuteNon: '1.200',
+                minuteRokok: '1.500'
+            }
         ];
+
+        function getStoredCMSLocations() {
+            const saved = localStorage.getItem('sevisa_locations');
+            if (saved) {
+                try { return JSON.parse(saved); } catch(e) {}
+            }
+            return DEFAULT_LOCATIONS;
+        }
+
+        function saveStoredCMSLocations(locs) {
+            localStorage.setItem('sevisa_locations', JSON.stringify(locs));
+            window.dispatchEvent(new Event('storage'));
+        }
 
         function renderCMSLocations() {
             const container = document.getElementById('cms-locations-list');
-            let saved = localStorage.getItem('sevisa_locations');
-            let locs = saved ? JSON.parse(saved) : DEFAULT_LOCATIONS;
+            if (!container) return;
+
+            let locs = getStoredCMSLocations();
+
+            if (locs.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 italic text-xs col-span-2">Belum ada lokasi videotron. Gunakan form di atas untuk menambah lokasi baru.</p>';
+                return;
+            }
 
             let html = '';
-            locs.forEach((loc, idx) => {
+            locs.forEach(loc => {
+                const titleStr = loc.title || loc.name || 'Videotron';
+                const latLng = loc.coords || `${loc.lat || -7.3305}, ${loc.lng || 110.5084}`;
+                const gmaps = `https://maps.google.com/?q=${encodeURIComponent(latLng)}`;
+
                 html += `
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl space-y-3 shadow-md">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl space-y-3 shadow-md hover:shadow-lg transition">
                         <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-                            <strong class="font-extrabold text-slate-900 dark:text-white text-sm">📍 ${loc.name}</strong>
-                            <span class="font-mono text-[10px] text-sky-400 font-bold">${loc.id}</span>
+                            <div>
+                                <span class="px-2 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[9px] rounded">${loc.badgeText || 'TITIK LOKASI'}</span>
+                                <h4 class="font-black text-slate-900 dark:text-white text-base mt-1">📍 ${titleStr}</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">${loc.address}</p>
+                            </div>
+                            <span class="font-mono text-[10px] text-sky-400 font-bold px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded">${loc.id}</span>
                         </div>
-                        <div>
-                            <label class="block font-bold text-[11px] text-slate-400 mb-1">Alamat Titik Lokasi:</label>
-                            <input type="text" id="loc-addr-${idx}" value="${loc.address}" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-xs">
+
+                        <div class="grid grid-cols-2 gap-2 text-[11px] font-mono bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <div>
+                                <span class="text-slate-400 block text-[9px] font-sans">KOORDINAT DIGITAL</span>
+                                <strong class="text-brand-600 dark:text-sky-400">${latLng}</strong>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block text-[9px] font-sans">UKURAN & TRAFIK</span>
+                                <strong class="text-slate-900 dark:text-white">${loc.size || '8x4 M'} • ${loc.traffic || '95K/Hari'}</strong>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block font-bold text-[11px] text-slate-400 mb-1">Link Embed Peta Google Maps:</label>
-                            <input type="text" id="loc-maps-${idx}" value="${loc.mapsUrl}" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-[11px]">
+
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="p-2.5 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-800">
+                                <span class="font-extrabold text-blue-700 dark:text-blue-300 text-[10px] block">NON-ROKOK</span>
+                                <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200">Hari: Rp ${loc.priceNon || '0'}</span><br>
+                                <span class="text-[10px] text-slate-500">Bulan: Rp ${loc.monthNon || '0'}</span>
+                            </div>
+                            <div class="p-2.5 bg-rose-50 dark:bg-rose-950/40 rounded-xl border border-rose-200 dark:border-rose-800">
+                                <span class="font-extrabold text-rose-700 dark:text-rose-300 text-[10px] block">ROKOK (+25%)</span>
+                                <span class="text-[11px] font-bold text-slate-800 dark:text-slate-200">Hari: Rp ${loc.priceRokok || '0'}</span><br>
+                                <span class="text-[10px] text-slate-500">Bulan: Rp ${loc.monthRokok || '0'}</span>
+                            </div>
                         </div>
-                        <button onclick="saveLocationCMSItem(${idx})" class="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs rounded-xl shadow transition">
-                            💾 Update Peta & Lokasi Ini
-                        </button>
+
+                        <div class="pt-2 flex items-center justify-between border-t border-slate-100 dark:border-slate-800">
+                            <a href="${gmaps}" target="_blank" class="text-emerald-600 font-bold text-[11px] hover:underline flex items-center gap-1">
+                                🗺️ Buka Maps GPS &rarr;
+                            </a>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="editLocationAdminItem('${loc.id}')" class="px-3 py-1 bg-sky-600 text-white font-extrabold text-[11px] rounded-lg shadow hover:bg-sky-700 transition">
+                                    ✏️ Edit
+                                </button>
+                                <button type="button" onclick="deleteLocationAdminItem('${loc.id}')" class="px-3 py-1 bg-rose-600 text-white font-extrabold text-[11px] rounded-lg shadow hover:bg-rose-700 transition">
+                                    🗑️ Hapus
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 `;
             });
+
             container.innerHTML = html;
         }
 
-        function saveLocationCMSItem(idx) {
-            let saved = localStorage.getItem('sevisa_locations');
-            let locs = saved ? JSON.parse(saved) : DEFAULT_LOCATIONS;
+        function saveLocationAdminForm(e) {
+            e.preventDefault();
+            const editId = document.getElementById('loc-edit-id').value;
+            const title = document.getElementById('loc-admin-title').value.trim();
+            const address = document.getElementById('loc-admin-address').value.trim();
+            const coords = document.getElementById('loc-admin-coords').value.trim();
+            const size = document.getElementById('loc-admin-size').value.trim() || '8 x 4 Meter';
+            const traffic = document.getElementById('loc-admin-traffic').value.trim() || '95.000 Kendaraan/Hari';
+            const badgeText = document.getElementById('loc-admin-badge').value.trim() || 'TITIK LOKASI';
+            const orientation = document.getElementById('loc-admin-orientation').value.trim() || 'Utara - Selatan';
 
-            locs[idx].address = document.getElementById(`loc-addr-${idx}`).value.trim();
-            locs[idx].mapsUrl = document.getElementById(`loc-maps-${idx}`).value.trim();
+            const monthNon = document.getElementById('loc-admin-month-non').value.trim() || '0';
+            const priceNon = document.getElementById('loc-admin-day-non').value.trim() || '0';
+            const hourNon = document.getElementById('loc-admin-hour-non').value.trim() || '0';
+            const minuteNon = document.getElementById('loc-admin-minute-non').value.trim() || '0';
 
-            localStorage.setItem('sevisa_locations', JSON.stringify(locs));
-            window.dispatchEvent(new Event('storage'));
-            showAdminToast('🗺️ PETA LOKASI TERPERBARUI', `Informasi & peta ${locs[idx].name} telah diperbarui di website publik.`);
+            const monthRokok = document.getElementById('loc-admin-month-rokok').value.trim() || '0';
+            const priceRokok = document.getElementById('loc-admin-day-rokok').value.trim() || '0';
+            const hourRokok = document.getElementById('loc-admin-hour-rokok').value.trim() || '0';
+            const minuteRokok = document.getElementById('loc-admin-minute-rokok').value.trim() || '0';
+
+            let locs = getStoredCMSLocations();
+
+            if (editId) {
+                const idx = locs.findIndex(l => l.id === editId);
+                if (idx !== -1) {
+                    locs[idx] = {
+                        ...locs[idx],
+                        title, address, coords, size, traffic, badgeText, orientation,
+                        monthNon, priceNon, hourNon, minuteNon,
+                        monthRokok, priceRokok, hourRokok, minuteRokok
+                    };
+                }
+            } else {
+                const newLoc = {
+                    id: 'VDT-' + Math.floor(10 + Math.random() * 90),
+                    title, address, coords, size, traffic, badgeText, orientation,
+                    monthNon, priceNon, hourNon, minuteNon,
+                    monthRokok, priceRokok, hourRokok, minuteRokok
+                };
+                locs.push(newLoc);
+            }
+
+            saveStoredCMSLocations(locs);
+            resetLocationForm();
+            renderCMSLocations();
+            showAdminToast('💾 LOKASI TERSIMPAN', `Titik lokasi "${title}" telah disimpan & otomatis aktif di website publik.`);
+        }
+
+        function editLocationAdminItem(id) {
+            const locs = getStoredCMSLocations();
+            const item = locs.find(l => l.id === id);
+            if (!item) return;
+
+            document.getElementById('loc-edit-id').value = item.id;
+            document.getElementById('loc-admin-title').value = item.title || item.name || '';
+            document.getElementById('loc-admin-address').value = item.address || '';
+            document.getElementById('loc-admin-coords').value = item.coords || `${item.lat || -7.3305}, ${item.lng || 110.5084}`;
+            document.getElementById('loc-admin-size').value = item.size || '';
+            document.getElementById('loc-admin-traffic').value = item.traffic || '';
+            document.getElementById('loc-admin-badge').value = item.badgeText || '';
+            document.getElementById('loc-admin-orientation').value = item.orientation || '';
+
+            document.getElementById('loc-admin-month-non').value = item.monthNon || '';
+            document.getElementById('loc-admin-day-non').value = item.priceNon || '';
+            document.getElementById('loc-admin-hour-non').value = item.hourNon || '';
+            document.getElementById('loc-admin-minute-non').value = item.minuteNon || '';
+
+            document.getElementById('loc-admin-month-rokok').value = item.monthRokok || '';
+            document.getElementById('loc-admin-day-rokok').value = item.priceRokok || '';
+            document.getElementById('loc-admin-hour-rokok').value = item.hourRokok || '';
+            document.getElementById('loc-admin-minute-rokok').value = item.minuteRokok || '';
+
+            document.getElementById('loc-form-title-label').innerText = `✏️ Edit Titik Lokasi: ${item.title || item.name}`;
+            window.scrollTo({ top: document.getElementById('sec-cms-lokasi').offsetTop, behavior: 'smooth' });
+        }
+
+        function deleteLocationAdminItem(id) {
+            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
+            if (role !== 'superadmin') {
+                showAdminToast('⛔ AKSES DITOLAK', 'Hanya Super Admin yang berhak menghapus lokasi videotron!');
+                return;
+            }
+
+            let locs = getStoredCMSLocations();
+            const item = locs.find(l => l.id === id);
+            if (!item) return;
+
+            if (confirm(`Apakah Anda yakin ingin menghapus titik lokasi videotron "${item.title || item.name}"?`)) {
+                locs = locs.filter(l => l.id !== id);
+                saveStoredCMSLocations(locs);
+                renderCMSLocations();
+                showAdminToast('🗑️ LOKASI DIHAPUS', `Titik lokasi "${item.title || item.name}" telah dihapus.`);
+            }
+        }
+
+        function resetLocationForm() {
+            document.getElementById('loc-edit-id').value = '';
+            document.getElementById('loc-admin-title').value = '';
+            document.getElementById('loc-admin-address').value = '';
+            document.getElementById('loc-admin-coords').value = '';
+            document.getElementById('loc-admin-size').value = '';
+            document.getElementById('loc-admin-traffic').value = '';
+            document.getElementById('loc-admin-badge').value = '';
+            document.getElementById('loc-admin-orientation').value = '';
+
+            document.getElementById('loc-admin-month-non').value = '';
+            document.getElementById('loc-admin-day-non').value = '';
+            document.getElementById('loc-admin-hour-non').value = '';
+            document.getElementById('loc-admin-minute-non').value = '';
+
+            document.getElementById('loc-admin-month-rokok').value = '';
+            document.getElementById('loc-admin-day-rokok').value = '';
+            document.getElementById('loc-admin-hour-rokok').value = '';
+            document.getElementById('loc-admin-minute-rokok').value = '';
+
+            document.getElementById('loc-form-title-label').innerText = '➕ Form Tambah / Edit Titik Lokasi Videotron';
         }
 
         // 3. FULL CRUD PORTFOLIO

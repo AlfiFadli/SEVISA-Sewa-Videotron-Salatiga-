@@ -910,8 +910,8 @@
                         <div id="master-salatiga-map" class="w-full h-80 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-md relative z-0"></div>
                     </div>
 
-                    <!-- TABEL PERBANDINGAN TARIF BROSUR (SEMUA 4 TITIK METALLIC CARDS WITH MAPS) -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- TABEL PERBANDINGAN TARIF BROSUR (SEMUA TITIK LOKASI DYNAMICALLY POPULATED FROM ADMIN CMS) -->
+                    <div id="user-lokasi-grid-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         
                         <!-- CARD 1: PASAR REJOSARI -->
                         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-lg space-y-4">
@@ -3093,12 +3093,163 @@
             }, 150);
         }
 
-        let masterSalatigaMapInstance = null;
-        const cardMapInstances = {};
+        function getStoredUserLocations() {
+            const saved = localStorage.getItem('sevisa_locations');
+            if (saved) {
+                try { return JSON.parse(saved); } catch(e) {}
+            }
+            return [
+                {
+                    id: 'VDT-01',
+                    title: 'PASAR REJOSARI',
+                    address: 'Jl. Hasanudin, Salatiga',
+                    coords: '-7.3305, 110.5084',
+                    orientation: 'Utara - Selatan (Kawasan Pasar & Komersial Rejosari)',
+                    size: '8 x 4 Meter',
+                    traffic: '120.000 Kendaraan/Hari',
+                    badgeText: 'LOKASI 1 (TOP TRAFFIC)',
+                    priceNon: '2.200.000',
+                    priceRokok: '2.750.000',
+                    monthNon: '59.450.000',
+                    monthRokok: '74.312.500',
+                    hourNon: '210.000',
+                    hourRokok: '262.500',
+                    minuteNon: '3.800',
+                    minuteRokok: '4.750'
+                },
+                {
+                    id: 'VDT-02',
+                    title: 'BLOTONGAN',
+                    address: 'Jl. Semarang - Surakarta, Blotongan',
+                    coords: '-7.3150, 110.4910',
+                    orientation: 'Utara - Selatan (Gate Masuk Salatiga dari Semarang)',
+                    size: '8 x 4 Meter',
+                    traffic: '110.000 Kendaraan/Hari',
+                    badgeText: 'LOKASI 2 (GATE UTARA)',
+                    priceNon: '1.268.000',
+                    priceRokok: '1.585.000',
+                    monthNon: '34.315.000',
+                    monthRokok: '42.893.750',
+                    hourNon: '120.500',
+                    hourRokok: '150.625',
+                    minuteNon: '2.200',
+                    minuteRokok: '2.750'
+                },
+                {
+                    id: 'VDT-03',
+                    title: 'SELASAR KARTINI',
+                    address: 'Jl. Kartini, Salatiga',
+                    coords: '-7.3275, 110.5012',
+                    orientation: 'Barat - Timur (Pusat Kota & Kawasan Kuliner Kartini)',
+                    size: '8 x 4 Meter',
+                    traffic: '85.000 Kendaraan/Hari',
+                    badgeText: 'LOKASI 3 (PUSAT EDUKASI)',
+                    priceNon: '716.000',
+                    priceRokok: '895.000',
+                    monthNon: '19.367.000',
+                    monthRokok: '24.208.750',
+                    hourNon: '68.000',
+                    hourRokok: '85.000',
+                    minuteNon: '1.300',
+                    minuteRokok: '1.625'
+                },
+                {
+                    id: 'VDT-04',
+                    title: 'ALUN-ALUN SALATIGA',
+                    address: 'Lapangan Pancasila / Simpang ABC, Salatiga',
+                    coords: '-7.3392, 110.5025',
+                    orientation: 'Timur - Barat (Persimpangan Jl. Jend. Sudirman & Argoyuwono)',
+                    size: '8 x 4 Meter',
+                    traffic: '95.000 Kendaraan/Hari',
+                    badgeText: 'LOKASI 4 (ALUN-ALUN PANCASILA)',
+                    priceNon: '698.000',
+                    priceRokok: '872.500',
+                    monthNon: '18.881.000',
+                    monthRokok: '23.601.250',
+                    hourNon: '66.200',
+                    hourRokok: '82.750',
+                    minuteNon: '1.200',
+                    minuteRokok: '1.500'
+                }
+            ];
+        }
+
+        function renderUserLokasiPageCards() {
+            const container = document.getElementById('user-lokasi-grid-container');
+            if (!container) return;
+
+            const locs = getStoredUserLocations();
+            let html = '';
+
+            locs.forEach((item, idx) => {
+                const titleStr = item.title || item.name || 'Videotron';
+                const coordsStr = item.coords || `${item.lat || -7.3305}, ${item.lng || 110.5084}`;
+                const mapCardId = `card-map-dynamic-${idx}`;
+                const gmapsLink = `https://maps.google.com/?q=${encodeURIComponent(coordsStr)}`;
+
+                html += `
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-lg space-y-4">
+                        <div class="flex justify-between items-start border-b border-slate-200 dark:border-slate-800 pb-3">
+                            <div>
+                                <span class="px-2.5 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[10px] rounded-md">${item.badgeText || 'TITIK LOKASI'}</span>
+                                <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">${titleStr.toUpperCase()}</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">${item.address}</p>
+                            </div>
+                            <span class="px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px] rounded-lg border border-emerald-500/30">
+                                ${coordsStr}
+                            </span>
+                        </div>
+
+                        <!-- CARD LEAFLET MAP CONTAINER -->
+                        <div id="${mapCardId}" class="w-full h-44 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
+
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
+                                <span class="font-extrabold text-blue-700 dark:text-blue-300 text-[11px] block uppercase">Tarif Non-Rokok</span>
+                                <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
+                                    <li><strong>Bulan:</strong> Rp ${item.monthNon || '0'}</li>
+                                    <li><strong>Hari:</strong> Rp ${item.priceNon || '0'}</li>
+                                    <li><strong>Jam:</strong> Rp ${item.hourNon || '0'}</li>
+                                    <li><strong>Menit:</strong> Rp ${item.minuteNon || '0'}</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-rose-50 dark:bg-rose-950/40 p-3 rounded-2xl border border-rose-200 dark:border-rose-800 space-y-1">
+                                <span class="font-extrabold text-rose-700 dark:text-rose-300 text-[11px] block uppercase">Tarif Rokok (+25%)</span>
+                                <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
+                                    <li><strong>Bulan:</strong> Rp ${item.monthRokok || '0'}</li>
+                                    <li><strong>Hari:</strong> Rp ${item.priceRokok || '0'}</li>
+                                    <li><strong>Jam:</strong> Rp ${item.hourRokok || '0'}</li>
+                                    <li><strong>Menit:</strong> Rp ${item.minuteRokok || '0'}</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                            <a href="${gmapsLink}" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
+                                📍 Google Maps GPS
+                            </a>
+                            <button onclick="openDetailLokasi('${titleStr}', '${item.address}', '${item.size || '8 x 4 Meter'}', '${item.priceNon}', '${item.priceRokok}', '${item.monthNon}', '${item.monthRokok}', '${item.hourNon}', '${item.hourRokok}', '${item.minuteNon}', '${item.minuteRokok}')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
+                                🔍 Detail Brosur
+                            </button>
+                            <button onclick="triggerBookingFlow('${titleStr}')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
+                                Sewa &rarr;
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
 
         function initPageLokasiMaps() {
+            renderUserLokasiPageCards();
+
             setTimeout(() => {
                 const masterContainer = document.getElementById('master-salatiga-map');
+                const locs = getStoredUserLocations();
+
                 if (masterContainer) {
                     if (masterSalatigaMapInstance) {
                         masterSalatigaMapInstance.remove();
@@ -3114,10 +3265,11 @@
                             maxZoom: 19
                         }).addTo(masterSalatigaMapInstance);
 
-                        const locKeys = Object.keys(LOCATION_COORDINATES);
-                        locKeys.forEach(k => {
-                            const loc = LOCATION_COORDINATES[k];
-                            if (!loc || !loc.lat) return;
+                        locs.forEach(item => {
+                            const titleStr = item.title || item.name || 'Videotron';
+                            const coordsStr = item.coords || `${item.lat || -7.3305}, ${item.lng || 110.5084}`;
+                            const parts = coordsStr.split(',').map(s => parseFloat(s.trim()));
+                            if (parts.length < 2 || isNaN(parts[0]) || isNaN(parts[1])) return;
 
                             const customIcon = L.divIcon({
                                 className: 'custom-leaflet-marker',
@@ -3134,12 +3286,12 @@
                                 popupAnchor: [0, -32]
                             });
 
-                            const marker = L.marker([loc.lat, loc.lng], { icon: customIcon }).addTo(masterSalatigaMapInstance);
+                            const marker = L.marker([parts[0], parts[1]], { icon: customIcon }).addTo(masterSalatigaMapInstance);
                             marker.bindPopup(`
                                 <div class="p-1.5 space-y-1 text-xs font-sans">
-                                    <strong class="font-black text-slate-900 block text-xs">${k}</strong>
-                                    <span class="text-[10px] text-slate-500 block font-medium">${loc.orientation}</span>
-                                    <a href="${loc.googleMaps}" target="_blank" class="px-2.5 py-1 bg-emerald-600 text-white font-extrabold text-[9px] rounded inline-block mt-1">
+                                    <strong class="font-black text-slate-900 block text-xs">${titleStr}</strong>
+                                    <span class="text-[10px] text-slate-500 block font-medium">${item.address}</span>
+                                    <a href="https://maps.google.com/?q=${encodeURIComponent(coordsStr)}" target="_blank" class="px-2.5 py-1 bg-emerald-600 text-white font-extrabold text-[9px] rounded inline-block mt-1">
                                         📍 Buka Google Maps GPS &rarr;
                                     </a>
                                 </div>
@@ -3150,25 +3302,23 @@
                     } catch(e) {}
                 }
 
-                const cards = [
-                    { id: 'card-map-rejosari', title: 'Pasar Rejosari', lat: -7.3305, lng: 110.5084 },
-                    { id: 'card-map-blotongan', title: 'Blotongan', lat: -7.3150, lng: 110.4910 },
-                    { id: 'card-map-kartini', title: 'Selasar Kartini', lat: -7.3275, lng: 110.5012 },
-                    { id: 'card-map-alunalun', title: 'Simpang ABC', lat: -7.3392, lng: 110.5025 }
-                ];
-
-                cards.forEach(c => {
-                    const container = document.getElementById(c.id);
+                locs.forEach((item, idx) => {
+                    const mapCardId = `card-map-dynamic-${idx}`;
+                    const container = document.getElementById(mapCardId);
                     if (!container) return;
 
-                    if (cardMapInstances[c.id]) {
-                        cardMapInstances[c.id].remove();
-                        delete cardMapInstances[c.id];
+                    if (cardMapInstances[mapCardId]) {
+                        cardMapInstances[mapCardId].remove();
+                        delete cardMapInstances[mapCardId];
                     }
 
+                    const coordsStr = item.coords || `${item.lat || -7.3305}, ${item.lng || 110.5084}`;
+                    const parts = coordsStr.split(',').map(s => parseFloat(s.trim()));
+                    if (parts.length < 2 || isNaN(parts[0]) || isNaN(parts[1])) return;
+
                     try {
-                        const map = L.map(c.id, { zoomControl: false }).setView([c.lat, c.lng], 15);
-                        cardMapInstances[c.id] = map;
+                        const map = L.map(mapCardId, { zoomControl: false }).setView([parts[0], parts[1]], 15);
+                        cardMapInstances[mapCardId] = map;
 
                         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                             subdomains: 'abcd',
@@ -3189,13 +3339,20 @@
                             iconAnchor: [14, 28]
                         });
 
-                        L.marker([c.lat, c.lng], { icon: customIcon }).addTo(map);
+                        L.marker([parts[0], parts[1]], { icon: customIcon }).addTo(map);
                         map.invalidateSize();
                     } catch(e) {}
                 });
 
             }, 200);
         }
+
+        window.addEventListener('storage', (e) => {
+            if (!e.key || e.key === 'sevisa_locations') {
+                renderUserLokasiPageCards();
+                initPageLokasiMaps();
+            }
+        });
 
         function openDetailLokasi(title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok) {
             selectedLocationData = { title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok };
