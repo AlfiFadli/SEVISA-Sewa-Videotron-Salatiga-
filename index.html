@@ -3258,6 +3258,9 @@
                 }
             }
 
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         // OPEN PAYMENT GATEWAY SELECTION MODAL
         function openPaymentGatewayModal(code) {
             const found = orderDatabase.find(o => o.code === code) || orderDatabase[0];
