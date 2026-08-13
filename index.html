@@ -36,6 +36,8 @@
     <!-- LEAFLET MAPS ENGINE -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- HTML2PDF BUNDLE ENGINE -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style> 
         body { font-family: 'Plus Jakarta Sans', sans-serif; } 
         @keyframes float3d {
@@ -3234,8 +3236,195 @@
             }
         }
 
-        function downloadLocationSpecSheet() {
-            show3DToast('📥 BROSUR DIDOWNLOAD', 'Berkas PDF Brosur Tarif Sewa Videotron Diskominfo Salatiga berhasil diunduh.', 'info');
+        function downloadLocationSpecSheet(locTitleOverride) {
+            let locTitle = locTitleOverride;
+            if (!locTitle && selectedLocationData) {
+                locTitle = selectedLocationData.title;
+            }
+            if (!locTitle) locTitle = 'Pasar Rejosari';
+
+            const locInfo = LOCATION_COORDINATES[locTitle] || { lat: -7.3305, lng: 110.5084, orientation: 'Utara - Selatan (Kawasan Komersial Salatiga)', googleMaps: 'https://maps.google.com/?q=-7.3305,110.5084' };
+            
+            let item = VIDEOTRON_DATA.find(v => v.title.toLowerCase().includes(locTitle.toLowerCase()) || locTitle.toLowerCase().includes(v.title.toLowerCase()));
+            if (!item && selectedLocationData) item = selectedLocationData;
+            if (!item) {
+                item = {
+                    title: locTitle,
+                    address: 'Kota Salatiga',
+                    size: '8 x 4 Meter',
+                    traffic: '95.000 Kendaraan / Hari',
+                    priceNon: '2.200.000',
+                    priceRokok: '2.750.000',
+                    monthNon: '59.450.000',
+                    monthRokok: '74.312.500',
+                    hourNon: '210.000',
+                    hourRokok: '262.500',
+                    minuteNon: '3.800',
+                    minuteRokok: '4.750'
+                };
+            }
+
+            const todayStr = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            const docNo = 'SEVISA-BROSUR/' + new Date().getFullYear() + '/' + Math.floor(1000 + Math.random() * 9000);
+
+            const pdfHtml = `
+                <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; padding: 25px; color: #0f172a; max-width: 800px; margin: 0 auto; background: #ffffff;">
+                    
+                    <!-- HEADER KOP SURAT DISKOMINFO SALATIGA -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #1e3a8a; padding-bottom: 12px; margin-bottom: 15px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <img src="logo.png" style="height: 55px; width: auto; object-fit: contain;">
+                            <div>
+                                <span style="background: #1e3a8a; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase;">PEMKOT SALATIGA</span>
+                                <h2 style="margin: 2px 0 0 0; font-size: 15px; font-weight: 900; color: #0f172a; text-transform: uppercase;">DINAS KOMUNIKASI DAN INFORMATIKA</h2>
+                                <span style="font-size: 10px; color: #475569; font-weight: 600;">Jl. Letjend Sukowati No. 51 Salatiga | Telp: (0298) 326767 | Web: sevisa.salatiga.go.id</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right; font-size: 9px; color: #64748b; font-family: monospace;">
+                            <strong>NO. DOKUMEN:</strong><br>${docNo}<br>
+                            <strong>TANGGAL:</strong> ${todayStr}
+                        </div>
+                    </div>
+
+                    <!-- TITLE BANNER -->
+                    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: #ffffff; padding: 16px; border-radius: 12px; margin-bottom: 15px;">
+                        <span style="background: #22c55e; color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 20px; text-transform: uppercase;">BROSUR SPESIFIKASI SEVISA DISKOMINFO</span>
+                        <h1 style="margin: 6px 0 2px 0; font-size: 20px; font-weight: 900; letter-spacing: -0.5px;">${item.title.toUpperCase()}</h1>
+                        <p style="margin: 0; font-size: 11px; color: #93c5fd;">${item.address} • Kota Salatiga, Jawa Tengah</p>
+                    </div>
+
+                    <!-- LOKASI & KOORDINAT PETA -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px;">
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 10px;">
+                            <span style="font-size: 9px; font-weight: 800; color: #64748b; text-transform: uppercase; display: block;">📍 KOORDINAT GPS DIGITAL DISKOMINFO</span>
+                            <strong style="font-size: 12px; color: #2563eb; font-family: monospace;">${locInfo.lat}, ${locInfo.lng}</strong>
+                            <span style="font-size: 10px; color: #334155; display: block; margin-top: 4px;">Orientasi: <strong>${locInfo.orientation}</strong></span>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 10px;">
+                            <span style="font-size: 9px; font-weight: 800; color: #64748b; text-transform: uppercase; display: block;">🚦 ESTIMASI TRAFIK KENDARAAN</span>
+                            <strong style="font-size: 12px; color: #16a34a;">${item.traffic || '95.000 Kendaraan / Hari'}</strong>
+                            <span style="font-size: 10px; color: #334155; display: block; margin-top: 4px;">Viewing Angle: <strong>Outdoor Wide Angle 140°</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- RINCIAN TABEL TARIF BROSUR RESMI -->
+                    <div style="margin-bottom: 15px;">
+                        <h3 style="font-size: 12px; font-weight: 900; color: #0f172a; margin-bottom: 8px; text-transform: uppercase; border-left: 4px solid #2563eb; padding-left: 8px;">
+                            1. RINCIAN TABEL TARIF RETRIBUSI RESMI (PERWALI NO. 49 TAHUN 2018)
+                        </h3>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+                            <thead>
+                                <tr style="background: #0f172a; color: #ffffff; font-size: 10px; text-transform: uppercase;">
+                                    <th style="padding: 8px; text-align: left; border: 1px solid #1e293b;">DURASI PENAYANGAN</th>
+                                    <th style="padding: 8px; text-align: right; border: 1px solid #1e293b; background: #1e3a8a;">PRODUK NON-ROKOK (STANDAR)</th>
+                                    <th style="padding: 8px; text-align: right; border: 1px solid #1e293b; background: #881337;">PRODUK ROKOK (+25% PERWALI)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: #ffffff; border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 8px; font-weight: 700;">🗓️ Tarif 1 Bulan</td>
+                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.monthNon || '0'}</td>
+                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.monthRokok || '0'}</td>
+                                </tr>
+                                <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 8px; font-weight: 700;">📅 Tarif 1 Hari</td>
+                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.priceNon || '0'}</td>
+                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.priceRokok || '0'}</td>
+                                </tr>
+                                <tr style="background: #ffffff; border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 8px; font-weight: 700;">⏰ Tarif 1 Jam</td>
+                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.hourNon || '0'}</td>
+                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.hourRokok || '0'}</td>
+                                </tr>
+                                <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 8px; font-weight: 700;">⏱️ Tarif 1 Menit</td>
+                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.minuteNon || '0'}</td>
+                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.minuteRokok || '0'}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- SPESIFIKASI HARDWARE LED SCREEN -->
+                    <div style="margin-bottom: 15px;">
+                        <h3 style="font-size: 12px; font-weight: 900; color: #0f172a; margin-bottom: 8px; text-transform: uppercase; border-left: 4px solid #2563eb; padding-left: 8px;">
+                            2. SPESIFIKASI HARDWARE LED DISPLAY & BROADCAST SPEC
+                        </h3>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center;">
+                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                                <span style="font-size: 8px; color: #64748b; font-weight: 800; display: block;">UKURAN SCREEN</span>
+                                <strong style="font-size: 11px; color: #0f172a;">${item.size || '8 x 4 Meter'}</strong>
+                            </div>
+                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                                <span style="font-size: 8px; color: #64748b; font-weight: 800; display: block;">PITCH LED</span>
+                                <strong style="font-size: 11px; color: #0f172a;">P10 Outdoor DIP</strong>
+                            </div>
+                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                                <span style="font-size: 8px; color: #64748b; font-weight: 800; display: block;">RESOLUSI DISPLAY</span>
+                                <strong style="font-size: 11px; color: #0f172a;">1920 x 1080 Full HD</strong>
+                            </div>
+                            <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                                <span style="font-size: 8px; color: #64748b; font-weight: 800; display: block;">JAM PENYIARAN</span>
+                                <strong style="font-size: 11px; color: #0f172a;">06:00 - 23:00 WIB</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- REGULASI & KETENTUAN MASYARAKAT -->
+                    <div style="background: #eff6ff; border: 1px dashed #3b82f6; padding: 10px 14px; border-radius: 10px; margin-bottom: 15px; font-size: 10px; color: #1e3a8a;">
+                        <strong style="display: block; font-size: 10px; margin-bottom: 4px; text-transform: uppercase;">📜 Regulasi & Syarat Ketentuan Penayangan Iklan:</strong>
+                        <ul style="margin: 0; padding-left: 15px; line-height: 1.5;">
+                            <li>Penetapan retribusi berdasarkan SK Wali Kota Salatiga No. 974/148/2022 & Perwali No. 49 Tahun 2018.</li>
+                            <li>Materi iklan berupa Video MP4 (1080p, 30fps) atau Poster Gambar HD (JPG/PNG 300 DPI).</li>
+                            <li>Materi iklan tidak mengandung ajaran melanggar hukum, SARA, Pornografi, atau politik terlarang.</li>
+                            <li>Seluruh pembayaran wajib ditransfer ke Rekening Resmi Bank Kasda Kota Salatiga (Bank Jateng).</li>
+                        </ul>
+                    </div>
+
+                    <!-- STEMPEL DIGITAL & QR VERIFIKASI DISKOMINFO -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 8px; border-top: 1px solid #e2e8f0;">
+                        <div style="font-size: 9px; color: #64748b;">
+                            <span>Dokumen ini diterbitkan secara otomatis oleh Portal Resmi <strong>SEVISA</strong></span><br>
+                            <span>Dinas Komunikasi dan Informatika Pemerintah Kota Salatiga</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 9px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">DISAHKAN OLEH:</div>
+                            <div style="padding: 6px 12px; background: #0f172a; color: #ffffff; border-radius: 8px; font-size: 9px; font-weight: 900; letter-spacing: 1px;">
+                                🛡️ DISKOMINFO SALATIGA
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            `;
+
+            const element = document.createElement('div');
+            element.innerHTML = pdfHtml;
+            document.body.appendChild(element);
+
+            show3DToast('⏳ MEMPROSES BROSUR PDF...', `Menyiapkan brosur spesifikasi resmi ${locTitle}...`, 'info');
+
+            const opt = {
+                margin:       [0.2, 0.2, 0.2, 0.2],
+                filename:     `Brosur_Spesifikasi_SEVISA_${locTitle.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            if (window.html2pdf) {
+                window.html2pdf().set(opt).from(element).save().then(() => {
+                    document.body.removeChild(element);
+                    show3DToast('📄 BROSUR PDF TERUNDUH', `Brosur Spesifikasi ${locTitle} berhasil dibuat & diunduh!`, 'success');
+                }).catch(err => {
+                    console.error('PDF Generation Error:', err);
+                    document.body.removeChild(element);
+                    window.print();
+                });
+            } else {
+                document.body.removeChild(element);
+                window.print();
+            }
         }
 
         function openAuthGateModal(tab = 'login') {
