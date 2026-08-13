@@ -2663,7 +2663,8 @@
 
             if (!gridContainer) return;
 
-            const displayItems = items && items.length > 0 ? items : VIDEOTRON_DATA;
+            // EXCLUSIVELY SHOW PASAR REJOSARI & SELASAR KARTINI ON BERANDA HOMEPAGE
+            const displayItems = (items && items.length > 0 ? items : VIDEOTRON_DATA).filter(item => item.lokasiCode === 'rejosari' || item.lokasiCode === 'kartini');
 
             if (displayItems.length === 0) {
                 gridContainer.innerHTML = '';
@@ -2673,7 +2674,7 @@
             }
 
             if (emptyState) emptyState.classList.add('hidden');
-            if (countBadge) countBadge.innerText = `Menampilkan ${displayItems.length} Titik Lokasi Videotron Paling Strategis Kota Salatiga`;
+            if (countBadge) countBadge.innerText = `Menampilkan ${displayItems.length} Titik Lokasi Paling Strategis (Pasar Rejosari & Selasar Kartini)`;
 
             let html = '';
             displayItems.forEach(item => {
