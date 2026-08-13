@@ -461,6 +461,23 @@
                                 <!-- CHAT MESSAGES POPULATE DYNAMICALLY -->
                             </div>
 
+                            <!-- QUICK RESPONSE TEMPLATE BUTTONS -->
+                            <div class="flex flex-wrap gap-1.5 pt-1 text-[10px]">
+                                <span class="text-slate-400 font-bold self-center mr-1">⚡ Templat Cepat:</span>
+                                <button type="button" onclick="insertAdminChatTemplate('🟢 Halo! Slot penayangan untuk titik lokasi yang Anda tanyakan masih tersedia. Silakan ajukan booking sewa!')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold rounded-lg border border-slate-700 transition">
+                                    🟢 Slot Tersedia
+                                </button>
+                                <button type="button" onclick="insertAdminChatTemplate('📄 Silakan lampirkan surat permohonan resmi dan file materi iklan (Video MP4 / Poster HD) pada formulir booking.')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-sky-400 font-bold rounded-lg border border-slate-700 transition">
+                                    📄 Berkas Syarat
+                                </button>
+                                <button type="button" onclick="insertAdminChatTemplate('💳 Silakan lakukan pembayaran retribusi via Bank Kasda Salatiga (Bank Jateng) atau QRIS Pemkot, lalu unggah bukti transfer.')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold rounded-lg border border-slate-700 transition">
+                                    💳 Panduan Bayar
+                                </button>
+                                <button type="button" onclick="insertAdminChatTemplate('✅ Pembayaran retribusi Anda telah diverifikasi Lunas! Kuitansi PDF resmi sudah dapat Anda cetak.')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-teal-400 font-bold rounded-lg border border-slate-700 transition">
+                                    ✅ Konfirmasi Lunas
+                                </button>
+                            </div>
+
                             <form onsubmit="sendAdminChatMessage(event)" class="flex gap-2 pt-2">
                                 <input type="text" id="admin-chat-input" required placeholder="Tulis balasan resmi Diskominfo..." class="flex-1 p-3 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-medium focus:outline-none">
                                 <button type="submit" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition">
@@ -1103,6 +1120,22 @@
         }
 
         // ADMIN LIVE CHAT MANAGEMENT
+        function insertAdminChatTemplate(templateText) {
+            const input = document.getElementById('admin-chat-input');
+            if (input) {
+                input.value = templateText;
+                input.focus();
+            }
+        }
+
+        function replyToUserChat(userName) {
+            const input = document.getElementById('admin-chat-input');
+            if (input) {
+                input.value = `Halo Sdr/i ${userName}, `;
+                input.focus();
+            }
+        }
+
         function renderAdminChatBox() {
             const container = document.getElementById('admin-chat-messages-container');
             if (!container) return;
@@ -1119,18 +1152,23 @@
             }
 
             let html = '';
-            chats.forEach(msg => {
+            chats.forEach((msg, idx) => {
                 if (msg.sender === 'user') {
                     html += `
-                        <div class="bg-slate-800 text-slate-100 p-3 rounded-2xl max-w-[85%] space-y-1 shadow-sm border border-slate-700">
-                            <strong class="font-bold text-[10px] text-sky-400 block font-mono">👤 User: ${msg.userName || 'Pengguna'} (${msg.time || ''})</strong>
-                            <p class="text-[11px] leading-relaxed">${msg.text}</p>
+                        <div class="bg-slate-800 text-slate-100 p-3 rounded-2xl max-w-[85%] space-y-1.5 shadow-sm border border-slate-700">
+                            <div class="flex items-center justify-between gap-2">
+                                <strong class="font-bold text-[10px] text-sky-400 font-mono">👤 User: ${msg.userName || 'Pengguna'} (${msg.time || ''})</strong>
+                                <button onclick="replyToUserChat('${msg.userName || 'Pengguna'}')" class="px-2 py-0.5 bg-brand-600 hover:bg-brand-500 text-white font-extrabold text-[9px] rounded-md shadow">
+                                    💬 Balas User Ini
+                                </button>
+                            </div>
+                            <p class="text-[11px] leading-relaxed text-slate-200">${msg.text}</p>
                         </div>
                     `;
                 } else {
                     html += `
                         <div class="bg-emerald-950 text-emerald-200 p-3 rounded-2xl max-w-[85%] ml-auto space-y-1 shadow-sm border border-emerald-800">
-                            <strong class="font-bold text-[10px] text-emerald-400 block text-right">🛡️ Admin Diskominfo (Anda)</strong>
+                            <strong class="font-bold text-[10px] text-emerald-400 block text-right">🛡️ Admin Diskominfo (Anda) • ${msg.time || ''}</strong>
                             <p class="text-[11px] leading-relaxed">${msg.text}</p>
                         </div>
                     `;
@@ -1162,7 +1200,7 @@
 
             input.value = '';
             renderAdminChatBox();
-            showAdminToast('💬 CHAT TERKIRIM', 'Balasan Admin dikirim ke layar user real-time.');
+            showAdminToast('💬 CHAT TERKIRIM', 'Balasan Admin berhasil dikirim ke layar user secara real-time.');
         }
 
         function toggleDarkMode() {
@@ -1267,6 +1305,15 @@
             renderAdminChatBox();
             updateAdminChatBadge();
         });
+
+        // AUTO REFRESH ADMIN CHAT BOX & UNREAD BADGE EVERY 2 SECONDS
+        setInterval(() => {
+            const secChat = document.getElementById('sec-cms-chat');
+            if (secChat && !secChat.classList.contains('hidden')) {
+                renderAdminChatBox();
+            }
+            updateAdminChatBadge();
+        }, 2000);
 
         window.addEventListener('DOMContentLoaded', () => {
             checkAdminSession();

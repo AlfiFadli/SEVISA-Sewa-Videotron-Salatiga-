@@ -3479,6 +3479,14 @@
             });
         });
 
+        // AUTO REFRESH LIVE CHAT MESSAGES EVERY 2 SECONDS IN BACKGROUND
+        setInterval(() => {
+            const box = document.getElementById('chat-window-box');
+            if (box && !box.classList.contains('hidden')) {
+                renderLiveChatMessages();
+            }
+        }, 2000);
+
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
             renderVideotronCards(VIDEOTRON_DATA);
