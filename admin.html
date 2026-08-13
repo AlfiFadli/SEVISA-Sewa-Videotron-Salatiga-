@@ -1207,6 +1207,16 @@
             showAdminToast('🔄 CMS SYNCHRONIZED', 'Seluruh data CMS & transaksi berhasil diperbarui.');
         }
 
+        function updateAdminChatBadge() {
+            const saved = localStorage.getItem('sevisa_chats');
+            const chats = saved ? JSON.parse(saved) : [];
+            const userChats = chats.filter(c => c.sender === 'user');
+            const tabBtn = document.getElementById('tab-cms-chat');
+            if (tabBtn) {
+                tabBtn.innerHTML = `💬 Inbox Live Chat Users ${userChats.length > 0 ? `<span class="px-2 py-0.5 bg-red-600 text-white font-extrabold text-[9px] rounded-full animate-pulse ml-1">${userChats.length} Pesan</span>` : ''}`;
+            }
+        }
+
         function showAdminToast(title, msg) {
             const toast = document.getElementById('admin-toast');
             document.getElementById('admin-toast-title').innerText = title;
@@ -1215,14 +1225,18 @@
             setTimeout(() => { toast.classList.add('hidden'); }, 4000);
         }
 
-        // LISTEN FOR REAL-TIME NEW ORDERS & NEW USER REGISTRATIONS FROM INDEX.HTML
+        // LISTEN FOR REAL-TIME NEW ORDERS, CHAT MESSAGES & NEW USER REGISTRATIONS FROM INDEX.HTML
         window.addEventListener('storage', () => {
             renderAdminTable();
             renderCMSUsers();
+            renderAdminChatBox();
+            updateAdminChatBadge();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
             checkAdminSession();
+            renderAdminChatBox();
+            updateAdminChatBadge();
         });
     </script>
 </body>
