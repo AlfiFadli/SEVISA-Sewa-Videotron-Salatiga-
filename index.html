@@ -2663,21 +2663,20 @@
 
             if (!gridContainer) return;
 
-            // ON BERANDA PAGE, DEFAULT SHOW 2 MOST STRATEGIC LOCATIONS ONLY
-            const homeStrategicItems = items.filter(item => item.lokasiCode === 'rejosari' || item.lokasiCode === 'kartini');
+            const displayItems = items && items.length > 0 ? items : VIDEOTRON_DATA;
 
-            if (homeStrategicItems.length === 0) {
+            if (displayItems.length === 0) {
                 gridContainer.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                countBadge.innerText = 'Menampilkan 0 Lokasi';
+                if (emptyState) emptyState.classList.remove('hidden');
+                if (countBadge) countBadge.innerText = 'Menampilkan 0 Lokasi';
                 return;
             }
 
-            emptyState.classList.add('hidden');
-            countBadge.innerText = `Menampilkan ${homeStrategicItems.length} Titik Lokasi Paling Strategis (Pasar Rejosari & Selasar Kartini)`;
+            if (emptyState) emptyState.classList.add('hidden');
+            if (countBadge) countBadge.innerText = `Menampilkan ${displayItems.length} Titik Lokasi Videotron Paling Strategis Kota Salatiga`;
 
             let html = '';
-            homeStrategicItems.forEach(item => {
+            displayItems.forEach(item => {
                 html += `
                     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 flex flex-col justify-between">
                         <div class="p-5 space-y-3">
