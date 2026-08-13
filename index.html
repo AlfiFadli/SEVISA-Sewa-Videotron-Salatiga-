@@ -33,6 +33,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- LEAFLET MAPS ENGINE -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <style> 
         body { font-family: 'Plus Jakarta Sans', sans-serif; } 
         @keyframes float3d {
@@ -1096,10 +1099,29 @@
                             </div>
                         </div>
 
-                        <div id="tab-content-lokasi" class="hidden space-y-3 text-xs text-slate-600 dark:text-slate-300">
-                            <h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider">Peta & Orientasi Arah Hadap</h4>
-                            <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-xl text-center font-mono font-bold text-brand-600 dark:text-sky-400 text-xs">
-                                -7.3305, 110.5084 (Koordinat Digital Pemkot Salatiga)
+                        <div id="tab-content-lokasi" class="hidden space-y-4 text-xs text-slate-600 dark:text-slate-300">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+                                <div>
+                                    <h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider">🗺️ Peta Interaktif & Navigasi GPS Lokasi Videotron</h4>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Perbesar/geser peta interaktif di bawah atau klik tombol Google Maps untuk petunjuk arah rute langsung.</p>
+                                </div>
+                                <a id="det-google-maps-link" href="https://maps.google.com/?q=-7.3305,110.5084" target="_blank" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-md flex items-center gap-1.5 transition shrink-0">
+                                    <span>📍 Buka di Google Maps GPS</span> &rarr;
+                                </a>
+                            </div>
+
+                            <!-- LEAFLET INTERACTIVE MAP CONTAINER -->
+                            <div id="detail-leaflet-map" class="w-full h-80 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-lg relative z-0"></div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                                <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-[11px]">
+                                    <span class="text-slate-400 font-bold block text-[9px] uppercase font-sans">KOORDINAT DIGITAL DISKOMINFO</span>
+                                    <strong id="det-coords-text" class="text-brand-600 dark:text-sky-400 font-black">-7.3305, 110.5084</strong>
+                                </div>
+                                <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                                    <span class="text-slate-400 font-bold block text-[9px] uppercase">ORIENTASI & VIEWING ANGLE</span>
+                                    <strong id="det-orientation-text" class="text-slate-900 dark:text-white font-black">Utara - Selatan (Trafik Utama Kota Salatiga)</strong>
+                                </div>
                             </div>
                         </div>
 
@@ -2917,6 +2939,78 @@
             ];
         }
 
+        const LOCATION_COORDINATES = {
+            'Pasar Rejosari': { lat: -7.3305, lng: 110.5084, orientation: 'Utara - Selatan (Kawasan Pasar & Komersial Rejosari)', googleMaps: 'https://maps.google.com/?q=-7.3305,110.5084' },
+            'Selasar Kartini': { lat: -7.3275, lng: 110.5012, orientation: 'Barat - Timur (Pusat Kota & Kawasan Kuliner Kartini)', googleMaps: 'https://maps.google.com/?q=-7.3275,110.5012' },
+            'Blotongan': { lat: -7.3150, lng: 110.4910, orientation: 'Utara - Selatan (Gate Masuk Salatiga dari Semarang)', googleMaps: 'https://maps.google.com/?q=-7.3150,110.4910' },
+            'Simpang ABC': { lat: -7.3392, lng: 110.5025, orientation: 'Timur - Barat (Persimpangan Jl. Jend. Sudirman & Argoyuwono)', googleMaps: 'https://maps.google.com/?q=-7.3392,110.5025' },
+            'Argoyuwono': { lat: -7.3392, lng: 110.5025, orientation: 'Timur - Barat (Simpang ABC Argoyuwono)', googleMaps: 'https://maps.google.com/?q=-7.3392,110.5025' }
+        };
+
+        let detailLeafletMapInstance = null;
+
+        function initDetailLeafletMap(title, address) {
+            const locInfo = LOCATION_COORDINATES[title] || { lat: -7.3305, lng: 110.5084, orientation: 'Utara - Selatan (Kawasan Komersial Salatiga)', googleMaps: 'https://maps.google.com/?q=-7.3305,110.5084' };
+            
+            const coordsEl = document.getElementById('det-coords-text');
+            const orientEl = document.getElementById('det-orientation-text');
+            const gmapsLink = document.getElementById('det-google-maps-link');
+
+            if (coordsEl) coordsEl.innerText = `${locInfo.lat}, ${locInfo.lng}`;
+            if (orientEl) orientEl.innerText = locInfo.orientation;
+            if (gmapsLink) gmapsLink.href = locInfo.googleMaps;
+
+            setTimeout(() => {
+                const container = document.getElementById('detail-leaflet-map');
+                if (!container) return;
+
+                if (detailLeafletMapInstance) {
+                    detailLeafletMapInstance.remove();
+                    detailLeafletMapInstance = null;
+                }
+
+                try {
+                    detailLeafletMapInstance = L.map('detail-leaflet-map').setView([locInfo.lat, locInfo.lng], 16);
+
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+                        subdomains: 'abcd',
+                        maxZoom: 19
+                    }).addTo(detailLeafletMapInstance);
+
+                    const customIcon = L.divIcon({
+                        className: 'custom-leaflet-marker',
+                        html: `
+                            <div class="relative flex items-center justify-center w-9 h-9">
+                                <span class="absolute w-9 h-9 rounded-full bg-sky-500/40 animate-ping"></span>
+                                <div class="w-9 h-9 rounded-full bg-brand-600 text-white font-black text-sm flex items-center justify-center shadow-xl border-2 border-white">
+                                    📍
+                                </div>
+                            </div>
+                        `,
+                        iconSize: [36, 36],
+                        iconAnchor: [18, 36],
+                        popupAnchor: [0, -36]
+                    });
+
+                    const marker = L.marker([locInfo.lat, locInfo.lng], { icon: customIcon }).addTo(detailLeafletMapInstance);
+                    marker.bindPopup(`
+                        <div class="p-1 space-y-1 text-xs font-sans">
+                            <strong class="font-black text-slate-900 block text-xs">${title}</strong>
+                            <span class="text-[10px] text-slate-500 block">${address || 'Kota Salatiga'}</span>
+                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[9px] rounded block text-center mt-1">
+                                🟢 Titik Penayangan Aktif
+                            </span>
+                        </div>
+                    `).openPopup();
+
+                    detailLeafletMapInstance.invalidateSize();
+                } catch(e) {
+                    console.error('Leaflet Map Init Error:', e);
+                }
+            }, 150);
+        }
+
         function openDetailLokasi(title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok) {
             selectedLocationData = { title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok };
             document.getElementById('det-title').innerText = title;
@@ -2950,6 +3044,10 @@
             const activeContent = document.getElementById('tab-content-' + tabName);
             if (activeBtn) activeBtn.className = "flex-1 py-2 rounded-lg bg-white dark:bg-slate-900 text-brand-600 dark:text-sky-400 shadow-sm transition font-extrabold";
             if (activeContent) activeContent.classList.remove('hidden');
+
+            if (tabName === 'lokasi' && selectedLocationData) {
+                initDetailLeafletMap(selectedLocationData.title, selectedLocationData.address);
+            }
         }
 
         function downloadLocationSpecSheet() {
