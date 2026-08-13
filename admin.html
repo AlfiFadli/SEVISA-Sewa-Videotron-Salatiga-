@@ -60,7 +60,7 @@
 
             <form onsubmit="handleAdminLoginSubmit(event)" class="space-y-4 text-left text-xs">
                 <div>
-                    <label class="block font-bold mb-1 text-slate-300 uppercase tracking-wider">Email Staf Diskominfo *</label>
+                    <label class="block font-bold mb-1 text-slate-300 uppercase tracking-wider">Email Admin / Operator Staf *</label>
                     <input type="email" id="admin-login-email" value="admin@salatiga.go.id" required placeholder="admin@salatiga.go.id" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono font-bold focus:border-sky-500 focus:outline-none">
                 </div>
                 <div>
@@ -69,14 +69,19 @@
                 </div>
 
                 <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-red-600 via-brand-600 to-sky-600 hover:from-red-700 hover:to-sky-500 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
-                    MASUK KANTOOR CMS ADMIN DISKOMINFO &rarr;
+                    MASUK PORTAL RESMI DISKOMINFO &rarr;
                 </button>
             </form>
 
-            <div class="pt-2 border-t border-slate-800">
-                <button onclick="quickAdminLogin()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-[11px] rounded-xl border border-slate-700 transition">
-                    ⚡ Masuk Demo Otomatis (1-Klik)
-                </button>
+            <div class="pt-3 border-t border-slate-800 space-y-2">
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="quickSuperAdminLogin()" class="py-2.5 bg-red-950/80 hover:bg-red-900 text-red-300 font-extrabold text-[10px] rounded-xl border border-red-800 transition">
+                        🛡️ Demo Super Admin
+                    </button>
+                    <button onclick="quickOperatorLogin()" class="py-2.5 bg-amber-950/80 hover:bg-amber-900 text-amber-300 font-extrabold text-[10px] rounded-xl border border-amber-800 transition">
+                        ⚙️ Demo Operator Staf
+                    </button>
+                </div>
             </div>
 
             <p class="text-[10px] text-slate-500">SEVISA • Pengelolaan Resmi Dinas Komunikasi dan Informatika Kota Salatiga</p>
@@ -96,8 +101,8 @@
                     <img src="logo.png" alt="SEVISA Admin Logo" class="h-10 w-10 rounded-xl object-contain border-2 border-brand-500 bg-slate-900 shadow-md">
                     <div>
                         <div class="flex items-center gap-2">
-                            <span class="px-2 py-0.5 bg-red-600 text-white font-extrabold text-[9px] rounded uppercase tracking-widest">CMS RESMI</span>
-                            <span class="text-xs font-mono font-bold text-sky-400">PEMKOT SALATIGA</span>
+                            <span id="admin-role-badge" class="px-2 py-0.5 bg-red-600 text-white font-extrabold text-[9px] rounded uppercase tracking-widest">🛡️ SUPER ADMIN</span>
+                            <span id="admin-role-name" class="text-xs font-mono font-bold text-sky-400">Super Admin Diskominfo</span>
                         </div>
                         <h1 class="text-base sm:text-lg font-black text-white tracking-tight">
                             Portal CMS Pengelolaan Web SEVISA
@@ -414,27 +419,110 @@
                 </div>
 
                 <!-- ========================================================================= -->
-                <!-- MODULE 6: KELOLA USER TERDAFTAR -->
+                <!-- MODULE 6: KELOLA AKUN USER & OPERATOR -->
                 <!-- ========================================================================= -->
                 <div id="sec-cms-users" class="hidden space-y-6">
-                    <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Pengguna Terdaftar & Verifikasi Profil</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Daftar pengguna yang telah mendaftar dan melengkapi data identitas (NIK, Instansi, WhatsApp).</p>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-200 dark:border-slate-800 pb-4 gap-3">
+                        <div>
+                            <h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Akun User Penyewa & Staf Operator Penyiaran</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Atur akun terdaftar, kelola hak akses operasional, serta tambahkan staf operator penyiaran baru.</p>
+                        </div>
+
+                        <!-- TAB SUB-NAVIGATION FOR USER VS OPERATOR ACCOUNTS -->
+                        <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 shrink-0">
+                            <button onclick="switchAccountSubTab('user')" id="btn-acc-tab-user" class="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 text-brand-600 dark:text-sky-400 shadow-sm transition font-black">
+                                👥 User Penyewa (Publik)
+                            </button>
+                            <button onclick="switchAccountSubTab('operator')" id="btn-acc-tab-operator" class="px-3.5 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">
+                                ⚙️ Operator Penyiaran (Staf)
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
-                        <table class="w-full text-left border-collapse text-xs">
-                            <thead>
-                                <tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
-                                    <th class="p-3.5">Nama & Email</th>
-                                    <th class="p-3.5">Perusahaan / Instansi</th>
-                                    <th class="p-3.5">NIK KTP</th>
-                                    <th class="p-3.5">No. WhatsApp</th>
-                                    <th class="p-3.5">Status Profil</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-user-table-body" class="divide-y divide-slate-200 dark:divide-slate-800 font-medium"></tbody>
-                        </table>
+                    <!-- SUB-CONTENT 1: USER PENYEWA TABLE -->
+                    <div id="sub-acc-user" class="space-y-4">
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
+                                        <th class="p-3.5">Nama & Email</th>
+                                        <th class="p-3.5">Perusahaan / Instansi</th>
+                                        <th class="p-3.5">NIK KTP</th>
+                                        <th class="p-3.5">No. WhatsApp</th>
+                                        <th class="p-3.5">Status Akun</th>
+                                        <th class="p-3.5 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-user-table-body" class="divide-y divide-slate-200 dark:divide-slate-800 font-medium"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUB-CONTENT 2: OPERATOR STAF TABLE & FORM -->
+                    <div id="sub-acc-operator" class="hidden space-y-6">
+                        
+                        <!-- FORM TAMBAH OPERATOR BARU (SUPER ADMIN ONLY) -->
+                        <div id="form-container-operator-add" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
+                            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
+                                <h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider">
+                                    ➕ Form Tambah Akun Staf Operator Penyiaran Baru
+                                </h4>
+                                <span class="px-2 py-0.5 bg-red-600/20 text-red-400 font-black text-[9px] rounded border border-red-500/30 uppercase">
+                                    🛡️ Khusus Super Admin
+                                </span>
+                            </div>
+                            
+                            <form onsubmit="saveOperatorAccountForm(event)" class="space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block font-bold mb-1">Nama Lengkap Staf Operator *</label>
+                                        <input type="text" id="op-add-name" required placeholder="Contoh: Ahmad Subagyo, S.ST" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold mb-1">Email Login Staf *</label>
+                                        <input type="email" id="op-add-email" required placeholder="Contoh: ahmad@salatiga.go.id" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block font-bold mb-1">Kata Sandi Login *</label>
+                                        <input type="password" id="op-add-pass" required placeholder="••••••••" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold mb-1">NIP / Identitas Staf *</label>
+                                        <input type="text" id="op-add-nip" required placeholder="199001012015031002" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold mb-1">No. WhatsApp *</label>
+                                        <input type="text" id="op-add-phone" required placeholder="081234567890" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold">
+                                    </div>
+                                </div>
+
+                                <div class="pt-2 flex gap-2">
+                                    <button type="submit" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
+                                        💾 SIMPAN AKUN OPERATOR BARU &rarr;
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- OPERATORS TABLE LIST -->
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
+                                        <th class="p-3.5">Nama & Email Operator</th>
+                                        <th class="p-3.5">NIP / Identitas Staf</th>
+                                        <th class="p-3.5">No. WhatsApp</th>
+                                        <th class="p-3.5">Hak Akses Role</th>
+                                        <th class="p-3.5 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-operator-table-body" class="divide-y divide-slate-200 dark:divide-slate-800 font-medium"></tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
 
@@ -575,7 +663,29 @@
     <script>
         let currentTargetOrderCode = null;
 
-        // CHECK ADMIN LOGIN STATUS
+        const DEFAULT_OPERATORS = [
+            { name: 'Siti Rahmawati, S.Kom', email: 'operator@salatiga.go.id', pass: 'operator123', nip: '198504122010012003', phone: '085712345678', role: 'operator', created: '2026-08-01' },
+            { name: 'Ahmad Subagyo, S.ST', email: 'ahmad.penyiaran@salatiga.go.id', pass: 'operator123', nip: '199001012015031002', phone: '081234567890', role: 'operator', created: '2026-08-05' }
+        ];
+
+        function getStoredOperators() {
+            const saved = localStorage.getItem('sevisa_operators');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                } catch(e) {}
+            }
+            localStorage.setItem('sevisa_operators', JSON.stringify(DEFAULT_OPERATORS));
+            return DEFAULT_OPERATORS;
+        }
+
+        function saveStoredOperators(ops) {
+            localStorage.setItem('sevisa_operators', JSON.stringify(ops));
+            window.dispatchEvent(new Event('storage'));
+        }
+
+        // CHECK ADMIN LOGIN STATUS & APPLY ROLE HIERARCHY
         function checkAdminSession() {
             const logged = sessionStorage.getItem('sevisa_admin_logged');
             const loginScreen = document.getElementById('admin-login-screen');
@@ -585,6 +695,7 @@
                 loginScreen.classList.add('hidden');
                 mainWrapper.classList.remove('hidden');
                 mainWrapper.classList.add('flex');
+                applyRolePermissions();
                 initAdminCMSData();
             } else {
                 loginScreen.classList.remove('hidden');
@@ -600,22 +711,82 @@
 
             if (email === 'admin@salatiga.go.id' && pass === 'admin123') {
                 sessionStorage.setItem('sevisa_admin_logged', 'true');
+                sessionStorage.setItem('sevisa_admin_role', 'superadmin');
+                sessionStorage.setItem('sevisa_admin_name', 'Super Admin Diskominfo');
                 checkAdminSession();
-                showAdminToast('✅ AKSES DITERIMA', 'Selamat datang di Portal CMS Admin Diskominfo Salatiga.');
-            } else {
-                alert('Email atau Kata Sandi Admin Salah! (Gunakan: admin@salatiga.go.id / admin123)');
+                showAdminToast('🛡️ AKSES SUPER ADMIN', 'Selamat datang Super Admin! Seluruh fitur & pengelolaan akun terbuka penuh.');
+                return;
             }
+
+            const operators = getStoredOperators();
+            const foundOp = operators.find(op => op.email.toLowerCase() === email.toLowerCase() && op.pass === pass);
+            if (foundOp) {
+                sessionStorage.setItem('sevisa_admin_logged', 'true');
+                sessionStorage.setItem('sevisa_admin_role', 'operator');
+                sessionStorage.setItem('sevisa_admin_name', foundOp.name + ' (Operator)');
+                checkAdminSession();
+                showAdminToast('⚙️ AKSES OPERATOR PENYIARAN', `Selamat datang Operator ${foundOp.name}. Akses dibatasi untuk operasional penyiaran & live chat.`);
+                return;
+            }
+
+            alert('Email atau Kata Sandi Salah!\n\nDemo Super Admin: admin@salatiga.go.id / admin123\nDemo Operator: operator@salatiga.go.id / operator123');
         }
 
-        function quickAdminLogin() {
+        function quickSuperAdminLogin() {
             sessionStorage.setItem('sevisa_admin_logged', 'true');
+            sessionStorage.setItem('sevisa_admin_role', 'superadmin');
+            sessionStorage.setItem('sevisa_admin_name', 'Super Admin Diskominfo');
             checkAdminSession();
-            showAdminToast('⚡ LOGIN DEMO OTOMATIS', 'Akses Admin Diskominfo Aktif.');
+            showAdminToast('🛡️ LOGIN SUPER ADMIN', 'Akses Penuh Super Admin Aktif.');
+        }
+
+        function quickOperatorLogin() {
+            sessionStorage.setItem('sevisa_admin_logged', 'true');
+            sessionStorage.setItem('sevisa_admin_role', 'operator');
+            sessionStorage.setItem('sevisa_admin_name', 'Siti Rahmawati, S.Kom (Operator)');
+            checkAdminSession();
+            showAdminToast('⚙️ LOGIN OPERATOR', 'Akses Operasional Penyiaran & Live Chat Aktif.');
         }
 
         function handleAdminLogout() {
             sessionStorage.removeItem('sevisa_admin_logged');
+            sessionStorage.removeItem('sevisa_admin_role');
+            sessionStorage.removeItem('sevisa_admin_name');
             checkAdminSession();
+        }
+
+        function applyRolePermissions() {
+            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
+            const name = sessionStorage.getItem('sevisa_admin_name') || 'Admin Diskominfo';
+            
+            const roleBadge = document.getElementById('admin-role-badge');
+            const roleNameEl = document.getElementById('admin-role-name');
+            const resetBtn = document.getElementById('admin-reset-demo-btn');
+            const formAddOp = document.getElementById('form-container-operator-add');
+
+            if (roleNameEl) roleNameEl.innerText = name;
+
+            if (role === 'operator') {
+                if (roleBadge) {
+                    roleBadge.innerText = '⚙️ OPERATOR STAF';
+                    roleBadge.className = 'px-2.5 py-0.5 bg-amber-500 text-slate-950 font-black text-[9px] rounded uppercase tracking-widest';
+                }
+                if (resetBtn) resetBtn.classList.add('hidden');
+                if (formAddOp) {
+                    formAddOp.innerHTML = `
+                        <div class="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-600 dark:text-amber-400 text-xs font-bold flex items-center justify-between">
+                            <span>🔒 Formulir Tambah Operator Penyiaran Terkunci (Khusus Hak Akses Super Admin Diskominfo)</span>
+                            <span class="px-2 py-0.5 bg-amber-500/20 rounded font-mono text-[10px]">READ ONLY OPERATOR</span>
+                        </div>
+                    `;
+                }
+            } else {
+                if (roleBadge) {
+                    roleBadge.innerText = '🛡️ SUPER ADMIN';
+                    roleBadge.className = 'px-2.5 py-0.5 bg-red-600 text-white font-extrabold text-[9px] rounded uppercase tracking-widest';
+                }
+                if (resetBtn) resetBtn.classList.remove('hidden');
+            }
         }
 
         // INITIALIZE ALL DATA FROM LOCALSTORAGE OR SET DEFAULTS
@@ -626,6 +797,7 @@
             renderCMSPortfolio();
             renderCMSBlog();
             renderCMSUsers();
+            renderCMSOperators();
             renderAdminChatBox();
             updateAdminChatBadge();
         }
@@ -1077,31 +1249,161 @@
             showAdminToast('📜 TENTANG KAMI UPDATED', 'Informasi Halaman Tentang Kami berhasil diperbarui.');
         }
 
-        // 6. USERS MANAGEMENT
+        // 6. USERS & OPERATORS MANAGEMENT HUB
+        function switchAccountSubTab(type) {
+            const userTab = document.getElementById('sub-acc-user');
+            const opTab = document.getElementById('sub-acc-operator');
+            const btnUser = document.getElementById('btn-acc-tab-user');
+            const btnOp = document.getElementById('btn-acc-tab-operator');
+
+            if (type === 'user') {
+                userTab.classList.remove('hidden');
+                opTab.classList.add('hidden');
+                btnUser.className = 'px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 text-brand-600 dark:text-sky-400 shadow-sm transition font-black';
+                btnOp.className = 'px-3.5 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition';
+                renderCMSUsers();
+            } else {
+                userTab.classList.add('hidden');
+                opTab.classList.remove('hidden');
+                btnUser.className = 'px-3.5 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition';
+                btnOp.className = 'px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 text-brand-600 dark:text-sky-400 shadow-sm transition font-black';
+                renderCMSOperators();
+            }
+        }
+
         function renderCMSUsers() {
             const tbody = document.getElementById('admin-user-table-body');
+            if (!tbody) return;
             const saved = localStorage.getItem('sevisa_users');
             let users = saved ? JSON.parse(saved) : [
-                { name: 'Budi Santoso', email: 'budi@gmail.com', company: 'PT Salatiga Digital Indo', phone: '081234567890', nik: '3373012345670001', verified: true }
+                { name: 'Budi Santoso', email: 'budi@gmail.com', company: 'PT Salatiga Digital Indo', phone: '081234567890', nik: '3373012345670001', verified: true },
+                { name: 'Alfi Fadli', email: 'alfi@gmail.com', company: 'PT Mencari Cinta Sejati', phone: '081987654321', nik: '3373021987650002', verified: true }
             ];
 
             let html = '';
             users.forEach(u => {
                 html += `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800">
-                        <td class="p-3.5"><strong class="text-slate-900 dark:text-white">${u.name}</strong><br><span class="text-[10px] text-slate-400">${u.email}</span></td>
-                        <td class="p-3.5 font-bold">${u.company || 'Personal'}</td>
+                        <td class="p-3.5"><strong class="text-slate-900 dark:text-white font-bold">${u.name}</strong><br><span class="text-[10px] text-slate-400 font-mono">${u.email}</span></td>
+                        <td class="p-3.5 font-bold">${u.company || 'Personal / Individu'}</td>
                         <td class="p-3.5 font-mono text-[11px]">${u.nik || '-'}</td>
-                        <td class="p-3.5 font-mono text-[11px] text-emerald-600">${u.phone || '-'}</td>
-                        <td class="p-3.5"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[9px] rounded">VERIFIED</span></td>
+                        <td class="p-3.5 font-mono text-[11px] text-emerald-600 font-bold">${u.phone || '-'}</td>
+                        <td class="p-3.5"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-extrabold text-[9px] rounded uppercase">PENYEWA VERIFIED</span></td>
+                        <td class="p-3.5 text-center">
+                            <button onclick="deleteUserAccount('${u.email}')" class="px-2 py-1 bg-rose-600/20 text-rose-500 hover:bg-rose-600 hover:text-white font-bold text-[10px] rounded transition">
+                                🗑️ Hapus
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
             tbody.innerHTML = html;
         }
 
+        function renderCMSOperators() {
+            const tbody = document.getElementById('admin-operator-table-body');
+            if (!tbody) return;
+            const operators = getStoredOperators();
+            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
+
+            let html = '';
+            operators.forEach(op => {
+                html += `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800">
+                        <td class="p-3.5"><strong class="text-slate-900 dark:text-white font-bold">${op.name}</strong><br><span class="text-[10px] text-sky-400 font-mono">${op.email}</span></td>
+                        <td class="p-3.5 font-mono text-[11px] font-bold text-slate-600 dark:text-slate-300">${op.nip || '-'}</td>
+                        <td class="p-3.5 font-mono text-[11px] text-emerald-600 font-bold">${op.phone || '-'}</td>
+                        <td class="p-3.5"><span class="px-2.5 py-1 bg-amber-500/20 text-amber-500 font-extrabold text-[9px] rounded border border-amber-500/30 uppercase">⚙️ OPERATOR STAF</span></td>
+                        <td class="p-3.5 text-center">
+                            ${role === 'superadmin' ? `
+                                <button onclick="deleteOperatorAccount('${op.email}')" class="px-2 py-1 bg-rose-600/20 text-rose-500 hover:bg-rose-600 hover:text-white font-bold text-[10px] rounded transition">
+                                    🗑️ Hapus Staf
+                                </button>
+                            ` : '<span class="text-[10px] text-slate-400 italic">Khusus Super Admin</span>'}
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function saveOperatorAccountForm(e) {
+            e.preventDefault();
+            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
+            if (role !== 'superadmin') {
+                alert('Hanya Super Admin Diskominfo yang berhak menambahkan akun Operator Staf baru!');
+                return;
+            }
+
+            const name = document.getElementById('op-add-name').value.trim();
+            const email = document.getElementById('op-add-email').value.trim();
+            const pass = document.getElementById('op-add-pass').value.trim();
+            const nip = document.getElementById('op-add-nip').value.trim();
+            const phone = document.getElementById('op-add-phone').value.trim();
+
+            if (!name || !email || !pass) return;
+
+            let operators = getStoredOperators();
+            if (operators.some(op => op.email.toLowerCase() === email.toLowerCase())) {
+                alert('Email operator ini sudah terdaftar dalam sistem!');
+                return;
+            }
+
+            operators.push({
+                name, email, pass, nip, phone,
+                role: 'operator',
+                created: new Date().toISOString().split('T')[0]
+            });
+
+            saveStoredOperators(operators);
+            renderCMSOperators();
+
+            document.getElementById('op-add-name').value = '';
+            document.getElementById('op-add-email').value = '';
+            document.getElementById('op-add-pass').value = '';
+            document.getElementById('op-add-nip').value = '';
+            document.getElementById('op-add-phone').value = '';
+
+            showAdminToast('✅ OPERATOR DITAMBAHKAN', `Akun Operator baru (${name}) berhasil dibuat. Staf dapat login dengan email ${email}.`);
+        }
+
+        function deleteOperatorAccount(email) {
+            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
+            if (role !== 'superadmin') {
+                alert('Hanya Super Admin yang dapat menghapus akun operator!');
+                return;
+            }
+
+            if (confirm(`Hapus akun operator ${email} dari sistem?`)) {
+                let operators = getStoredOperators();
+                operators = operators.filter(op => op.email.toLowerCase() !== email.toLowerCase());
+                saveStoredOperators(operators);
+                renderCMSOperators();
+                showAdminToast('🗑️ OPERATOR DIHAPUS', `Akun operator ${email} telah dihapus.`);
+            }
+        }
+
+        function deleteUserAccount(email) {
+            if (confirm(`Hapus akun user penyewa ${email}?`)) {
+                const saved = localStorage.getItem('sevisa_users');
+                let users = saved ? JSON.parse(saved) : [];
+                users = users.filter(u => u.email.toLowerCase() !== email.toLowerCase());
+                localStorage.setItem('sevisa_users', JSON.stringify(users));
+                window.dispatchEvent(new Event('storage'));
+                renderCMSUsers();
+                showAdminToast('🗑️ AKUN USER DIHAPUS', `Akun user ${email} telah dihapus.`);
+            }
+        }
+
         // TAB MODULE SWITCHER
         function switchCMSModule(modName) {
+            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
+            
+            if (role === 'operator' && (modName === 'lokasi' || modName === 'tentang')) {
+                showAdminToast('🔒 AKSES TERBATASI', 'Modul Lokasi & Edit Teks Tentang Kami hanya dapat diubah oleh Super Admin Diskominfo!');
+                return;
+            }
+
             const modules = ['transaksi', 'lokasi', 'portofolio', 'blog', 'tentang', 'users', 'chat'];
             modules.forEach(m => {
                 const sec = document.getElementById('sec-cms-' + m);
@@ -1116,6 +1418,10 @@
             if (activeSec) activeSec.classList.remove('hidden');
             if (activeTab) activeTab.className = "px-4 py-2.5 rounded-xl bg-slate-900 text-white shadow-md font-black shrink-0";
             if (modName === 'chat') renderAdminChatBox();
+            if (modName === 'users') {
+                renderCMSUsers();
+                renderCMSOperators();
+            }
         }
 
         // PRINT OFFICIAL INVOICE FROM ADMIN
