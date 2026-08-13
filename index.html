@@ -3417,6 +3417,32 @@
             return DEFAULT_SAMPLE_CHATS;
         }
 
+        function editUserChatMessage(idx) {
+            let chats = getStoredChats();
+            if (!chats[idx]) return;
+            const currentText = chats[idx].text;
+            const newText = prompt('Edit pesan obrolan Anda:', currentText);
+            if (newText !== null && newText.trim() !== '') {
+                chats[idx].text = newText.trim();
+                chats[idx].time = (chats[idx].time || '').replace(' (diedit)', '') + ' (diedit)';
+                localStorage.setItem('sevisa_chats', JSON.stringify(chats));
+                window.dispatchEvent(new Event('storage'));
+                renderLiveChatMessages();
+                show3DToast('✏️ PESAN DIEDIT', 'Pesan obrolan Anda berhasil diperbarui.', 'success');
+            }
+        }
+
+        function deleteUserChatMessage(idx) {
+            if (confirm('Hapus pesan obrolan ini dari percakapan?')) {
+                let chats = getStoredChats();
+                chats.splice(idx, 1);
+                localStorage.setItem('sevisa_chats', JSON.stringify(chats));
+                window.dispatchEvent(new Event('storage'));
+                renderLiveChatMessages();
+                show3DToast('🗑️ PESAN DIHAPUS', 'Pesan obrolan telah dihapus.', 'info');
+            }
+        }
+
         function renderLiveChatMessages() {
             const container = document.getElementById('chat-messages-container');
             let chats = getStoredChats();
@@ -3428,18 +3454,24 @@
                 </div>
             `;
 
-            chats.forEach(msg => {
+            chats.forEach((msg, idx) => {
                 if (msg.sender === 'user') {
                     html += `
-                        <div class="bg-emerald-600 text-white p-3 rounded-2xl max-w-[85%] ml-auto space-y-1 shadow-sm">
-                            <strong class="font-bold text-[10px] text-emerald-200 block text-right">${msg.userName || 'Anda'}</strong>
+                        <div class="bg-emerald-600 text-white p-3 rounded-2xl max-w-[85%] ml-auto space-y-1 shadow-sm relative group">
+                            <div class="flex items-center justify-between gap-2 border-b border-emerald-500/50 pb-1 mb-1">
+                                <strong class="font-bold text-[10px] text-emerald-200">${msg.userName || 'Anda'} • ${msg.time || ''}</strong>
+                                <div class="flex gap-1.5 opacity-90">
+                                    <button onclick="editUserChatMessage(${idx})" title="Edit Pesan" class="hover:text-amber-300 transition text-[10px] font-bold">✏️ Edit</button>
+                                    <button onclick="deleteUserChatMessage(${idx})" title="Hapus Pesan" class="hover:text-rose-300 transition text-[10px] font-bold">🗑️ Hapus</button>
+                                </div>
+                            </div>
                             <p class="text-[11px] leading-relaxed">${msg.text}</p>
                         </div>
                     `;
                 } else {
                     html += `
                         <div class="bg-blue-100 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 text-blue-950 dark:text-blue-200 p-3 rounded-2xl max-w-[85%] space-y-1 shadow-sm">
-                            <strong class="font-bold text-[10px] text-blue-600 block">👤 Admin Diskominfo Salatiga</strong>
+                            <strong class="font-bold text-[10px] text-blue-600 block">👤 Admin Diskominfo Salatiga • ${msg.time || ''}</strong>
                             <p class="text-[11px] leading-relaxed">${msg.text}</p>
                         </div>
                     `;

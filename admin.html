@@ -1185,6 +1185,33 @@
             }
         }
 
+        function editAdminChatMessage(idx) {
+            let chats = getStoredChats();
+            if (!chats[idx]) return;
+            const currentText = chats[idx].text;
+            const newText = prompt('Edit pesan obrolan:', currentText);
+            if (newText !== null && newText.trim() !== '') {
+                chats[idx].text = newText.trim();
+                chats[idx].time = (chats[idx].time || '').replace(' (diedit)', '') + ' (diedit)';
+                localStorage.setItem('sevisa_chats', JSON.stringify(chats));
+                window.dispatchEvent(new Event('storage'));
+                renderAdminChatBox();
+                showAdminToast('✏️ PESAN DIEDIT', 'Pesan obrolan berhasil diperbarui di layar user & admin.');
+            }
+        }
+
+        function deleteAdminChatMessage(idx) {
+            if (confirm('Hapus pesan obrolan ini dari riwayat obrolan?')) {
+                let chats = getStoredChats();
+                chats.splice(idx, 1);
+                localStorage.setItem('sevisa_chats', JSON.stringify(chats));
+                window.dispatchEvent(new Event('storage'));
+                renderAdminChatBox();
+                updateAdminChatBadge();
+                showAdminToast('🗑️ PESAN DIHAPUS', 'Pesan obrolan telah dihapus dari sistem.');
+            }
+        }
+
         function renderAdminChatBox() {
             const container = document.getElementById('admin-chat-messages-container');
             if (!container) return;
@@ -1204,19 +1231,29 @@
                 if (msg.sender === 'user') {
                     html += `
                         <div class="bg-slate-800 text-slate-100 p-3 rounded-2xl max-w-[85%] space-y-1.5 shadow-sm border border-slate-700">
-                            <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center justify-between gap-2 border-b border-slate-700 pb-1">
                                 <strong class="font-bold text-[10px] text-sky-400 font-mono">👤 User: ${msg.userName || 'Pengguna'} (${msg.time || ''})</strong>
-                                <button onclick="replyToUserChat('${msg.userName || 'Pengguna'}')" class="px-2 py-0.5 bg-brand-600 hover:bg-brand-500 text-white font-extrabold text-[9px] rounded-md shadow">
-                                    💬 Balas User Ini
-                                </button>
+                                <div class="flex items-center gap-1.5">
+                                    <button onclick="replyToUserChat('${msg.userName || 'Pengguna'}')" class="px-2 py-0.5 bg-brand-600 hover:bg-brand-500 text-white font-extrabold text-[9px] rounded-md shadow">
+                                        💬 Balas User
+                                    </button>
+                                    <button onclick="editAdminChatMessage(${idx})" title="Edit Pesan Ini" class="text-amber-400 font-bold text-[10px] hover:underline">✏️</button>
+                                    <button onclick="deleteAdminChatMessage(${idx})" title="Hapus Pesan Ini" class="text-rose-400 font-bold text-[10px] hover:underline">🗑️</button>
+                                </div>
                             </div>
                             <p class="text-[11px] leading-relaxed text-slate-200">${msg.text}</p>
                         </div>
                     `;
                 } else {
                     html += `
-                        <div class="bg-emerald-950 text-emerald-200 p-3 rounded-2xl max-w-[85%] ml-auto space-y-1 shadow-sm border border-emerald-800">
-                            <strong class="font-bold text-[10px] text-emerald-400 block text-right">🛡️ Admin Diskominfo (Anda) • ${msg.time || ''}</strong>
+                        <div class="bg-emerald-950 text-emerald-200 p-3 rounded-2xl max-w-[85%] ml-auto space-y-1.5 shadow-sm border border-emerald-800">
+                            <div class="flex items-center justify-between gap-2 border-b border-emerald-800/80 pb-1">
+                                <strong class="font-bold text-[10px] text-emerald-400">🛡️ Admin Diskominfo (Anda) • ${msg.time || ''}</strong>
+                                <div class="flex items-center gap-1.5">
+                                    <button onclick="editAdminChatMessage(${idx})" title="Edit Balasan" class="text-amber-300 font-bold text-[10px] hover:underline">✏️ Edit</button>
+                                    <button onclick="deleteAdminChatMessage(${idx})" title="Hapus Balasan" class="text-rose-300 font-bold text-[10px] hover:underline">🗑️ Hapus</button>
+                                </div>
+                            </div>
                             <p class="text-[11px] leading-relaxed">${msg.text}</p>
                         </div>
                     `;
