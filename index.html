@@ -2877,6 +2877,19 @@
             applyVideotronFilters();
         }
 
+        function getStoredLocations() {
+            const saved = localStorage.getItem('sevisa_locations');
+            if (saved) {
+                try { return JSON.parse(saved); } catch(e) {}
+            }
+            return [
+                { id: 'VDT-01', name: 'Pasar Rejosari', address: 'Jl. Hasanudin, Salatiga', mapsUrl: 'https://maps.google.com/?q=Pasar+Rejosari+Salatiga', priceDay: '2.200.000' },
+                { id: 'VDT-02', name: 'Blotongan', address: 'Jl. Semarang - Surakarta, Salatiga', mapsUrl: 'https://maps.google.com/?q=Blotongan+Salatiga', priceDay: '1.268.000' },
+                { id: 'VDT-03', name: 'Selasar Kartini', address: 'Jl. Kartini, Salatiga', mapsUrl: 'https://maps.google.com/?q=Selasar+Kartini+Salatiga', priceDay: '716.000' },
+                { id: 'VDT-04', name: 'Alun-Alun Salatiga', address: 'Jl. Pancasila, Salatiga', mapsUrl: 'https://maps.google.com/?q=Alun+Alun+Salatiga', priceDay: '698.000' }
+            ];
+        }
+
         function openDetailLokasi(title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok) {
             selectedLocationData = { title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok };
             document.getElementById('det-title').innerText = title;
