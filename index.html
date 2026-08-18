@@ -2767,40 +2767,50 @@
 
             if (!gridContainer) return;
 
-            // EXCLUSIVELY SHOW PASAR REJOSARI & SELASAR KARTINI ON BERANDA HOMEPAGE
-            const displayItems = (items && items.length > 0 ? items : VIDEOTRON_DATA).filter(item => item.lokasiCode === 'rejosari' || item.lokasiCode === 'kartini');
+            const sourceData = (items && items.length > 0) ? items : getStoredUserLocations();
 
-            if (displayItems.length === 0) {
-                gridContainer.innerHTML = '';
-                if (emptyState) emptyState.classList.remove('hidden');
-                if (countBadge) countBadge.innerText = 'Menampilkan 0 Lokasi';
-                return;
-            }
+            // EXCLUSIVELY SHOW PASAR REJOSARI & SELASAR KARTINI ON BERANDA HOMEPAGE
+            const displayItems = sourceData.filter(item => {
+                const titleStr = (item.title || item.name || '').toLowerCase();
+                const codeStr = (item.lokasiCode || '').toLowerCase();
+                return titleStr.includes('rejosari') || titleStr.includes('kartini') || codeStr === 'rejosari' || codeStr === 'kartini';
+            });
+
+            const finalItems = displayItems.length > 0 ? displayItems : sourceData.slice(0, 2);
 
             if (emptyState) emptyState.classList.add('hidden');
-            if (countBadge) countBadge.innerText = `Menampilkan ${displayItems.length} Titik Lokasi Paling Strategis (Pasar Rejosari & Selasar Kartini)`;
+            if (countBadge) countBadge.innerText = `Menampilkan ${finalItems.length} Titik Lokasi Paling Strategis (Pasar Rejosari & Selasar Kartini)`;
 
             let html = '';
-            displayItems.forEach(item => {
+            finalItems.forEach(item => {
+                const titleStr = item.title || item.name || 'Videotron';
+                const sizeStr = item.size || '8 x 4 Meter';
+                const priceNonStr = item.priceNon || item.priceDay || '2.200.000';
+                const priceRokokStr = item.priceRokok || '2.750.000';
+                const badgeStr = item.badgeText || 'LOKASI UTAMA';
+                const trafficStr = item.traffic || '95.000+';
+                const ledSpecStr = item.ledSpec || 'P10 Outdoor DIP • 1920x1080';
+                const addressStr = item.address || 'Salatiga';
+
                 html += `
                     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 flex flex-col justify-between">
                         <div class="p-5 space-y-3">
                             <div class="w-full h-40 bg-slate-900 rounded-2xl border border-slate-800 flex flex-col items-center justify-center relative p-3 text-center overflow-hidden">
                                 <div class="absolute inset-0 bg-gradient-to-tr from-brand-900/40 via-brand-600/20 to-transparent"></div>
                                 <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-lg mb-1.5 relative z-10 font-black text-xs">
-                                    ${item.size.split(' ')[0]}
+                                    ${sizeStr.split(' ')[0]}
                                 </div>
-                                <span class="text-[9px] font-extrabold text-amber-400 uppercase tracking-widest relative z-10">${item.ledSpec}</span>
-                                <span class="text-xs text-white font-bold mt-0.5 relative z-10">${item.title}</span>
+                                <span class="text-[9px] font-extrabold text-amber-400 uppercase tracking-widest relative z-10">${ledSpecStr}</span>
+                                <span class="text-xs text-white font-bold mt-0.5 relative z-10">${titleStr}</span>
                             </div>
 
                             <div class="space-y-1.5">
                                 <div class="flex items-center justify-between">
-                                    <span class="px-2.5 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[9px] rounded-md border border-brand-200 dark:border-slate-700">${item.badgeText}</span>
-                                    <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400">${item.traffic} Kendaraan/Hari</span>
+                                    <span class="px-2.5 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[9px] rounded-md border border-brand-200 dark:border-slate-700">${badgeStr}</span>
+                                    <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400">${trafficStr} Kendaraan/Hari</span>
                                 </div>
-                                <h3 class="font-black text-slate-900 dark:text-white text-base pt-0.5">${item.title}</h3>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">${item.address}</p>
+                                <h3 class="font-black text-slate-900 dark:text-white text-base pt-0.5">${titleStr}</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">${addressStr}</p>
                             </div>
                         </div>
 
@@ -2808,18 +2818,18 @@
                             <div class="space-y-1 text-xs">
                                 <div class="flex justify-between items-center">
                                     <span class="text-slate-500 dark:text-slate-400 font-medium">Tarif Non-Rokok (Hari):</span>
-                                    <span class="font-extrabold text-amber-600 dark:text-amber-400 text-xs">Rp ${item.priceNon}</span>
+                                    <span class="font-extrabold text-amber-600 dark:text-amber-400 text-xs">Rp ${priceNonStr}</span>
                                 </div>
                                 <div class="flex justify-between items-center text-slate-400">
                                     <span>Tarif Rokok (+25%):</span>
-                                    <span class="font-semibold text-rose-600 dark:text-rose-400 text-xs">Rp ${item.priceRokok}</span>
+                                    <span class="font-semibold text-rose-600 dark:text-rose-400 text-xs">Rp ${priceRokokStr}</span>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-2">
-                                <button onclick="openDetailLokasi('${item.title}', '${item.address}', '${item.size}', '${item.priceNon}', '${item.priceRokok}', '${item.monthNon}', '${item.monthRokok}', '${item.hourNon}', '${item.hourRokok}', '${item.minuteNon}', '${item.minuteRokok}')" class="py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
+                                <button onclick="openDetailLokasi('${titleStr}', '${addressStr}', '${sizeStr}', '${priceNonStr}', '${priceRokokStr}', '${item.monthNon || ''}', '${item.monthRokok || ''}', '${item.hourNon || ''}', '${item.hourRokok || ''}', '${item.minuteNon || ''}', '${item.minuteRokok || ''}')" class="py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
                                     Rincian Brosur
                                 </button>
-                                <button onclick="triggerBookingFlow('${item.title}')" class="py-2.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs rounded-xl shadow-md transition text-center">
+                                <button onclick="triggerBookingFlow('${titleStr}')" class="py-2.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs rounded-xl shadow-md transition text-center">
                                     Ajukan Sewa &rarr;
                                 </button>
                             </div>
@@ -3907,6 +3917,10 @@
                 activeNav.className = "px-2.5 py-1.5 rounded-lg text-brand-600 dark:text-sky-400 bg-brand-50 dark:bg-slate-800 font-black transition";
             }
 
+            if (pageId === 'home') {
+                renderVideotronCards(getStoredUserLocations());
+            }
+
             if (pageId === 'lokasi') {
                 initPageLokasiMaps();
             }
@@ -4189,6 +4203,7 @@
             if (storageDebounceTimer) cancelAnimationFrame(storageDebounceTimer);
             storageDebounceTimer = requestAnimationFrame(() => {
                 orderDatabase = getStoredOrders();
+                renderVideotronCards(getStoredUserLocations());
                 renderPortfolioGrid(getMergedPortfolioData());
                 renderAboutPageCMS();
                 renderUserBlogPageCards();
@@ -4218,6 +4233,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
+            renderVideotronCards(getStoredUserLocations());
             renderUserLokasiPageCards();
             renderPortfolioGrid(getMergedPortfolioData());
             renderAboutPageCMS();
