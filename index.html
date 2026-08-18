@@ -47,6 +47,11 @@
         .animate-3d-float {
             animation: float3d 3s ease-in-out infinite;
         }
+        .leaflet-container {
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 1 !important;
+        }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col min-h-screen transition-colors duration-300">
@@ -3253,10 +3258,15 @@
             container.innerHTML = html;
         }
 
+        let masterSalatigaMapInstance = null;
+        const cardMapInstances = {};
+
         function initPageLokasiMaps() {
             renderUserLokasiPageCards();
 
             setTimeout(() => {
+                if (typeof L === 'undefined') return;
+
                 const masterContainer = document.getElementById('master-salatiga-map');
                 const locs = getStoredUserLocations();
 
@@ -3269,9 +3279,8 @@
                     try {
                         masterSalatigaMapInstance = L.map('master-salatiga-map').setView([-7.3280, 110.5010], 14);
 
-                        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-                            subdomains: 'abcd',
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; OpenStreetMap contributors',
                             maxZoom: 19
                         }).addTo(masterSalatigaMapInstance);
 
@@ -3308,7 +3317,7 @@
                             `);
                         });
 
-                        masterSalatigaMapInstance.invalidateSize();
+                        setTimeout(() => { if (masterSalatigaMapInstance) masterSalatigaMapInstance.invalidateSize(); }, 300);
                     } catch(e) {}
                 }
 
@@ -3330,8 +3339,8 @@
                         const map = L.map(mapCardId, { zoomControl: false }).setView([parts[0], parts[1]], 15);
                         cardMapInstances[mapCardId] = map;
 
-                        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                            subdomains: 'abcd',
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; OpenStreetMap contributors',
                             maxZoom: 19
                         }).addTo(map);
 
@@ -3350,7 +3359,7 @@
                         });
 
                         L.marker([parts[0], parts[1]], { icon: customIcon }).addTo(map);
-                        map.invalidateSize();
+                        setTimeout(() => { if (cardMapInstances[mapCardId]) cardMapInstances[mapCardId].invalidateSize(); }, 300);
                     } catch(e) {}
                 });
 
