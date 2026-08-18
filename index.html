@@ -48,9 +48,10 @@
             animation: float3d 3s ease-in-out infinite;
         }
         .leaflet-container {
-            width: 100% !important;
-            height: 100% !important;
-            z-index: 1 !important;
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+            z-index: 1;
         }
     </style>
 </head>
@@ -916,213 +917,7 @@
                     </div>
 
                     <!-- TABEL PERBANDINGAN TARIF BROSUR (SEMUA TITIK LOKASI DYNAMICALLY POPULATED FROM ADMIN CMS) -->
-                    <div id="user-lokasi-grid-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        
-                        <!-- CARD 1: PASAR REJOSARI -->
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-lg space-y-4">
-                            <div class="flex justify-between items-start border-b border-slate-200 dark:border-slate-800 pb-3">
-                                <div>
-                                    <span class="px-2.5 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[10px] rounded-md">LOKASI 1 (TOP TRAFFIC)</span>
-                                    <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">PASAR REJOSARI</h3>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Jl. Hasanudin, Salatiga</p>
-                                </div>
-                                <span class="px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px] rounded-lg border border-emerald-500/30">
-                                    -7.3305, 110.5084
-                                </span>
-                            </div>
-
-                            <!-- CARD LEAFLET MAP CONTAINER -->
-                            <div id="card-map-rejosari" class="w-full h-44 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
-
-                            <div class="grid grid-cols-2 gap-3 text-xs">
-                                <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
-                                    <span class="font-extrabold text-blue-700 dark:text-blue-300 text-[11px] block uppercase">Tarif Non-Rokok</span>
-                                    <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                        <li><strong>Bulan:</strong> Rp 59.450.000</li>
-                                        <li><strong>Hari:</strong> Rp 2.200.000</li>
-                                        <li><strong>Jam:</strong> Rp 210.000</li>
-                                        <li><strong>Menit:</strong> Rp 3.800</li>
-                                    </ul>
-                                </div>
-
-                                <div class="bg-rose-50 dark:bg-rose-950/40 p-3 rounded-2xl border border-rose-200 dark:border-rose-800 space-y-1">
-                                    <span class="font-extrabold text-rose-700 dark:text-rose-300 text-[11px] block uppercase">Tarif Rokok (+25%)</span>
-                                    <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                        <li><strong>Bulan:</strong> Rp 74.312.500</li>
-                                        <li><strong>Hari:</strong> Rp 2.750.000</li>
-                                        <li><strong>Jam:</strong> Rp 262.500</li>
-                                        <li><strong>Menit:</strong> Rp 4.750</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                                <a href="https://maps.google.com/?q=-7.3305,110.5084" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
-                                    📍 Google Maps GPS
-                                </a>
-                                <button onclick="openDetailLokasi('Pasar Rejosari', 'Jl. Hasanudin, Salatiga', '8 x 4 Meter', '2.200.000', '2.750.000', '59.450.000', '74.312.500', '210.000', '262.500', '3.800', '4.750')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
-                                    🔍 Detail Brosur
-                                </button>
-                                <button onclick="triggerBookingFlow('Pasar Rejosari')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
-                                    Sewa &rarr;
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- CARD 2: BLOTONGAN -->
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-lg space-y-4">
-                            <div class="flex justify-between items-start border-b border-slate-200 dark:border-slate-800 pb-3">
-                                <div>
-                                    <span class="px-2.5 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[10px] rounded-md">LOKASI 2 (GATE UTARA)</span>
-                                    <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">BLOTONGAN</h3>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Jl. Semarang - Surakarta, Blotongan</p>
-                                </div>
-                                <span class="px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px] rounded-lg border border-emerald-500/30">
-                                    -7.3150, 110.4910
-                                </span>
-                            </div>
-
-                            <!-- CARD LEAFLET MAP CONTAINER -->
-                            <div id="card-map-blotongan" class="w-full h-44 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
-
-                            <div class="grid grid-cols-2 gap-3 text-xs">
-                                <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
-                                    <span class="font-extrabold text-blue-700 dark:text-blue-300 text-[11px] block uppercase">Tarif Non-Rokok</span>
-                                    <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                        <li><strong>Bulan:</strong> Rp 34.315.000</li>
-                                        <li><strong>Hari:</strong> Rp 1.268.000</li>
-                                        <li><strong>Jam:</strong> Rp 120.500</li>
-                                        <li><strong>Menit:</strong> Rp 2.200</li>
-                                    </ul>
-                                </div>
-
-                                <div class="bg-rose-50 dark:bg-rose-950/40 p-3 rounded-2xl border border-rose-200 dark:border-rose-800 space-y-1">
-                                    <span class="font-extrabold text-rose-700 dark:text-rose-300 text-[11px] block uppercase">Tarif Rokok (+25%)</span>
-                                    <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                        <li><strong>Bulan:</strong> Rp 42.893.750</li>
-                                        <li><strong>Hari:</strong> Rp 1.585.000</li>
-                                        <li><strong>Jam:</strong> Rp 150.625</li>
-                                        <li><strong>Menit:</strong> Rp 2.750</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                                <a href="https://maps.google.com/?q=-7.3150,110.4910" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
-                                    📍 Google Maps GPS
-                                </a>
-                                <button onclick="openDetailLokasi('Blotongan', 'Jl. Semarang - Surakarta, Blotongan', '8 x 4 Meter', '1.268.000', '1.585.000', '34.315.000', '42.893.750', '120.500', '150.625', '2.200', '2.750')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
-                                    🔍 Detail Brosur
-                                </button>
-                                <button onclick="triggerBookingFlow('Blotongan')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
-                                    Sewa &rarr;
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- CARD 3: SELASAR KARTINI -->
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-lg space-y-4">
-                            <div class="flex justify-between items-start border-b border-slate-200 dark:border-slate-800 pb-3">
-                                <div>
-                                    <span class="px-2.5 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[10px] rounded-md">LOKASI 3 (PUSAT EDUKASI)</span>
-                                    <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">SELASAR KARTINI</h3>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Jl. Kartini, Salatiga</p>
-                                </div>
-                                <span class="px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px] rounded-lg border border-emerald-500/30">
-                                    -7.3275, 110.5012
-                                </span>
-                            </div>
-
-                            <!-- CARD LEAFLET MAP CONTAINER -->
-                            <div id="card-map-kartini" class="w-full h-44 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
-
-                            <div class="grid grid-cols-2 gap-3 text-xs">
-                                <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
-                                    <span class="font-extrabold text-blue-700 dark:text-blue-300 text-[11px] block uppercase">Tarif Non-Rokok</span>
-                                    <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                        <li><strong>Bulan:</strong> Rp 19.367.000</li>
-                                        <li><strong>Hari:</strong> Rp 716.000</li>
-                                        <li><strong>Jam:</strong> Rp 68.000</li>
-                                        <li><strong>Menit:</strong> Rp 1.300</li>
-                                    </ul>
-                                </div>
-
-                                <div class="bg-rose-50 dark:bg-rose-950/40 p-3 rounded-2xl border border-rose-200 dark:border-rose-800 space-y-1">
-                                    <span class="font-extrabold text-rose-700 dark:text-rose-300 text-[11px] block uppercase">Tarif Rokok (+25%)</span>
-                                    <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                        <li><strong>Bulan:</strong> Rp 24.208.750</li>
-                                        <li><strong>Hari:</strong> Rp 895.000</li>
-                                        <li><strong>Jam:</strong> Rp 85.000</li>
-                                        <li><strong>Menit:</strong> Rp 1.625</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                                <a href="https://maps.google.com/?q=-7.3275,110.5012" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
-                                    📍 Google Maps GPS
-                                </a>
-                                <button onclick="openDetailLokasi('Selasar Kartini', 'Jl. Kartini, Salatiga', '8 x 4 Meter', '716.000', '895.000', '19.367.000', '24.208.750', '68.000', '85.000', '1.300', '1.625')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
-                                    🔍 Detail Brosur
-                                </button>
-                                <button onclick="triggerBookingFlow('Selasar Kartini')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
-                                    Sewa &rarr;
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- CARD 4: ALUN-ALUN SALATIGA / SIMPANG ABC -->
-                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-lg space-y-4">
-                            <div class="flex justify-between items-start border-b border-slate-200 dark:border-slate-800 pb-3">
-                                <div>
-                                    <span class="px-2.5 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[10px] rounded-md">LOKASI 4 (ALUN-ALUN PANCASILA)</span>
-                                    <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">ALUN-ALUN SALATIGA</h3>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Lapangan Pancasila / Simpang ABC, Salatiga</p>
-                                </div>
-                                <span class="px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px] rounded-lg border border-emerald-500/30">
-                                    -7.3392, 110.5025
-                                </span>
-                            </div>
-
-                            <!-- CARD LEAFLET MAP CONTAINER -->
-                            <div id="card-map-alunalun" class="w-full h-44 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
-
-                            <div class="grid grid-cols-2 gap-3 text-xs">
-                                <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
-                                    <span class="font-extrabold text-blue-700 dark:text-blue-300 text-[11px] block uppercase">Tarif Non-Rokok</span>
-                                    <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                        <li><strong>Bulan:</strong> Rp 18.881.000</li>
-                                        <li><strong>Hari:</strong> Rp 698.000</li>
-                                        <li><strong>Jam:</strong> Rp 66.200</li>
-                                        <li><strong>Menit:</strong> Rp 1.200</li>
-                                    </ul>
-                                </div>
-
-                                <div class="bg-rose-50 dark:bg-rose-950/40 p-3 rounded-2xl border border-rose-200 dark:border-rose-800 space-y-1">
-                                    <span class="font-extrabold text-rose-700 dark:text-rose-300 text-[11px] block uppercase">Tarif Rokok (+25%)</span>
-                                    <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                        <li><strong>Bulan:</strong> Rp 23.601.250</li>
-                                        <li><strong>Hari:</strong> Rp 872.500</li>
-                                        <li><strong>Jam:</strong> Rp 82.750</li>
-                                        <li><strong>Menit:</strong> Rp 1.500</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                                <a href="https://maps.google.com/?q=-7.3392,110.5025" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
-                                    📍 Google Maps GPS
-                                </a>
-                                <button onclick="openDetailLokasi('Simpang ABC', 'Lapangan Pancasila / Simpang ABC, Salatiga', '8 x 4 Meter', '698.000', '872.500', '18.881.000', '23.601.250', '66.200', '82.750', '1.200', '1.500')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
-                                    🔍 Detail Brosur
-                                </button>
-                                <button onclick="triggerBookingFlow('Alun-Alun Salatiga')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
-                                    Sewa &rarr;
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
+                    <div id="user-lokasi-grid-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
 
                 </div>
             </section>
@@ -3216,7 +3011,7 @@
                         </div>
 
                         <!-- CARD LEAFLET MAP CONTAINER -->
-                        <div id="${mapCardId}" class="w-full h-44 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-inner relative z-0"></div>
+                        <div id="${mapCardId}" style="height: 180px; width: 100%; position: relative; overflow: hidden;" class="rounded-2xl border border-slate-200 dark:border-slate-700 shadow-inner z-0"></div>
 
                         <div class="grid grid-cols-2 gap-3 text-xs">
                             <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
