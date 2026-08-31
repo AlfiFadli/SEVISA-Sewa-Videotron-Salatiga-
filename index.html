@@ -508,11 +508,9 @@
                         Daftar Lokasi
                     </button>
                     <button onclick="showPage('proyek')" id="nav-proyek" class="px-2.5 py-1.5 rounded-lg hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-                        Portofolio
+                        Testimoni
                     </button>
-                    <button onclick="showPage('blog')" id="nav-blog" class="px-2.5 py-1.5 rounded-lg hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-                        Blog
-                    </button>
+
                     <button onclick="showPage('cek-status')" id="nav-cek-status" class="px-3 py-1.5 rounded-lg text-brand-700 dark:text-sky-300 bg-brand-50 dark:bg-slate-800 hover:bg-brand-100 transition border border-brand-200 dark:border-slate-700 font-bold">
                         Cek Status
                     </button>
@@ -642,6 +640,130 @@
                     </div>
                 </div>
 
+                <!-- SPOTLIGHT PAKET TAYANG & PRICING -->
+                <div class="py-12 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
+                    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+                            <div>
+                                <span class="text-xs font-bold text-lime-600 dark:text-lime-500 uppercase tracking-widest block">Pilihan Durasi & Harga Sewa</span>
+                                <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase">Paket Tayang Videotron</h2>
+                            </div>
+                            <span class="px-3 py-1 bg-lime-50 dark:bg-lime-950/50 text-lime-700 dark:text-lime-300 border border-lime-200 dark:border-lime-800 font-extrabold text-[11px] rounded-full">
+                                Menampilkan 3 Pilihan Paket
+                            </span>
+                        </div>
+
+                        <!-- 3 Pricing Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            
+                            <!-- Card Alpha -->
+                            <div class="bg-[#8cc63f] rounded-2xl overflow-hidden shadow-xl flex flex-col transform hover:scale-105 transition-transform duration-300">
+                                <div class="bg-white pt-6 pb-10 px-6 text-center relative" style="clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);">
+                                    <h4 class="text-3xl font-black text-[#8cc63f] italic uppercase">PAKET <span class="font-serif">α</span></h4>
+                                    <span class="text-sm font-black text-slate-800 uppercase tracking-widest block -mt-1">ALPHA</span>
+                                </div>
+                                <div class="pt-6 pb-6 px-6 text-center text-white flex-grow flex flex-col justify-center border-b border-[#7ab32e]/50">
+                                    <div class="text-6xl font-black mb-1 drop-shadow-md">30x</div>
+                                    <div class="text-sm font-bold uppercase tracking-wider opacity-90">tayang per hari</div>
+                                </div>
+                                <div class="py-6 px-6 text-center text-white flex-grow flex flex-col justify-center border-b border-[#7ab32e]/50">
+                                    <div class="text-sm font-bold opacity-90 mb-0.5">penayangan berulang</div>
+                                    <div class="text-xl font-black uppercase mb-1 drop-shadow-md">sesuai playlist</div>
+                                    <div class="text-[10px] font-medium opacity-75">(Tidak bisa request jam tayang)</div>
+                                </div>
+                                <div class="py-8 px-6 text-center text-white">
+                                    <div class="text-sm font-bold opacity-90 mb-1">pemasangan iklan selama</div>
+                                    <div class="text-4xl font-black drop-shadow-md">1-3 hari</div>
+                                </div>
+                            </div>
+
+                            <!-- Card Beta -->
+                            <div class="bg-[#7ab32e] rounded-2xl overflow-hidden shadow-xl flex flex-col transform hover:scale-105 transition-transform duration-300">
+                                <div class="bg-white pt-6 pb-10 px-6 text-center relative" style="clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);">
+                                    <h4 class="text-3xl font-black text-[#7ab32e] italic uppercase">PAKET <span class="font-serif">β</span></h4>
+                                    <span class="text-sm font-black text-slate-800 uppercase tracking-widest block -mt-1">BETA</span>
+                                </div>
+                                <div class="pt-6 pb-6 px-6 text-center text-white flex-grow flex flex-col justify-center border-b border-[#689f1d]/50">
+                                    <div class="text-6xl font-black mb-1 drop-shadow-md">20x</div>
+                                    <div class="text-sm font-bold uppercase tracking-wider opacity-90">tayang per hari</div>
+                                </div>
+                                <div class="py-6 px-6 text-center text-white flex-grow flex flex-col justify-center border-b border-[#689f1d]/50">
+                                    <div class="text-sm font-bold opacity-90 mb-0.5">penayangan berulang</div>
+                                    <div class="text-xl font-black uppercase mb-1 drop-shadow-md">sesuai playlist</div>
+                                    <div class="text-[10px] font-medium opacity-75">(Tidak bisa request jam tayang)</div>
+                                </div>
+                                <div class="py-8 px-6 text-center text-white">
+                                    <div class="text-sm font-bold opacity-90 mb-1">pemasangan iklan minimal</div>
+                                    <div class="text-4xl font-black drop-shadow-md">4 hari</div>
+                                </div>
+                            </div>
+
+                            <!-- Card Event -->
+                            <div class="bg-[#5c8a14] rounded-2xl overflow-hidden shadow-xl flex flex-col transform hover:scale-105 transition-transform duration-300">
+                                <div class="bg-white pt-6 pb-10 px-6 text-center relative" style="clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);">
+                                    <h4 class="text-3xl font-black text-[#5c8a14] italic uppercase">PAKET <span class="font-serif">ε</span></h4>
+                                    <span class="text-sm font-black text-slate-800 uppercase tracking-widest block -mt-1">EVENT</span>
+                                </div>
+                                <div class="pt-6 pb-6 px-6 text-center text-white flex-grow flex flex-col justify-center border-b border-[#4a720c]/50">
+                                    <div class="text-6xl font-black mb-1 drop-shadow-md">30x</div>
+                                    <div class="text-sm font-bold uppercase tracking-wider opacity-90">tayang per hari</div>
+                                </div>
+                                <div class="py-6 px-6 text-center text-white flex-grow flex flex-col justify-center border-b border-[#4a720c]/50">
+                                    <div class="text-sm font-bold opacity-90 mb-0.5">penayangan</div>
+                                    <div class="text-xl font-black uppercase drop-shadow-md">pilih jam tayang</div>
+                                </div>
+                                <div class="py-8 px-6 text-center text-white">
+                                    <div class="text-sm font-medium opacity-90 leading-relaxed max-w-[200px] mx-auto">
+                                        cocok untuk ucapan ulang tahun, wisuda, dan lain-lain
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Footer Prices & Info -->
+                        <div class="mt-8 pt-4 flex flex-col lg:flex-row items-center lg:items-end justify-between gap-6">
+                            <div class="flex flex-wrap justify-center lg:justify-start gap-x-8 gap-y-6">
+                                <div class="flex gap-3 items-center">
+                                    <div class="w-16 h-12 bg-white rounded-md flex items-center justify-center p-0.5 shrink-0 border border-slate-200 shadow-sm">
+                                       <img src="header_banner.jpg" alt="Pasar Sapi" class="w-full h-full object-cover rounded">
+                                    </div>
+                                    <div>
+                                        <div class="text-slate-900 dark:text-white font-black text-lg leading-none mb-1">Pasar Sapi</div>
+                                        <div class="text-slate-600 dark:text-slate-400 text-sm font-medium">Rp 3.800 /menit</div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3 items-center">
+                                    <div class="w-16 h-12 bg-white rounded-md flex items-center justify-center p-0.5 shrink-0 border border-slate-200 shadow-sm">
+                                        <img src="header_banner.jpg" alt="Blotongan" class="w-full h-full object-cover rounded">
+                                    </div>
+                                    <div>
+                                        <div class="text-slate-900 dark:text-white font-black text-lg leading-none mb-1">Blotongan</div>
+                                        <div class="text-slate-600 dark:text-slate-400 text-sm font-medium">Rp 2.200 /menit</div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3 items-center">
+                                    <div class="w-16 h-12 bg-white rounded-md flex items-center justify-center p-0.5 shrink-0 border border-slate-200 shadow-sm">
+                                        <img src="header_banner.jpg" alt="Selasar Kartini" class="w-full h-full object-cover rounded">
+                                    </div>
+                                    <div>
+                                        <div class="text-slate-900 dark:text-white font-black text-lg leading-none mb-1">Selasar Kartini</div>
+                                        <div class="text-slate-600 dark:text-slate-400 text-sm font-medium">Rp 1.300 /menit</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center lg:text-right w-full lg:w-auto shrink-0 mt-4 lg:mt-0">
+                                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">INFORMASI SEWA</div>
+                                <div class="text-3xl font-black text-slate-900 dark:text-white tracking-wider flex items-center justify-center lg:justify-end gap-2">
+                                    0851 - 7337 - 2262
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
                 <!-- 2 LOKASI STRATEGIS BERANDA SECTION -->
                 <div class="py-12 bg-slate-50 dark:bg-slate-950">
                     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -678,8 +800,72 @@
                             <button onclick="resetVideotronFilters()" class="px-4 py-2 bg-red-600 text-white font-bold text-xs rounded-lg shadow-sm">Reset Filter Pencarian</button>
                         </div>
 
+                        </div>
+                    </div>
+
+                <!-- ALUR PEMESANAN (FLOWCHART) -->
+                <div class="py-14 sm:py-16 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 relative z-10 overflow-hidden">
+                    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div class="text-center max-w-2xl mx-auto mb-12 space-y-2">
+                            <span class="text-xs font-bold text-sky-600 dark:text-sky-400 uppercase tracking-widest">Cara Sewa Layanan</span>
+                            <h2 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">Alur Pemesanan Videotron</h2>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm">Hanya butuh 4 langkah mudah untuk mengiklankan produk/layanan Anda di titik strategis Kota Salatiga.</p>
+                        </div>
+
+                        <div class="relative">
+                            <!-- Connecting Line (Desktop) -->
+                            <div class="hidden md:block absolute top-1/2 left-8 right-8 w-auto h-0.5 bg-slate-200 dark:bg-slate-800 -translate-y-1/2 z-0"></div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative z-10">
+                                
+                                <!-- Step 1 -->
+                                <div class="bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 p-6 rounded-2xl shadow-sm text-center relative group hover:border-sky-500 hover:shadow-xl hover:-translate-y-1 transition duration-300">
+                                    <div class="w-14 h-14 bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-400 rounded-full flex items-center justify-center text-xl font-black mx-auto mb-4 border-4 border-white dark:border-slate-800 shadow-sm relative z-10 group-hover:scale-110 transition-transform">
+                                        1
+                                    </div>
+                                    <h3 class="text-base font-black text-slate-900 dark:text-white mb-2">Pilih Lokasi & Paket</h3>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Tentukan titik videotron (Pasar Sapi / Blotongan / Kartini) dan jenis paket tayang sesuai kebutuhan Anda.</p>
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div class="bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 p-6 rounded-2xl shadow-sm text-center relative group hover:border-amber-500 hover:shadow-xl hover:-translate-y-1 transition duration-300">
+                                    <div class="w-14 h-14 bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 rounded-full flex items-center justify-center text-xl font-black mx-auto mb-4 border-4 border-white dark:border-slate-800 shadow-sm relative z-10 group-hover:scale-110 transition-transform">
+                                        2
+                                    </div>
+                                    <h3 class="text-base font-black text-slate-900 dark:text-white mb-2">Siapkan Video</h3>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Format <strong>Landscape</strong> maks 50MB, bersubtitle, tanpa unsur SARA. Dikirim maksimal <strong>H-1</strong> sebelum tayang.</p>
+                                </div>
+
+                                <!-- Step 3 -->
+                                <div class="bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 p-6 rounded-2xl shadow-sm text-center relative group hover:border-brand-500 hover:shadow-xl hover:-translate-y-1 transition duration-300">
+                                    <div class="w-14 h-14 bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 rounded-full flex items-center justify-center text-xl font-black mx-auto mb-4 border-4 border-white dark:border-slate-800 shadow-sm relative z-10 group-hover:scale-110 transition-transform">
+                                        3
+                                    </div>
+                                    <h3 class="text-base font-black text-slate-900 dark:text-white mb-2">Pembayaran</h3>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Datang langsung ke kantor <strong>BPKPD Kota Salatiga</strong> saat jam operasional kerja untuk melakukan pembayaran.</p>
+                                </div>
+
+                                <!-- Step 4 -->
+                                <div class="bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 p-6 rounded-2xl shadow-sm text-center relative group hover:border-lime-500 hover:shadow-xl hover:-translate-y-1 transition duration-300">
+                                    <div class="w-14 h-14 bg-lime-100 dark:bg-lime-900/50 text-lime-600 dark:text-lime-400 rounded-full flex items-center justify-center text-xl font-black mx-auto mb-4 border-4 border-white dark:border-slate-800 shadow-sm relative z-10 group-hover:scale-110 transition-transform">
+                                        4
+                                    </div>
+                                    <h3 class="text-base font-black text-slate-900 dark:text-white mb-2">Iklan Tayang!</h3>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Video diputar otomatis! Jam operasional layanan videotron adalah pukul <strong>05.00 s/d 22.00 WIB</strong>.</p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="mt-12 text-center">
+                            <a href="https://wa.me/6285173372262" target="_blank" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-lime-600 hover:bg-lime-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg hover:shadow-lime-600/30 transition hover:-translate-y-1">
+                                <span>Tanya Admin & Pesan Sekarang</span>
+                                <span>&rarr;</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
+
             </section>
 
             <!-- 2. HALAMAN TENTANG KAMI -->
@@ -1048,37 +1234,36 @@
                 </div>
             </section>
 
-            <!-- 5. HALAMAN PORTOFOLIO (INTERACTIVE SHOWCASE GALLERY) -->
+            <!-- 5. HALAMAN TESTIMONI (CLIENT REVIEWS) -->
             <section id="page-proyek" class="hidden">
                 <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white py-10 sm:py-12 relative overflow-hidden">
                     <div class="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none mix-blend-screen" style="background-image: url('header_banner.jpg');"></div>
                     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3 relative z-10">
                         <div class="inline-flex items-center gap-2 bg-slate-800/80 border border-sky-400/40 px-3 py-1 rounded-lg">
-                            <img src="header_banner.jpg" alt="Portal Logo Mini" class="h-6 w-auto rounded object-contain border border-sky-300">
-                            <span class="text-[10px] font-bold text-sky-300 uppercase tracking-widest">SHOWCASE REKAM PENAYANGAN</span>
+                            <span class="text-[10px] font-bold text-sky-300 uppercase tracking-widest">🌟 PENGALAMAN PENYEWA KAMI</span>
                         </div>
-                        <h1 class="text-2xl sm:text-3xl font-black text-white">Portofolio Penayangan Videotron</h1>
-                        <p class="text-slate-300 text-xs max-w-2xl">Jelajahi galeri rekaman materi iklan komersial, poster digital, video motion, dan sosialisasi program yang telah ditayangkan pada 4 videotron resmi Pemkot Salatiga.</p>
+                        <h1 class="text-2xl sm:text-3xl font-black text-white">Testimoni & Kepuasan Pelanggan</h1>
+                        <p class="text-slate-300 text-xs max-w-2xl">Apa kata instansi, perusahaan, dan EO yang telah menggunakan layanan sewa videotron resmi Pemkot Salatiga? Simak ulasan mereka di bawah ini.</p>
                     </div>
                 </div>
 
                 <div class="py-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
                     
-                    <!-- FILTER CONTROL BAR PORTOFOLIO -->
+                    <!-- FILTER CONTROL BAR TESTIMONI -->
                     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-5 rounded-2xl shadow-md flex flex-col sm:flex-row items-center justify-between gap-3">
                         
                         <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0 text-xs font-bold">
                             <button onclick="filterPortfolio('all')" id="port-filter-all" class="px-3.5 py-2 rounded-xl bg-brand-600 text-white shadow-sm shrink-0 transition">
-                                Semua Penayangan
+                                Semua Testimoni
                             </button>
-                            <button onclick="filterPortfolio('video')" id="port-filter-video" class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0 transition">
-                                📹 Video Motion
+                            <button onclick="filterPortfolio('Instansi Pemerintah')" id="port-filter-pemerintah" class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0 transition">
+                                🏛️ Instansi Pemerintah
                             </button>
-                            <button onclick="filterPortfolio('image')" id="port-filter-image" class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0 transition">
-                                🖼️ Poster Digital
+                            <button onclick="filterPortfolio('Perusahaan Swasta')" id="port-filter-swasta" class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0 transition">
+                                🏢 Perusahaan Swasta
                             </button>
-                            <button onclick="filterPortfolio('layanan')" id="port-filter-layanan" class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0 transition">
-                                🏛️ Iklan Layanan Publik
+                            <button onclick="filterPortfolio('UMKM / Personal')" id="port-filter-umkm" class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0 transition">
+                                🛒 UMKM / Personal
                             </button>
                         </div>
 
@@ -1094,207 +1279,24 @@
 
                     </div>
 
-                    <!-- GALLERY GRID SHOWCASE PORTOFOLIO -->
+                    <!-- GALLERY GRID SHOWCASE TESTIMONI -->
                     <div id="portfolio-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Dynamic Portfolio Item Cards rendered via JS -->
+                        <!-- Dynamic Testimonial Cards rendered via JS -->
                     </div>
 
                     <!-- INFO FOOTER ADMIN UPDATE NOTICE -->
                     <div class="bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3 text-xs">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-sky-600 text-white flex items-center justify-center font-bold text-lg shrink-0">
-                                🔄
+                                💬
                             </div>
                             <div class="space-y-0.5">
-                                <strong class="text-sky-900 dark:text-sky-200 font-extrabold block">Pembaruan Portofolio Berkala Oleh Admin</strong>
+                                <strong class="text-sky-900 dark:text-sky-200 font-extrabold block">Testimoni Asli dan Terverifikasi</strong>
                                 <span class="text-sky-700 dark:text-sky-400 text-[11px] block">Galeri materi penayangan ini terus diperbarui oleh tim Admin Diskominfo Kota Salatiga secara berkala.</span>
                             </div>
                         </div>
                     </div>
 
-                </div>
-            </section>
-
-            <!-- 6. HALAMAN BLOG -->
-            <section id="page-blog" class="hidden">
-                <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white py-12 relative overflow-hidden text-center">
-                    <div class="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none mix-blend-screen" style="background-image: url('header_banner.jpg');"></div>
-                    <div class="max-w-4xl mx-auto px-4 relative z-10 space-y-2">
-                        <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Artikel</h1>
-                        <p class="text-slate-300 text-xs font-medium">Panduan, Berita, & Ulasan 4 Titik Lokasi Periklanan Videotron Salatiga</p>
-                    </div>
-                </div>
-
-                <div class="py-12 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
-                    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                        
-                        <!-- VIEW 1: BLOG CARDS GRID LIST -->
-                        <div id="blog-list-view" class="block space-y-8">
-                            <div id="user-blog-grid-container" class="grid grid-cols-1 md:grid-cols-4 gap-5">
-                                
-                                <div onclick="openBlogArticleDetail('VDT-01')" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group flex flex-col justify-between">
-                                    <div>
-                                        <div class="w-full h-36 bg-slate-900 relative flex items-center justify-center p-3 text-center overflow-hidden">
-                                            <img src="header_banner.jpg" alt="Videotron Pasar Rejosari" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                                            <span class="px-2.5 py-1 bg-red-600 text-white text-[8px] font-extrabold uppercase rounded-full shadow-lg relative z-10 border border-red-400">
-                                                PASAR REJOSARI
-                                            </span>
-                                        </div>
-                                        <div class="p-4 space-y-1.5">
-                                            <h3 class="font-extrabold text-slate-900 dark:text-white text-xs leading-snug group-hover:text-red-600 transition">
-                                                Pasang Iklan Videotron Pasar Rejosari Salatiga, Cek Tarif Resmi Diskominfo
-                                            </h3>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div onclick="openBlogArticleDetail('VDT-02')" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group flex flex-col justify-between">
-                                    <div>
-                                        <div class="w-full h-36 bg-slate-900 relative flex items-center justify-center p-3 text-center overflow-hidden">
-                                            <img src="header_banner.jpg" alt="Videotron Blotongan" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                                            <span class="px-2.5 py-1 bg-red-600 text-white text-[8px] font-extrabold uppercase rounded-full shadow-lg relative z-10 border border-red-400">
-                                                BLOTONGAN
-                                            </span>
-                                        </div>
-                                        <div class="p-4 space-y-1.5">
-                                            <h3 class="font-extrabold text-slate-900 dark:text-white text-xs leading-snug group-hover:text-red-600 transition">
-                                                Pasang Iklan Videotron Blotongan Gate Utara Salatiga, Cek Tarif dan Lokasi
-                                            </h3>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div onclick="openBlogArticleDetail('VDT-03')" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group flex flex-col justify-between">
-                                    <div>
-                                        <div class="w-full h-36 bg-slate-900 relative flex items-center justify-center p-3 text-center overflow-hidden">
-                                            <img src="header_banner.jpg" alt="Videotron Selasar Kartini" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                                            <span class="px-2.5 py-1 bg-red-600 text-white text-[8px] font-extrabold uppercase rounded-full shadow-lg relative z-10 border border-red-400">
-                                                SELASAR KARTINI
-                                            </span>
-                                        </div>
-                                        <div class="p-4 space-y-1.5">
-                                            <h3 class="font-extrabold text-slate-900 dark:text-white text-xs leading-snug group-hover:text-red-600 transition">
-                                                Pasang Iklan Videotron Selasar Kartini Pusat Kota, Cek Tarif Harian & Bulanan
-                                            </h3>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div onclick="openBlogArticleDetail('VDT-04')" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group flex flex-col justify-between">
-                                    <div>
-                                        <div class="w-full h-36 bg-slate-900 relative flex items-center justify-center p-3 text-center overflow-hidden">
-                                            <img src="header_banner.jpg" alt="Videotron Alun-Alun Salatiga" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                                            <span class="px-2.5 py-1 bg-red-600 text-white text-[8px] font-extrabold uppercase rounded-full shadow-lg relative z-10 border border-red-400">
-                                                ALUN-ALUN SALATIGA
-                                            </span>
-                                        </div>
-                                        <div class="p-4 space-y-1.5">
-                                            <h3 class="font-extrabold text-slate-900 dark:text-white text-xs leading-snug group-hover:text-red-600 transition">
-                                                Pasang Iklan Videotron Alun-Alun Pancasila Salatiga, Cek Tarif Resmi Diskominfo
-                                            </h3>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- VIEW 2: ARTICLE DETAIL VIEW -->
-                        <div id="blog-detail-view" class="hidden space-y-6">
-                            
-                            <button onclick="closeBlogArticleDetail()" class="px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-extrabold text-xs rounded-xl transition flex items-center gap-1.5 shadow-sm">
-                                <span>&larr; Kembali ke Daftar Artikel</span>
-                            </button>
-
-                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                                
-                                <div class="lg:col-span-8 space-y-6">
-                                    
-                                    <div class="w-full rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 bg-slate-900 relative">
-                                        <img src="header_banner.jpg" alt="Visual Lokasi Videotron" class="w-full h-72 sm:h-96 object-cover">
-                                        <div class="absolute bottom-4 left-4 right-4 bg-slate-900/80 backdrop-blur-md p-3 rounded-xl border border-slate-700 text-white flex items-center justify-between text-xs">
-                                            <span class="font-mono text-amber-400 font-bold">Telp: (0298) 326 767</span>
-                                            <span class="font-bold text-sky-300">DISKOMINFO KOTA SALATIGA</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="space-y-4 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
-                                        <p id="art-det-p1">
-                                            Pasang iklan videotron outdoor di Kota Salatiga menjadi solusi promosi luar ruang yang sangat efektif untuk menjangkau masyarakat umum dan pengguna jalan. Pemerintah Kota Salatiga melalui Dinas Komunikasi dan Informatika (Diskominfo) mengelola 4 titik lokasi videotron resmi yang terletak di lokasi paling strategis.
-                                        </p>
-
-                                        <p id="art-det-p2">
-                                            Penetapan tarif sewa videotron mengacu pada SK Wali Kota Salatiga No. 974/148/2022 dan Perwali No. 49 Tahun 2018. Pengiklan dapat memilih satuan layanan mulai dari per menit, jam, hari, hingga bulanan dengan opsi produk non-rokok maupun produk rokok.
-                                        </p>
-
-                                        <p id="art-det-p3">
-                                            Promosi menggunakan videotron outdoor sangat efektif untuk meningkatkan <strong>brand awareness</strong> dengan paparan visual jernih selama jam operasional 06:00 - 23:00 WIB.
-                                        </p>
-                                    </div>
-
-                                    <div class="space-y-6 pt-4 border-t border-slate-200 dark:border-slate-800">
-                                        <div class="space-y-3">
-                                            <h3 id="art-det-subheading" class="text-lg font-black text-slate-900 dark:text-white">1. Pasar Rejosari Salatiga</h3>
-                                            <div class="w-full rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800 bg-slate-900">
-                                                <img src="header_banner.jpg" alt="Titik Lokasi Sub" class="w-full h-56 object-cover">
-                                            </div>
-                                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                                                Titik penayangan utama di kawasan perdagangan Pasar Rejosari dengan arus kendaraan komersial padat setiap hari.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="lg:col-span-4 space-y-4">
-                                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-md space-y-4">
-                                        
-                                        <h3 class="font-extrabold text-slate-900 dark:text-white text-base">4 Videotron Resmi Pemkot</h3>
-
-                                        <div class="space-y-3 text-xs">
-                                            
-                                            <div onclick="openBlogArticleDetail('VDT-01')" class="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-red-400 bg-slate-50 dark:bg-slate-800/50 hover:bg-rose-50/50 transition cursor-pointer group">
-                                                <img src="header_banner.jpg" alt="Thumb 1" class="w-14 h-12 rounded-lg object-cover border border-slate-300 dark:border-slate-700 shrink-0">
-                                                <div class="space-y-0.5">
-                                                    <h4 class="font-extrabold text-slate-900 dark:text-white text-xs leading-snug group-hover:text-red-600 transition">1. Pasar Rejosari</h4>
-                                                    <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold block">Rp 2.200.000 / Hari</span>
-                                                </div>
-                                            </div>
-
-                                            <div onclick="openBlogArticleDetail('VDT-02')" class="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-red-400 bg-slate-50 dark:bg-slate-800/50 hover:bg-rose-50/50 transition cursor-pointer group">
-                                                <img src="header_banner.jpg" alt="Thumb 2" class="w-14 h-12 rounded-lg object-cover border border-slate-300 dark:border-slate-700 shrink-0">
-                                                <div class="space-y-0.5">
-                                                    <h4 class="font-extrabold text-slate-900 dark:text-white text-xs leading-snug group-hover:text-red-600 transition">2. Blotongan</h4>
-                                                    <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold block">Rp 1.268.000 / Hari</span>
-                                                </div>
-                                            </div>
-
-                                            <div onclick="openBlogArticleDetail('VDT-03')" class="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-red-400 bg-slate-50 dark:bg-slate-800/50 hover:bg-rose-50/50 transition cursor-pointer group">
-                                                <img src="header_banner.jpg" alt="Thumb 3" class="w-14 h-12 rounded-lg object-cover border border-slate-300 dark:border-slate-700 shrink-0">
-                                                <div class="space-y-0.5">
-                                                    <h4 class="font-extrabold text-slate-900 dark:text-white text-xs leading-snug group-hover:text-red-600 transition">3. Selasar Kartini</h4>
-                                                    <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold block">Rp 716.000 / Hari</span>
-                                                </div>
-                                            </div>
-
-                                            <div onclick="openBlogArticleDetail('VDT-04')" class="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-red-400 bg-slate-50 dark:bg-slate-800/50 hover:bg-rose-50/50 transition cursor-pointer group">
-                                                <img src="header_banner.jpg" alt="Thumb 4" class="w-14 h-12 rounded-lg object-cover border border-slate-300 dark:border-slate-700 shrink-0">
-                                                <div class="space-y-0.5">
-                                                    <h4 class="font-extrabold text-slate-900 dark:text-white text-xs leading-snug group-hover:text-red-600 transition">4. Alun-Alun Salatiga</h4>
-                                                    <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold block">Rp 698.000 / Hari</span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
                 </div>
             </section>
 
@@ -1666,41 +1668,47 @@
                     </select>
                 </div>
 
-                <!-- 2. PILIH KATEGORI PRODUK -->
+                <!-- 2. KATEGORI PEMOHON -->
                 <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">2. Kategori Produk Iklan *</label>
+                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">2. Kategori Pemohon *</label>
                     <select id="book-ad-category" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
-                        <option value="nonrokok">Produk Non-Rokok (Tarif Standar Resmi)</option>
-                        <option value="rokok">Produk Rokok (+25% Sesuai Perwali No. 49 Tahun 2018)</option>
+                        <option value="perorangan" selected>Perorangan</option>
+                        <option value="nonperorangan">Non Perorangan</option>
+                        <option value="instansi">Instansi</option>
                     </select>
                 </div>
 
-                <!-- 3. PILIH SATUAN & DURASI SEWA -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- 3. PILIHAN PAKET -->
+                <div>
+                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">3. Pilihan Paket *</label>
+                    <select id="book-paket" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
+                        <option value="alfa" selected>Paket Alfa</option>
+                        <option value="beta">Paket Beta</option>
+                        <option value="event">Paket Event</option>
+                    </select>
+                </div>
+
+                <!-- 4. DURASI ROTASI & KALI TAYANG -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                     <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">3. Satuan Durasi Sewa *</label>
-                        <select id="book-unit" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
-                            <option value="hari" selected>Harian (Per Hari)</option>
-                            <option value="bulan">Bulanan (Per Bulan)</option>
-                            <option value="jam">Jam-jaman (Per Jam)</option>
-                            <option value="menit">Menit-menitan (Per Menit)</option>
-                        </select>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">4. Jumlah Rotasi (Detik) *</label>
+                        <input type="number" id="book-rotasi-detik" value="15" min="1" oninput="calculateBookingPrice()" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
                     </div>
                     <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">4. Jumlah Durasi *</label>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">5. Kali Tayang Di Satu Hari *</label>
                         <input type="number" id="book-qty" value="1" min="1" oninput="calculateBookingPrice()" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
                     </div>
                 </div>
 
-                <!-- 4. TANGGAL MULAI & SELESAI -->
+                <!-- 6 & 7. TANGGAL MULAI & SELESAI -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">5. Tanggal Mulai Sewa *</label>
-                        <input type="date" id="book-start-date" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">6. Tanggal Mulai Sewa *</label>
+                        <input type="date" id="book-start-date" required onchange="calculateBookingPrice()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
                     </div>
                     <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">6. Tanggal Selesai Sewa *</label>
-                        <input type="date" id="book-end-date" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">7. Tanggal Selesai Sewa *</label>
+                        <input type="date" id="book-end-date" required onchange="calculateBookingPrice()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
                     </div>
                 </div>
 
@@ -1711,46 +1719,42 @@
                             <span>💰 ESTIMASI TARIF RESMI DISKOMINFO</span>
                         </span>
                         <span id="calc-rate-badge" class="px-2 py-0.5 bg-sky-500/20 text-sky-300 border border-sky-400/30 text-[9px] font-bold rounded-md uppercase">
-                            Produk Non-Rokok
+                            Perorangan
                         </span>
                     </div>
 
                     <!-- MATRIX TAMPILAN TARIF BROSUR LOKASI TERPILIH -->
-                    <div class="grid grid-cols-4 gap-1.5 text-center text-[10px] bg-slate-950/60 p-2 rounded-xl border border-slate-800">
-                        <div class="space-y-0.5">
-                            <span class="text-slate-400 block font-semibold">1 Bulan</span>
-                            <strong id="calc-rate-month" class="text-amber-400 block font-bold text-[10px]">Rp 59.450k</strong>
-                        </div>
-                        <div class="space-y-0.5 border-l border-slate-800">
-                            <span class="text-slate-400 block font-semibold">1 Hari</span>
-                            <strong id="calc-rate-day" class="text-amber-400 block font-bold text-[10px]">Rp 2.200k</strong>
-                        </div>
-                        <div class="space-y-0.5 border-l border-slate-800">
-                            <span class="text-slate-400 block font-semibold">1 Jam</span>
-                            <strong id="calc-rate-hour" class="text-amber-400 block font-bold text-[10px]">Rp 210k</strong>
-                        </div>
-                        <div class="space-y-0.5 border-l border-slate-800">
-                            <span class="text-slate-400 block font-semibold">1 Menit</span>
-                            <strong id="calc-rate-minute" class="text-amber-400 block font-bold text-[10px]">Rp 3.800</strong>
-                        </div>
+                    <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800 flex items-center justify-between px-4">
+                        <span class="text-slate-400 font-semibold text-xs">Tarif Dasar per Menit:</span>
+                        <strong id="calc-rate-minute" class="text-amber-400 font-bold text-sm">Rp 3.800</strong>
                     </div>
 
                     <!-- TOTAL PRICE DISPLAY -->
-                    <div class="flex items-center justify-between pt-1">
-                        <div>
-                            <span class="text-[10px] text-slate-300 block font-medium">Total Rincian Biaya Sewa:</span>
-                            <span id="calc-unit-detail" class="text-[11px] font-bold text-sky-200 block">1 Hari x Rp 2.200.000</span>
+                    <div class="space-y-2 pt-1">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] text-slate-400 font-medium">Subtotal (Tarif × Menit × Tayang × Hari):</span>
+                            <span id="calc-subtotal" class="text-[11px] font-bold text-slate-300">Rp 0</span>
                         </div>
-                        <div class="text-right">
-                            <span class="text-[9px] font-bold text-slate-400 block uppercase">TOTAL TARIF SEWA</span>
-                            <span id="calc-total-price" class="text-lg font-black text-amber-400 tracking-tight">Rp 2.200.000</span>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] text-red-400 font-medium">Pajak (25%):</span>
+                            <span id="calc-tax" class="text-[11px] font-bold text-red-400">Rp 0</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-700/50">
+                            <div>
+                                <span class="text-[10px] text-slate-300 block font-medium">Rincian Durasi:</span>
+                                <span id="calc-unit-detail" class="text-[11px] font-bold text-sky-200 block">1 Hari</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[9px] font-bold text-slate-400 block uppercase">TOTAL TARIF SEWA</span>
+                                <span id="calc-total-price" class="text-lg font-black text-amber-400 tracking-tight">Rp 0</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 7. FILE MATERI IKLAN UPLOAD -->
+                <!-- 8. FILE MATERI IKLAN UPLOAD -->
                 <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">7. File Materi Iklan (Video / PPT / Gambar / PDF) *</label>
+                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">8. File Materi Iklan (Video / PPT / Gambar / PDF) *</label>
                     <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-4 text-center bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                         <input type="file" id="book-ad-file" accept="video/*,.ppt,.pptx,image/*,.pdf" required class="hidden" onchange="handleAdFileSelect(event)">
                         <label for="book-ad-file" class="cursor-pointer space-y-2 block">
@@ -1775,13 +1779,13 @@
                     </div>
                 </div>
 
-                <!-- 8. CATATAN MATERI -->
+                <!-- 9. CATATAN MATERI -->
                 <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">8. Keterangan / Catatan Khusus Materi Iklan</label>
+                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">9. Keterangan / Catatan Khusus Materi Iklan</label>
                     <textarea id="book-notes" rows="2" placeholder="Catatan jam tayang khusus, pesan tambahan, atau instruksi penyiaran..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium"></textarea>
                 </div>
 
-                <!-- 9. KETENTUAN UMUM SEWA VIDEOTRON -->
+                <!-- 10. KETENTUAN UMUM SEWA VIDEOTRON -->
                 <div class="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl p-4 text-[10px] text-blue-900 dark:text-blue-100 space-y-2">
                     <strong class="uppercase text-[11px] border-b border-blue-200 dark:border-blue-800 pb-1 block">Ketentuan Umum Sewa Videotron Pemkot Salatiga</strong>
                     <ul class="list-disc pl-4 space-y-1">
@@ -2225,60 +2229,59 @@
 
         function calculateBookingPrice() {
             const locEl = document.getElementById('book-location');
-            const catEl = document.getElementById('book-ad-category');
-            const unitEl = document.getElementById('book-unit');
-            const qtyEl = document.getElementById('book-qty');
+            const catEl = document.getElementById('book-ad-category'); // Perorangan / Non Perorangan / Instansi
+            const paketEl = document.getElementById('book-paket');
+            const rotasiEl = document.getElementById('book-rotasi-detik');
+            const qtyEl = document.getElementById('book-qty'); // Kali tayang
+            const startEl = document.getElementById('book-start-date');
+            const endEl = document.getElementById('book-end-date');
 
-            if (!locEl || !catEl || !unitEl || !qtyEl) return;
+            if (!locEl || !catEl || !paketEl || !rotasiEl || !qtyEl) return;
 
             const locName = locEl.value;
-            const isRokok = catEl.value === 'rokok';
-            const unit = unitEl.value;
-            let qty = parseInt(qtyEl.value) || 1;
-            if (qty < 1) qty = 1;
-
             const item = VIDEOTRON_DATA.find(v => v.title.toLowerCase().includes(locName.toLowerCase())) || VIDEOTRON_DATA[0];
-
-            const monthRate = getRawPriceNumber(isRokok ? item.monthRokok : item.monthNon);
-            const dayRate = getRawPriceNumber(isRokok ? item.priceRokok : item.priceNon);
-            const hourRate = getRawPriceNumber(isRokok ? item.hourRokok : item.hourNon);
-            const minuteRate = getRawPriceNumber(isRokok ? item.minuteRokok : item.minuteNon);
-
-            // Update 4-column brochure rate matrix
-            const rateMonthEl = document.getElementById('calc-rate-month');
-            const rateDayEl = document.getElementById('calc-rate-day');
-            const rateHourEl = document.getElementById('calc-rate-hour');
+            
+            const minuteRate = getRawPriceNumber(item.minuteNon);
+            
             const rateMinEl = document.getElementById('calc-rate-minute');
             const badgeEl = document.getElementById('calc-rate-badge');
 
-            if (rateMonthEl) rateMonthEl.innerText = 'Rp ' + (monthRate / 1000).toLocaleString('id-ID') + 'k';
-            if (rateDayEl) rateDayEl.innerText = 'Rp ' + (dayRate / 1000).toLocaleString('id-ID') + 'k';
-            if (rateHourEl) rateHourEl.innerText = 'Rp ' + (hourRate / 1000).toLocaleString('id-ID') + 'k';
             if (rateMinEl) rateMinEl.innerText = 'Rp ' + minuteRate.toLocaleString('id-ID');
-
             if (badgeEl) {
-                badgeEl.innerText = isRokok ? 'Produk Rokok (+25%)' : 'Produk Non-Rokok';
-                badgeEl.className = isRokok 
-                    ? 'px-2 py-0.5 bg-rose-500/20 text-rose-300 border border-rose-400/30 text-[9px] font-bold rounded-md uppercase'
-                    : 'px-2 py-0.5 bg-sky-500/20 text-sky-300 border border-sky-400/30 text-[9px] font-bold rounded-md uppercase';
+                let catText = "Perorangan";
+                if(catEl.value === 'nonperorangan') catText = "Non Perorangan";
+                if(catEl.value === 'instansi') catText = "Instansi";
+                badgeEl.innerText = catText;
             }
 
-            let unitRate = dayRate;
-            let unitLabel = 'Hari';
-            if (unit === 'bulan') { unitRate = monthRate; unitLabel = 'Bulan'; }
-            else if (unit === 'hari') { unitRate = dayRate; unitLabel = 'Hari'; }
-            else if (unit === 'jam') { unitRate = hourRate; unitLabel = 'Jam'; }
-            else if (unit === 'menit') { unitRate = minuteRate; unitLabel = 'Menit'; }
+            let rotasiDetik = parseInt(rotasiEl.value) || 15;
+            let kaliTayang = parseInt(qtyEl.value) || 1;
+            
+            let totalDays = 1;
+            if (startEl && endEl && startEl.value && endEl.value) {
+                const start = new Date(startEl.value);
+                const end = new Date(endEl.value);
+                const diffTime = end - start;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; 
+                if (diffDays > 0) totalDays = diffDays;
+            }
 
-            const totalPrice = qty * unitRate;
+            const rotasiMenit = rotasiDetik / 60;
+            const subtotal = rotasiMenit * minuteRate * kaliTayang * totalDays;
+            const tax = subtotal * 0.25;
+            const totalPrice = subtotal + tax;
 
+            const subtotalEl = document.getElementById('calc-subtotal');
+            const taxEl = document.getElementById('calc-tax');
             const unitDetailEl = document.getElementById('calc-unit-detail');
             const totalPriceEl = document.getElementById('calc-total-price');
 
-            if (unitDetailEl) unitDetailEl.innerText = `${qty} ${unitLabel} x Rp ${unitRate.toLocaleString('id-ID')}`;
-            if (totalPriceEl) totalPriceEl.innerText = 'Rp ' + totalPrice.toLocaleString('id-ID');
+            if (subtotalEl) subtotalEl.innerText = 'Rp ' + Math.round(subtotal).toLocaleString('id-ID');
+            if (taxEl) taxEl.innerText = 'Rp ' + Math.round(tax).toLocaleString('id-ID');
+            if (unitDetailEl) unitDetailEl.innerText = `${totalDays} Hari (${kaliTayang} Tayang/Hari)`;
+            if (totalPriceEl) totalPriceEl.innerText = 'Rp ' + Math.round(totalPrice).toLocaleString('id-ID');
 
-            return { qty, unitLabel, unitRate, totalPrice, categoryLabel: isRokok ? 'Produk Rokok (+25%)' : 'Produk Non-Rokok' };
+            return { totalDays, rotasiDetik, kaliTayang, minuteRate, subtotal, tax, totalPrice, categoryLabel: badgeEl ? badgeEl.innerText : '', paketLabel: paketEl.options[paketEl.selectedIndex].text };
         }
 
         // TRIGGER BOOKING FLOW WHEN USER CLICKS "AJUKAN PENYEWAAN" OR "PESAN SEWA SEKARANG"
@@ -2360,11 +2363,11 @@
                 userName: currentUser ? currentUser.name : 'Pengguna',
                 company: currentUser ? (currentUser.company || 'Personal') : 'Personal',
                 location: location,
-                dates: `${startDate} s.d. ${endDate} (${calcResult.qty} ${calcResult.unitLabel} • ${calcResult.categoryLabel} • Rp ${calcResult.totalPrice.toLocaleString('id-ID')})`,
+                dates: `${startDate} s.d. ${endDate} (${calcResult.totalDays} Hari • ${calcResult.paketLabel} • Rp ${calcResult.totalPrice.toLocaleString('id-ID')})`,
                 file: fileName,
                 status: 'menunggu',
                 statusLabel: 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO',
-                statusDesc: `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa lokasi <strong>${location}</strong> (${calcResult.qty} ${calcResult.unitLabel} • Rp ${calcResult.totalPrice.toLocaleString('id-ID')}) sedang dalam antrean verifikasi.`
+                statusDesc: `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa lokasi <strong>${location}</strong> (Kategori: ${calcResult.categoryLabel} • Paket: ${calcResult.paketLabel} • Total: Rp ${calcResult.totalPrice.toLocaleString('id-ID')}) sedang dalam antrean verifikasi.`
             };
 
             orderDatabase.unshift(newOrder);
@@ -2663,7 +2666,7 @@
             gridContainer.innerHTML = html;
         }
 
-        // RENDER PORTOFOLIO SHOWCASE GALLERY GRID
+        // RENDER TESTIMONI SHOWCASE GALLERY GRID
         function renderPortfolioGrid(items) {
             const container = document.getElementById('portfolio-grid-container');
             if (!container) return;
@@ -2671,9 +2674,9 @@
             if (items.length === 0) {
                 container.innerHTML = `
                     <div class="col-span-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 text-center space-y-2">
-                        <span class="text-2xl">🖼️</span>
-                        <h3 class="font-black text-slate-900 dark:text-white">Portofolio Tidak Ditemukan</h3>
-                        <p class="text-xs text-slate-500">Tidak ada materi penayangan yang cocok dengan kriteria filter Anda.</p>
+                        <span class="text-3xl">💬</span>
+                        <h3 class="font-black text-slate-900 dark:text-white">Testimoni Tidak Ditemukan</h3>
+                        <p class="text-xs text-slate-500">Belum ada testimoni pelanggan yang cocok dengan kriteria filter Anda.</p>
                     </div>
                 `;
                 return;
@@ -2681,47 +2684,28 @@
 
             let html = '';
             items.forEach(item => {
+                const stars = '⭐'.repeat(parseInt(item.rating || 5));
                 html += `
-                    <div onclick="openPortfolioModal('${item.id}')" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group flex flex-col justify-between">
-                        <div class="space-y-3">
-                            <div class="w-full h-44 bg-slate-950 relative overflow-hidden flex items-center justify-center">
-                                <img src="${item.imgUrl}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
-                                
-                                <div class="absolute top-3 left-3 flex gap-1.5">
-                                    <span class="px-2.5 py-1 bg-slate-900/80 backdrop-blur-md border border-slate-700 text-white font-extrabold text-[9px] rounded-lg">
-                                        ${item.mediaLabel}
-                                    </span>
-                                </div>
-
-                                <div class="absolute top-3 right-3">
-                                    <span class="px-2.5 py-1 bg-red-600 text-white font-extrabold text-[9px] rounded-lg shadow-md">
-                                        ${item.location}
-                                    </span>
-                                </div>
-
-                                <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
-                                    <span class="font-mono text-amber-400 font-bold text-[10px]">${item.dates}</span>
-                                    <div class="w-8 h-8 rounded-full bg-red-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition">
-                                        <svg class="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    </div>
-                                </div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm hover:shadow-xl transition duration-300 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm tracking-widest text-amber-500 drop-shadow-sm">${stars}</span>
+                                <span class="px-2 py-1 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-extrabold text-[9px] rounded-lg border border-red-200 dark:border-red-800/50">
+                                    📍 ${item.location || 'Pasar Rejosari'}
+                                </span>
                             </div>
-
-                            <div class="p-4 space-y-2">
-                                <span class="text-[10px] font-bold text-brand-600 dark:text-sky-400 uppercase tracking-wider block">${item.client}</span>
-                                <h3 class="font-extrabold text-slate-900 dark:text-white text-sm leading-snug group-hover:text-red-600 transition line-clamp-2">
-                                    ${item.title}
-                                </h3>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed font-normal">
-                                    ${item.description}
-                                </p>
-                            </div>
+                            
+                            <p class="text-sm text-slate-700 dark:text-slate-300 italic leading-relaxed font-medium">
+                                "${item.description || 'Pelayanan sangat memuaskan, tampilan videotron sangat cerah dan jelas.'}"
+                            </p>
                         </div>
 
-                        <div class="px-4 pb-4 pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] font-bold text-slate-500">
-                            <span>Frekuensi: ${item.freq}</span>
-                            <span class="text-red-600 dark:text-red-400 group-hover:underline">Lihat Details &rarr;</span>
+                        <div class="pt-5 mt-5 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
+                            <img src="${item.imgUrl || 'https://ui-avatars.com/api/?name='+encodeURIComponent(item.client)+'&background=random'}" alt="${item.client}" class="w-10 h-10 rounded-full object-cover border-2 border-brand-100 dark:border-slate-700">
+                            <div>
+                                <h4 class="font-extrabold text-slate-900 dark:text-white text-xs">${item.client}</h4>
+                                <span class="text-[10px] text-brand-600 dark:text-sky-400 font-bold uppercase tracking-wider">${item.category || 'Instansi Pemerintah'}</span>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -2777,7 +2761,7 @@
         }
 
         function filterPortfolio(category) {
-            const tabs = ['all', 'video', 'image', 'layanan'];
+            const tabs = ['all', 'pemerintah', 'swasta', 'umkm'];
             tabs.forEach(t => {
                 const btn = document.getElementById('port-filter-' + t);
                 if (btn) {
@@ -2785,18 +2769,21 @@
                 }
             });
 
-            const activeBtn = document.getElementById('port-filter-' + category);
+            const filterIdMap = {
+                'all': 'all',
+                'Instansi Pemerintah': 'pemerintah',
+                'Perusahaan Swasta': 'swasta',
+                'UMKM / Personal': 'umkm'
+            };
+            
+            const activeBtn = document.getElementById('port-filter-' + filterIdMap[category]);
             if (activeBtn) {
                 activeBtn.className = "px-3.5 py-2 rounded-xl bg-brand-600 text-white shadow-sm shrink-0 transition font-extrabold";
             }
 
-            let filtered = PORTFOLIO_DATABASE;
-            if (category === 'video') {
-                filtered = PORTFOLIO_DATABASE.filter(p => p.type === 'video');
-            } else if (category === 'image') {
-                filtered = PORTFOLIO_DATABASE.filter(p => p.type === 'image');
-            } else if (category === 'layanan') {
-                filtered = PORTFOLIO_DATABASE.filter(p => p.type === 'layanan');
+            let filtered = getMergedPortfolioData();
+            if (category !== 'all') {
+                filtered = filtered.filter(p => p.category === category);
             }
 
             const locSelect = document.getElementById('port-location-select');
@@ -3727,7 +3714,7 @@
         }
 
         function showPage(pageId) {
-            const pages = ['home', 'tentang', 'lokasi', 'detail-lokasi', 'proyek', 'blog', 'cek-status', 'profil'];
+            const pages = ['home', 'tentang', 'lokasi', 'detail-lokasi', 'proyek', 'cek-status', 'profil'];
             pages.forEach(p => {
                 const el = document.getElementById('page-' + p);
                 if (el) el.classList.add('hidden');
@@ -3824,52 +3811,7 @@
             document.getElementById(id).classList.remove('flex');
         }
 
-        // SYNC BLOG & TENTANG KAMI FROM ADMIN CMS (LOCALSTORAGE)
-        function renderUserBlogPageCards() {
-            const container = document.getElementById('user-blog-grid-container');
-            if (!container) return;
-
-            let saved = localStorage.getItem('sevisa_blogs');
-            let customBlogs = saved ? JSON.parse(saved) : [];
-
-            const defaultBlogs = [
-                { id: 'VDT-01', title: 'Pasang Iklan Videotron Pasar Rejosari Salatiga, Cek Tarif Resmi Diskominfo', tag: 'PASAR REJOSARI', img: 'header_banner.jpg' },
-                { id: 'VDT-02', title: 'Pasang Iklan Videotron Blotongan Gate Utara Salatiga, Cek Tarif dan Lokasi', tag: 'BLOTONGAN', img: 'header_banner.jpg' },
-                { id: 'VDT-03', title: 'Pasang Iklan Videotron Selasar Kartini Pusat Kota, Cek Tarif Harian & Bulanan', tag: 'SELASAR KARTINI', img: 'header_banner.jpg' },
-                { id: 'VDT-04', title: 'Pasang Iklan Videotron Alun-Alun Pancasila Salatiga, Cek Tarif Resmi Diskominfo', tag: 'ALUN-ALUN SALATIGA', img: 'header_banner.jpg' }
-            ];
-
-            const allBlogs = [...customBlogs.map(b => ({
-                id: b.id,
-                title: b.title,
-                tag: b.tag || 'PUBLIKASI DISKOMINFO',
-                img: b.imgUrl || 'header_banner.jpg'
-            })), ...defaultBlogs];
-
-            let html = '';
-            allBlogs.forEach(b => {
-                html += `
-                    <div onclick="openBlogArticleDetail('${b.id}')" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 cursor-pointer group flex flex-col justify-between">
-                        <div>
-                            <div class="w-full h-36 bg-slate-900 relative flex items-center justify-center p-3 text-center overflow-hidden">
-                                <img src="${b.img}" alt="${b.title}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                                <span class="px-2.5 py-1 bg-red-600 text-white text-[8px] font-extrabold uppercase rounded-full shadow-lg relative z-10 border border-red-400">
-                                    ${b.tag}
-                                </span>
-                            </div>
-                            <div class="p-4 space-y-1.5">
-                                <h3 class="font-extrabold text-slate-900 dark:text-white text-xs leading-snug group-hover:text-red-600 transition">
-                                    ${b.title}
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
+        // SYNC TENTANG KAMI FROM ADMIN CMS (LOCALSTORAGE)
         function renderAboutPageCMS() {
             let saved = localStorage.getItem('sevisa_about');
             if (saved) {
@@ -4035,7 +3977,6 @@
                 renderVideotronCards(getStoredUserLocations());
                 renderPortfolioGrid(getMergedPortfolioData());
                 renderAboutPageCMS();
-                renderUserBlogPageCards();
                 renderUserLokasiPageCards();
                 renderLiveChatMessages();
 
@@ -4066,7 +4007,6 @@
             renderUserLokasiPageCards();
             renderPortfolioGrid(getMergedPortfolioData());
             renderAboutPageCMS();
-            renderUserBlogPageCards();
             updateUserNavArea();
             updateProfileStatusUI();
         });

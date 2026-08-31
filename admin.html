@@ -181,7 +181,7 @@
                         🗺️ Lokasi & Peta Interactive
                     </button>
                     <button onclick="switchCMSModule('portofolio')" id="tab-cms-portofolio" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
-                        📸 Full CRUD Portofolio Video/PPT
+                        ⭐ Manajemen Testimoni Penyewa
                     </button>
                     <button onclick="switchCMSModule('blog')" id="tab-cms-blog" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
                         📰 Full CRUD Blog & Berita
@@ -352,27 +352,31 @@
                 <div id="sec-cms-portofolio" class="hidden space-y-6">
                     <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
                         <div>
-                            <h3 class="text-base font-black text-slate-900 dark:text-white">Full CRUD Portofolio Penayangan Iklan (Video, PPT, Gambar)</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Tambah, Edit, Update, dan Hapus contoh hasil penayangan videotron di website publik.</p>
+                            <h3 class="text-base font-black text-slate-900 dark:text-white">Manajemen Testimoni & Pengalaman Penyewa</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Tambah, Edit, dan Hapus ulasan/testimoni pelanggan yang tampil di website publik.</p>
                         </div>
                     </div>
 
                     <form onsubmit="savePortfolioAdminForm(event)" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
                         <input type="hidden" id="port-edit-id" value="">
-                        <h4 id="port-form-title-label" class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2">➕ Form Tambah / Edit Item Portofolio</h4>
+                        <h4 id="port-form-title-label" class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2">➕ Form Tambah / Edit Testimoni</h4>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block font-bold mb-1">Judul Iklan / Kampanye *</label>
-                                <input type="text" id="port-admin-title" required placeholder="Contoh: Campaign Sosialisasi Kesehatan 2026" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                                <label class="block font-bold mb-1">Nama Penyewa / Klien *</label>
+                                <input type="text" id="port-admin-client" required placeholder="Contoh: PT ABC / Dinas Pendidikan" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
                             </div>
                             <div>
-                                <label class="block font-bold mb-1">Nama Klien / Instansi *</label>
-                                <input type="text" id="port-admin-client" required placeholder="Contoh: Dinas Kesehatan Kota Salatiga" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
+                                <label class="block font-bold mb-1">Rating Bintang (1-5) *</label>
+                                <select id="port-admin-rating" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-amber-600">
+                                    <option value="5">⭐⭐⭐⭐⭐ (5 Bintang)</option>
+                                    <option value="4">⭐⭐⭐⭐ (4 Bintang)</option>
+                                    <option value="3">⭐⭐⭐ (3 Bintang)</option>
+                                </select>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block font-bold mb-1">Titik Lokasi Videotron *</label>
                                 <select id="port-admin-location" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
@@ -383,54 +387,35 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block font-bold mb-1">Kategori Konten *</label>
+                                <label class="block font-bold mb-1">Jenis Instansi / Kategori *</label>
                                 <select id="port-admin-category" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                                    <option value="pemkot">Iklan Layanan Pemkot</option>
-                                    <option value="komersial">Iklan Komersial / Ritel</option>
-                                    <option value="event">Event & Kebudayaan</option>
+                                    <option value="Instansi Pemerintah">Instansi Pemerintah</option>
+                                    <option value="Perusahaan Swasta">Perusahaan Swasta</option>
+                                    <option value="UMKM / Personal">UMKM / Personal</option>
+                                    <option value="Event Organizer">Event Organizer</option>
                                 </select>
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">Jenis Media Materi *</label>
-                                <select id="port-admin-type" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                                    <option value="video">🎥 Video Motion HD (MP4/MOV)</option>
-                                    <option value="ppt">📊 Presentasi Slide (PPT/PPTX)</option>
-                                    <option value="image">🖼️ Poster Digital HD (JPG/PNG)</option>
-                                    <option value="layanan">🏛️ Iklan Layanan Publik</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block font-bold mb-1">Periode Tayang *</label>
-                                <input type="text" id="port-admin-dates" required placeholder="Contoh: 1 - 15 Oktober 2026" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">Frekuensi Penyiaran *</label>
-                                <input type="text" id="port-admin-freq" required placeholder="Contoh: 60x / Hari (30 Detik)" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block font-bold mb-1">📁 Upload File Materi (Foto / Video MP4 / PPT / PDF) *</label>
-                                <input type="file" id="port-admin-file" accept="image/*,video/*,.ppt,.pptx,.pdf" class="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold">
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">🔗 Atau Masukkan URL Gambar/Video</label>
-                                <input type="text" id="port-admin-url" placeholder="Opsional, contoh: header_banner.jpg" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block font-bold mb-1">Deskripsi Penayangan Materi *</label>
-                            <textarea id="port-admin-desc" rows="2" required placeholder="Jelaskan cakupan penayangan, target audiens, dan dampak promosi..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium"></textarea>
+                            <label class="block font-bold mb-1">Teks Ulasan / Testimoni *</label>
+                            <textarea id="port-admin-desc" rows="3" required placeholder="Tuliskan pengalaman penyewa di sini..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium"></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold mb-1">📁 Upload Foto Klien / Logo (Opsional)</label>
+                                <input type="file" id="port-admin-file" accept="image/*" class="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">🔗 Atau URL Foto / Logo Klien</label>
+                                <input type="text" id="port-admin-url" placeholder="Opsional, contoh: logo_klien.jpg" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
+                            </div>
                         </div>
 
                         <div class="flex gap-2">
                             <button type="submit" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
-                                💾 SIMPAN PORTOFOLIO &rarr;
+                                💾 SIMPAN TESTIMONI &rarr;
                             </button>
                             <button type="button" onclick="resetPortfolioForm()" class="px-4 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl">
                                 Batal
@@ -1344,20 +1329,22 @@
             let items = saved ? JSON.parse(saved) : [];
 
             if (items.length === 0) {
-                container.innerHTML = '<p class="text-slate-400 italic text-xs col-span-3">Belum ada portofolio tambahan. Gunakan form di atas untuk menambah.</p>';
+                container.innerHTML = '<p class="text-slate-400 italic text-xs col-span-3">Belum ada testimoni. Gunakan form di atas untuk menambah.</p>';
                 return;
             }
 
             let html = '';
             items.forEach(item => {
+                const stars = '⭐'.repeat(parseInt(item.rating || 5));
                 html += `
                     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl space-y-2 shadow-sm">
                         <div class="flex items-center justify-between text-[10px]">
                             <span class="font-mono font-bold text-sky-400">${item.id}</span>
                             <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-bold">${item.location}</span>
                         </div>
-                        <h5 class="font-extrabold text-slate-900 dark:text-white text-xs truncate">${item.title}</h5>
-                        <p class="text-[10px] text-slate-500 truncate">${item.client} • ${item.mediaLabel}</p>
+                        <h5 class="font-extrabold text-slate-900 dark:text-white text-xs truncate">${item.client}</h5>
+                        <p class="text-[10px] text-amber-500 truncate">${stars}</p>
+                        <p class="text-[10px] text-slate-500 line-clamp-2 italic">"${item.description}"</p>
                         <div class="pt-2 flex gap-2 border-t border-slate-100 dark:border-slate-800">
                             <button onclick="editPortfolioItem('${item.id}')" class="text-sky-600 font-bold text-[10px] hover:underline">✏️ Edit</button>
                             <button onclick="deletePortfolioItem('${item.id}')" class="text-rose-500 font-bold text-[10px] hover:underline">🗑️ Hapus</button>
@@ -1371,45 +1358,35 @@
         function savePortfolioAdminForm(e) {
             e.preventDefault();
             const editId = document.getElementById('port-edit-id').value;
-            const title = document.getElementById('port-admin-title').value.trim();
             const client = document.getElementById('port-admin-client').value.trim();
+            const rating = document.getElementById('port-admin-rating').value;
             const location = document.getElementById('port-admin-location').value;
             const category = document.getElementById('port-admin-category').value;
-            const type = document.getElementById('port-admin-type').value;
-            const dates = document.getElementById('port-admin-dates').value.trim();
-            const freq = document.getElementById('port-admin-freq').value.trim();
             const description = document.getElementById('port-admin-desc').value.trim();
             const fileInput = document.getElementById('port-admin-file');
             const urlInput = document.getElementById('port-admin-url');
             const customUrl = urlInput ? urlInput.value.trim() : '';
 
-            let mediaLabel = '🎥 Video Motion 1080p';
-            if (type === 'ppt') mediaLabel = '📊 Presentasi Slide (PPT)';
-            if (type === 'image') mediaLabel = '🖼️ Poster Digital HD';
-            if (type === 'layanan') mediaLabel = '🏛️ Iklan Layanan Publik';
-
             const commitSave = (mediaDataUrl) => {
                 let saved = localStorage.getItem('sevisa_portfolio');
                 let items = saved ? JSON.parse(saved) : [];
 
-                const finalMedia = mediaDataUrl || customUrl || 'header_banner.jpg';
+                const finalMedia = mediaDataUrl || customUrl || 'https://ui-avatars.com/api/?name='+encodeURIComponent(client)+'&background=random';
 
                 if (editId) {
                     const idx = items.findIndex(p => p.id === editId);
                     if (idx !== -1) {
                         items[idx] = { 
                             ...items[idx], 
-                            title, client, location, category, type, mediaLabel, dates, freq, description,
-                            imgUrl: finalMedia,
-                            mediaUrl: finalMedia
+                            client, rating, location, category, description,
+                            imgUrl: finalMedia
                         };
                     }
                 } else {
                     const newItem = {
-                        id: 'PORT-' + Math.floor(100 + Math.random() * 900),
-                        title, client, location, category, type, mediaLabel, dates, freq, description,
-                        imgUrl: finalMedia,
-                        mediaUrl: finalMedia
+                        id: 'TESTI-' + Math.floor(100 + Math.random() * 900),
+                        client, rating, location, category, description,
+                        imgUrl: finalMedia
                     };
                     items.unshift(newItem);
                 }
@@ -1418,7 +1395,7 @@
                 window.dispatchEvent(new Event('storage'));
                 resetPortfolioForm();
                 renderCMSPortfolio();
-                showAdminToast('💾 PORTOFOLIO TERSIMPAN', `Item portofolio "${title}" telah disimpan & otomatis aktif di website publik.`);
+                showAdminToast('💾 TESTIMONI TERSIMPAN', `Testimoni dari "${client}" telah disimpan & tampil di website publik.`);
             };
 
             if (fileInput && fileInput.files && fileInput.files[0]) {
@@ -1439,36 +1416,31 @@
             if (!item) return;
 
             document.getElementById('port-edit-id').value = item.id;
-            document.getElementById('port-form-title-label').innerText = `✏️ Edit Item Portofolio (${item.id})`;
-            document.getElementById('port-admin-title').value = item.title;
-            document.getElementById('port-admin-client').value = item.client;
-            document.getElementById('port-admin-location').value = item.location;
-            document.getElementById('port-admin-category').value = item.category;
-            document.getElementById('port-admin-type').value = item.type;
-            document.getElementById('port-admin-dates').value = item.dates;
-            document.getElementById('port-admin-freq').value = item.freq;
-            document.getElementById('port-admin-desc').value = item.description;
+            document.getElementById('port-form-title-label').innerText = `✏️ Edit Testimoni (${item.id})`;
+            document.getElementById('port-admin-client').value = item.client || '';
+            if(document.getElementById('port-admin-rating')) document.getElementById('port-admin-rating').value = item.rating || '5';
+            document.getElementById('port-admin-location').value = item.location || 'Pasar Rejosari';
+            document.getElementById('port-admin-category').value = item.category || 'Instansi Pemerintah';
+            document.getElementById('port-admin-desc').value = item.description || '';
         }
 
         function deletePortfolioItem(id) {
-            if (confirm(`Apakah Anda yakin ingin menghapus portofolio ${id}?`)) {
+            if (confirm(`Apakah Anda yakin ingin menghapus testimoni ${id}?`)) {
                 let saved = localStorage.getItem('sevisa_portfolio');
                 let items = saved ? JSON.parse(saved) : [];
                 items = items.filter(p => p.id !== id);
                 localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
                 window.dispatchEvent(new Event('storage'));
                 renderCMSPortfolio();
-                showAdminToast('🗑️ PORTOFOLIO DIHAPUS', `Item portofolio ${id} telah dihapus.`);
+                showAdminToast('🗑️ TESTIMONI DIHAPUS', `Testimoni ${id} telah dihapus.`);
             }
         }
 
         function resetPortfolioForm() {
             document.getElementById('port-edit-id').value = '';
-            document.getElementById('port-form-title-label').innerText = '➕ Form Tambah / Edit Item Portofolio';
-            document.getElementById('port-admin-title').value = '';
+            document.getElementById('port-form-title-label').innerText = '➕ Form Tambah / Edit Testimoni';
             document.getElementById('port-admin-client').value = '';
-            document.getElementById('port-admin-dates').value = '';
-            document.getElementById('port-admin-freq').value = '';
+            if(document.getElementById('port-admin-rating')) document.getElementById('port-admin-rating').value = '5';
             document.getElementById('port-admin-desc').value = '';
         }
 
