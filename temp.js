@@ -24,7 +24,7 @@
 
         let isLoggedIn = false;
         let isProfileComplete = false;
-        let selectedLocationData = {};
+        let selectedLocationData = { title, address, size, priceNon, monthNon, hourNon, minuteNon };
         let currentUser = null;
         let selectedPortfolioItem = null;
 
@@ -60,13 +60,9 @@
                 layoutCode: 'landscape',
                 size: '8 x 4 Meter',
                 priceNon: '2.200.000',
-                priceRokok: '2.750.000',
                 monthNon: '59.450.000',
-                monthRokok: '74.312.500',
                 hourNon: '210.000',
-                hourRokok: '262.500',
                 minuteNon: '3.800',
-                minuteRokok: '4.750',
                 traffic: '65.000+',
                 ledSpec: 'P10 Outdoor DIP • 1920x1080',
                 badgeText: 'LOKASI 1 (TOP TRAFFIC)'
@@ -80,13 +76,9 @@
                 layoutCode: 'landscape',
                 size: '6 x 3 Meter',
                 priceNon: '716.000',
-                priceRokok: '895.000',
                 monthNon: '19.367.000',
-                monthRokok: '24.208.750',
                 hourNon: '68.000',
-                hourRokok: '85.000',
                 minuteNon: '1.300',
-                minuteRokok: '1.625',
                 traffic: '40.000+',
                 ledSpec: 'P6 Outdoor LED • Pusat Edukasi Publik',
                 badgeText: 'LOKASI 2 (PUSAT EDUKASI)'
@@ -100,13 +92,9 @@
                 layoutCode: 'portrait',
                 size: '6 x 4 Meter',
                 priceNon: '1.268.000',
-                priceRokok: '1.585.000',
                 monthNon: '34.315.000',
-                monthRokok: '42.893.750',
                 hourNon: '120.500',
-                hourRokok: '150.625',
                 minuteNon: '2.200',
-                minuteRokok: '2.750',
                 traffic: '55.000+',
                 ledSpec: 'P8 Outdoor LED • Gate Utara Salatiga',
                 badgeText: 'LOKASI 3 (GATE UTARA)'
@@ -120,13 +108,9 @@
                 layoutCode: 'dual',
                 size: '10 x 5 Meter',
                 priceNon: '698.000',
-                priceRokok: '872.500',
                 monthNon: '18.881.000',
-                monthRokok: '23.601.250',
                 hourNon: '66.200',
-                hourRokok: '82.750',
                 minuteNon: '1.200',
-                minuteRokok: '1.500',
                 traffic: '60.000+',
                 ledSpec: 'P10 Outdoor Dual • Alun-Alun Pancasila',
                 badgeText: 'LOKASI 4 (ALUN-ALUN PANCASILA)'
@@ -222,7 +206,7 @@
                 userName: 'Alfi Fadli',
                 company: 'Pt Mencari Cinta sejati',
                 location: 'Selasar Kartini',
-                dates: '2026-08-11 s.d. 2026-09-11 (5 Bulan • Produk Rokok (+25%) • Rp 121.043.750)',
+                dates: '2026-08-11 s.d. 2026-09-11 (5 Bulan • Standar • Rp 121.043.750)',
                 file: 'logo savisa.jpeg',
                 status: 'terkonfirmasi',
                 statusLabel: 'TERKONFIRMASI & SIAP PENAYANGAN',
@@ -234,7 +218,7 @@
                 userName: 'Budi Santoso',
                 company: 'PT Salatiga Digital Indo',
                 location: 'Pasar Rejosari',
-                dates: '2026-08-15 s.d. 2026-08-22 (7 Hari • Produk Non-Rokok • Rp 15.400.000)',
+                dates: '2026-08-15 s.d. 2026-08-22 (7 Hari • Standar • Rp 15.400.000)',
                 file: 'Video_Promosi_Produk.mp4',
                 status: 'menunggu',
                 statusLabel: 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO',
@@ -246,7 +230,7 @@
                 userName: 'Dinas Pariwisata Salatiga',
                 company: 'Pemerintah Kota Salatiga',
                 location: 'Blotongan',
-                dates: '2026-08-18 s.d. 2026-08-25 (7 Hari • Produk Non-Rokok • Rp 8.876.000)',
+                dates: '2026-08-18 s.d. 2026-08-25 (7 Hari • Standar • Rp 8.876.000)',
                 file: 'Sosialisasi_Pariwisata.mp4',
                 status: 'diproses',
                 statusLabel: 'SEDANG DIPROSES / UJI TAYANG',
@@ -258,7 +242,7 @@
                 userName: 'Komunitas UMKM Salatiga',
                 company: 'Brand Kuliner Salatiga',
                 location: 'Alun-Alun Salatiga',
-                dates: '2026-08-20 s.d. 2026-08-30 (10 Hari • Produk Non-Rokok • Rp 6.980.000)',
+                dates: '2026-08-20 s.d. 2026-08-30 (10 Hari • Standar • Rp 6.980.000)',
                 file: 'Poster_Promo_Event.png',
                 status: 'terkonfirmasi',
                 statusLabel: 'TERKONFIRMASI & SIAP PENAYANGAN',
@@ -434,94 +418,148 @@
         }
 
         function calculateBookingPrice() {
-            const locEl = document.getElementById('book-location');
-            const catEl = document.getElementById('book-ad-category');
-            const unitEl = document.getElementById('book-unit');
-            const qtyEl = document.getElementById('book-qty');
+    const checkedLocations = document.querySelectorAll('input[name="book-location"]:checked');
+    const paketEl = document.getElementById('book-paket');
+    const startEl = document.getElementById('book-start-date');
+    const endEl = document.getElementById('book-end-date');
+    const startTimeEl = document.getElementById('book-start-time');
+    const endTimeEl = document.getElementById('book-end-time');
 
-            if (!locEl || !catEl || !unitEl || !qtyEl) return;
+    if (!paketEl || !startEl || !endEl || !startTimeEl || !endTimeEl) return;
 
-            const locName = locEl.value;
-            const isRokok = catEl.value === 'rokok';
-            const unit = unitEl.value;
-            let qty = parseInt(qtyEl.value) || 1;
-            if (qty < 1) qty = 1;
+    const item = VIDEOTRON_DATA[0];
+    const minuteRateStr = item.minuteNon || '0';
+    
+    const badgeEl = document.getElementById('calc-rate-badge');
+    if (badgeEl) {
+        badgeEl.innerText = 'Standar';
+        badgeEl.className = 'px-2 py-0.5 bg-sky-500/20 text-sky-300 border border-sky-400/30 text-[9px] font-bold rounded-md uppercase';
+    }
 
-            const item = VIDEOTRON_DATA.find(v => v.title.toLowerCase().includes(locName.toLowerCase())) || VIDEOTRON_DATA[0];
+    const unitDetailEl = document.getElementById('calc-unit-detail');
+    const totalPriceEl = document.getElementById('calc-total-price');
+    const rateMinEl = document.getElementById('calc-rate-minute');
+    if (rateMinEl) rateMinEl.innerText = 'Rp ' + minuteRateStr;
 
-            const monthRate = getRawPriceNumber(isRokok ? item.monthRokok : item.monthNon);
-            const dayRate = getRawPriceNumber(isRokok ? item.priceRokok : item.priceNon);
-            const hourRate = getRawPriceNumber(isRokok ? item.hourRokok : item.hourNon);
-            const minuteRate = getRawPriceNumber(isRokok ? item.minuteRokok : item.minuteNon);
+    const rateMonthEl = document.getElementById('calc-rate-month');
+    const rateDayEl = document.getElementById('calc-rate-day');
+    const rateHourEl = document.getElementById('calc-rate-hour');
+    if(rateMonthEl) rateMonthEl.innerText = '-';
+    if(rateDayEl) rateDayEl.innerText = '-';
+    if(rateHourEl) rateHourEl.innerText = '-';
 
-            // Update 4-column brochure rate matrix
-            const rateMonthEl = document.getElementById('calc-rate-month');
-            const rateDayEl = document.getElementById('calc-rate-day');
-            const rateHourEl = document.getElementById('calc-rate-hour');
-            const rateMinEl = document.getElementById('calc-rate-minute');
-            const badgeEl = document.getElementById('calc-rate-badge');
+    if (checkedLocations.length === 0) {
+        if(unitDetailEl) unitDetailEl.innerText = 'Pilih lokasi terlebih dahulu';
+        if(totalPriceEl) totalPriceEl.innerText = 'Rp 0';
+        return null;
+    }
 
-            if (rateMonthEl) rateMonthEl.innerText = 'Rp ' + (monthRate / 1000).toLocaleString('id-ID') + 'k';
-            if (rateDayEl) rateDayEl.innerText = 'Rp ' + (dayRate / 1000).toLocaleString('id-ID') + 'k';
-            if (rateHourEl) rateHourEl.innerText = 'Rp ' + (hourRate / 1000).toLocaleString('id-ID') + 'k';
-            if (rateMinEl) rateMinEl.innerText = 'Rp ' + minuteRate.toLocaleString('id-ID');
+    const startDate = startEl.value;
+    const endDate = endEl.value;
+    const startTime = startTimeEl.value;
+    const endTime = endTimeEl.value;
+    const paket = paketEl.value;
 
-            if (badgeEl) {
-                badgeEl.innerText = isRokok ? 'Produk Rokok (+25%)' : 'Produk Non-Rokok';
-                badgeEl.className = isRokok 
-                    ? 'px-2 py-0.5 bg-rose-500/20 text-rose-300 border border-rose-400/30 text-[9px] font-bold rounded-md uppercase'
-                    : 'px-2 py-0.5 bg-sky-500/20 text-sky-300 border border-sky-400/30 text-[9px] font-bold rounded-md uppercase';
-            }
+    if (!startDate || !endDate || !startTime || !endTime || !paket) {
+        if(unitDetailEl) unitDetailEl.innerText = 'Lengkapi formulir di atas';
+        if(totalPriceEl) totalPriceEl.innerText = 'Rp 0';
+        return null;
+    }
 
-            let unitRate = dayRate;
-            let unitLabel = 'Hari';
-            if (unit === 'bulan') { unitRate = monthRate; unitLabel = 'Bulan'; }
-            else if (unit === 'hari') { unitRate = dayRate; unitLabel = 'Hari'; }
-            else if (unit === 'jam') { unitRate = hourRate; unitLabel = 'Jam'; }
-            else if (unit === 'menit') { unitRate = minuteRate; unitLabel = 'Menit'; }
+    if (startTime < "05:00" || startTime > "22:00" || endTime < "05:00" || endTime > "22:00") {
+        if(unitDetailEl) unitDetailEl.innerHTML = '<span class="text-rose-500">Jam operasional 05:00 - 22:00</span>';
+        if(totalPriceEl) totalPriceEl.innerText = 'Rp 0';
+        return null;
+    }
 
-            const totalPrice = qty * unitRate;
+    const startD = new Date(startDate);
+    const endD = new Date(endDate);
+    if(endD < startD) {
+        if(unitDetailEl) unitDetailEl.innerHTML = '<span class="text-rose-500">Tanggal tidak valid</span>';
+        if(totalPriceEl) totalPriceEl.innerText = 'Rp 0';
+        return null;
+    }
+    
+    let diffTime = endD - startD;
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-            const unitDetailEl = document.getElementById('calc-unit-detail');
-            const totalPriceEl = document.getElementById('calc-total-price');
+    const startT = new Date(`1970-01-01T${startTime}:00`);
+    const endT = new Date(`1970-01-01T${endTime}:00`);
+    if(endT <= startT) {
+        if(unitDetailEl) unitDetailEl.innerHTML = '<span class="text-rose-500">Jam selesai harus > jam mulai</span>';
+        if(totalPriceEl) totalPriceEl.innerText = 'Rp 0';
+        return null;
+    }
 
-            if (unitDetailEl) unitDetailEl.innerText = `${qty} ${unitLabel} x Rp ${unitRate.toLocaleString('id-ID')}`;
-            if (totalPriceEl) totalPriceEl.innerText = 'Rp ' + totalPrice.toLocaleString('id-ID');
+    const totalMinutesPerDay = Math.ceil((endT - startT) / 60000);
+    const totalMinutes = totalMinutesPerDay * diffDays;
 
-            return { qty, unitLabel, unitRate, totalPrice, categoryLabel: isRokok ? 'Produk Rokok (+25%)' : 'Produk Non-Rokok' };
-        }
+    if (paket === 'alfa' && totalMinutesPerDay < 30) {
+        if(unitDetailEl) unitDetailEl.innerHTML = '<span class="text-rose-500">Paket Alfa minimal 30 menit / hari</span>';
+        if(totalPriceEl) totalPriceEl.innerText = 'Rp 0';
+        return null;
+    }
+    if (paket === 'beta' && totalMinutesPerDay < 20) {
+        if(unitDetailEl) unitDetailEl.innerHTML = '<span class="text-rose-500">Paket Beta minimal 20 menit / hari</span>';
+        if(totalPriceEl) totalPriceEl.innerText = 'Rp 0';
+        return null;
+    }
+    if (paket === 'event' && totalMinutesPerDay < 30) {
+        if(unitDetailEl) unitDetailEl.innerHTML = '<span class="text-rose-500">Paket Event minimal 30 menit / hari</span>';
+        if(totalPriceEl) totalPriceEl.innerText = 'Rp 0';
+        return null;
+    }
+
+    let grandTotal = 0;
+    let locNames = [];
+
+    checkedLocations.forEach(chk => {
+        locNames.push(chk.value);
+        const vid = VIDEOTRON_DATA.find(v => v.title.toLowerCase().includes(chk.value.toLowerCase())) || VIDEOTRON_DATA[0];
+        const minuteRate = getRawPriceNumber(vid.minuteNon);
+        grandTotal += totalMinutes * minuteRate;
+    });
+
+    if(unitDetailEl) unitDetailEl.innerText = `${locNames.length} Lokasi x ${diffDays} Hari x ${totalMinutesPerDay} Menit`;
+    if(totalPriceEl) totalPriceEl.innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
+
+    return { totalMinutes, locNames, grandTotal, startDate, endDate, startTime, endTime, paket };
+}
 
         // TRIGGER BOOKING FLOW WHEN USER CLICKS "AJUKAN PENYEWAAN" OR "PESAN SEWA SEKARANG"
         function triggerBookingFlow(locationTitle = null) {
-            if (!isLoggedIn) {
-                openAuthGateModal('login');
-                show3DToast('ℹ️ SILAKAN MASUK AKUN', 'Untuk mengajukan penyewaan videotron, silakan <strong>Masuk Akun</strong> atau <strong>Daftar</strong> terlebih dahulu.', 'info');
-                return;
+    if (!isLoggedIn) {
+        openAuthGateModal('login');
+        show3DToast('ℹ️ SILAKAN MASUK AKUN', 'Untuk mengajukan penyewaan videotron, silakan <strong>Masuk Akun</strong> atau <strong>Daftar</strong> terlebih dahulu.', 'info');
+        return;
+    }
+
+    if (!isProfileComplete) {
+        showPage('profil');
+        show3DToast('⚠️ LENGKAPI DATA DIRI', 'Silakan lengkapi data diri Anda secara menyeluruh terlebih dahulu untuk mengaktifkan izin penyewaan videotron.', 'error');
+        return;
+    }
+
+    const checkboxes = document.querySelectorAll('input[name="book-location"]');
+    checkboxes.forEach(chk => chk.checked = false);
+
+    if (locationTitle) {
+        checkboxes.forEach(chk => {
+            if (chk.value.toLowerCase().includes(locationTitle.toLowerCase()) || locationTitle.toLowerCase().includes(chk.value.toLowerCase())) {
+                chk.checked = true;
             }
+        });
+    } else {
+        if(checkboxes.length > 0) checkboxes[0].checked = true;
+    }
 
-            if (!isProfileComplete) {
-                showPage('profil');
-                show3DToast('⚠️ LENGKAPI DATA DIRI', 'Silakan lengkapi data diri Anda secara menyeluruh terlebih dahulu untuk mengaktifkan izin penyewaan videotron.', 'error');
-                return;
-            }
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('book-start-date').min = today;
+    document.getElementById('book-end-date').min = today;
 
-            if (locationTitle) {
-                const selectEl = document.getElementById('book-location');
-                for (let i = 0; i < selectEl.options.length; i++) {
-                    if (selectEl.options[i].value.toLowerCase().includes(locationTitle.toLowerCase())) {
-                        selectEl.selectedIndex = i;
-                        break;
-                    }
-                }
-            }
-
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('book-start-date').min = today;
-            document.getElementById('book-end-date').min = today;
-
-            openModal('booking-modal');
-            calculateBookingPrice();
-        }
+    openModal('booking-modal');
+    calculateBookingPrice();
+}
 
         function triggerBookingFlowFromPort() {
             closeModal('portfolio-modal-viewer');
@@ -549,47 +587,92 @@
         }
 
         function submitBookingSewa(event) {
-            event.preventDefault();
-            const location = document.getElementById('book-location').value;
-            const startDate = document.getElementById('book-start-date').value;
-            const endDate = document.getElementById('book-end-date').value;
-            const fileInput = document.getElementById('book-ad-file');
+    event.preventDefault();
+    const fileInput = document.getElementById('book-ad-file');
 
-            if (!fileInput.files || fileInput.files.length === 0) {
-                show3DToast('⚠️ MATERI IKLAN BELUM TERLAMPIR', 'Harap lampirkan file materi iklan (Video/PPT/Gambar/PDF) Anda!', 'error');
-                return;
+    if (!fileInput.files || fileInput.files.length === 0) {
+        show3DToast('⚠️ MATERI IKLAN BELUM TERLAMPIR', 'Harap lampirkan file materi iklan (Video/PPT/Gambar/PDF) Anda!', 'error');
+        return;
+    }
+
+    const calcResult = calculateBookingPrice();
+    if(!calcResult) {
+        show3DToast('⚠️ FORM TIDAK VALID', 'Silakan periksa kembali pilihan lokasi, jam, dan paket Anda.', 'error');
+        return;
+    }
+
+    const existingOrders = getStoredOrders();
+    let hasConflict = false;
+    let conflictLoc = '';
+
+    for (let order of existingOrders) {
+        if (order.status === 'ditolak' || order.status === 'selesai') continue; 
+
+        for (let loc of calcResult.locNames) {
+            if (order.location.includes(loc)) {
+                const match = order.dates.match(/(\d{4}-\d{2}-\d{2}) s\.d\. (\d{4}-\d{2}-\d{2})/);
+                if (match) {
+                    const oStart = match[1];
+                    const oEnd = match[2];
+                    
+                    if (calcResult.startDate <= oEnd && calcResult.endDate >= oStart) {
+                        const tMatch = order.dates.match(/Jam: (\d{2}:\d{2}) - (\d{2}:\d{2})/);
+                        if (tMatch) {
+                            const otStart = tMatch[1];
+                            const otEnd = tMatch[2];
+                            if (calcResult.startTime < otEnd && calcResult.endTime > otStart) {
+                                hasConflict = true;
+                                conflictLoc = loc;
+                                break;
+                            }
+                        } else {
+                            hasConflict = true;
+                            conflictLoc = loc;
+                            break;
+                        }
+                    }
+                }
             }
-
-            const calcResult = calculateBookingPrice();
-            const fileName = fileInput.files[0].name;
-            const randomSuffix = Math.floor(100000 + Math.random() * 900000);
-            const bookingCode = 'SVS-' + randomSuffix;
-
-            const newOrder = {
-                code: bookingCode,
-                userName: currentUser ? currentUser.name : 'Pengguna',
-                company: currentUser ? (currentUser.company || 'Personal') : 'Personal',
-                location: location,
-                dates: `${startDate} s.d. ${endDate} (${calcResult.qty} ${calcResult.unitLabel} • ${calcResult.categoryLabel} • Rp ${calcResult.totalPrice.toLocaleString('id-ID')})`,
-                file: fileName,
-                status: 'menunggu',
-                statusLabel: 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO',
-                statusDesc: `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa lokasi <strong>${location}</strong> (${calcResult.qty} ${calcResult.unitLabel} • Rp ${calcResult.totalPrice.toLocaleString('id-ID')}) sedang dalam antrean verifikasi.`
-            };
-
-            orderDatabase.unshift(newOrder);
-            saveStoredOrders(orderDatabase);
-
-            closeModal('booking-modal');
-
-            show3DToast(
-                '🎉 PENGAJUAN BERHASIL DISIMPAN!',
-                `Kode Transaksi Pemesanan Anda:<br><strong class="text-xl font-black font-mono text-amber-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-amber-500/40 inline-block my-2 shadow-inner tracking-wider">${bookingCode}</strong><br>Silakan <strong>salin / catat Kode Transaksi</strong> di atas. Anda harus memasukkannya terlebih dahulu ke dalam kolom <strong>"Masukkan Kode Transaksi Pemesanan"</strong> pada Halaman Cek Status untuk menampilkan status & tahapan pengajuan.`,
-                'success',
-                'MENUJU HALAMAN CEK STATUS &rarr;',
-                `navigateToStatusPage('${bookingCode}')`
-            );
         }
+        if(hasConflict) break;
+    }
+
+    if (hasConflict) {
+        show3DToast('🚨 KONFLIK JADWAL', `Lokasi <strong>${conflictLoc}</strong> sudah dipesan pada tanggal & jam tersebut. Silakan pilih waktu atau lokasi lain.`, 'error');
+        return;
+    }
+
+    const fileName = fileInput.files[0].name;
+    const randomSuffix = Math.floor(100000 + Math.random() * 900000);
+    const bookingCode = 'SVS-' + randomSuffix;
+    const locString = calcResult.locNames.join(', ');
+    
+    const newOrder = {
+        code: bookingCode,
+        userName: currentUser ? currentUser.name : 'Pengguna',
+        company: currentUser ? (currentUser.company || 'Personal') : 'Personal',
+        phone: currentUser ? (currentUser.phone || '') : '',
+        location: locString,
+        paket: calcResult.paket,
+        dates: `${calcResult.startDate} s.d. ${calcResult.endDate} | Jam: ${calcResult.startTime} - ${calcResult.endTime} (${calcResult.totalMinutes} Menit • Rp ${calcResult.grandTotal.toLocaleString('id-ID')})`,
+        file: fileName,
+        status: 'menunggu',
+        statusLabel: 'MENUNGGU VERIFIKASI',
+        statusDesc: `📌 <strong>Status: Menunggu Verifikasi</strong><br>Permohonan sewa lokasi <strong>${locString}</strong> sedang dalam antrean verifikasi.`
+    };
+
+    orderDatabase.unshift(newOrder);
+    saveStoredOrders(orderDatabase);
+    closeModal('booking-modal');
+
+    show3DToast(
+        '🎉 PENGAJUAN BERHASIL!',
+        `Kode Transaksi Pemesanan Anda:<br><strong class="text-xl font-black font-mono text-amber-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-amber-500/40 inline-block my-2 shadow-inner tracking-wider">${bookingCode}</strong><br>Silakan pantau status transaksi Anda.`,
+        'success',
+        'LIHAT TRANSAKSI &rarr;',
+        `showPage('daftar-transaksi')`
+    );
+}
 
         function navigateToStatusPage(code) {
             close3DToast();
@@ -624,7 +707,7 @@
                 return;
             }
 
-            const foundOrder = orderDatabase.find(o => o.code === inputCode);
+            const foundOrder = orderDatabase.find(o => o.code === inputCode || (o.phone && o.phone === inputCode));
 
             if (!foundOrder) {
                 if (resultCard) resultCard.classList.add('hidden');
@@ -1135,13 +1218,9 @@
                     traffic: '120.000 Kendaraan/Hari',
                     badgeText: 'LOKASI 1 (TOP TRAFFIC)',
                     priceNon: '2.200.000',
-                    priceRokok: '2.750.000',
                     monthNon: '59.450.000',
-                    monthRokok: '74.312.500',
                     hourNon: '210.000',
-                    hourRokok: '262.500',
                     minuteNon: '3.800',
-                    minuteRokok: '4.750'
                 },
                 {
                     id: 'VDT-02',
@@ -1153,13 +1232,9 @@
                     traffic: '110.000 Kendaraan/Hari',
                     badgeText: 'LOKASI 2 (GATE UTARA)',
                     priceNon: '1.268.000',
-                    priceRokok: '1.585.000',
                     monthNon: '34.315.000',
-                    monthRokok: '42.893.750',
                     hourNon: '120.500',
-                    hourRokok: '150.625',
                     minuteNon: '2.200',
-                    minuteRokok: '2.750'
                 },
                 {
                     id: 'VDT-03',
@@ -1171,13 +1246,9 @@
                     traffic: '85.000 Kendaraan/Hari',
                     badgeText: 'LOKASI 3 (PUSAT EDUKASI)',
                     priceNon: '716.000',
-                    priceRokok: '895.000',
                     monthNon: '19.367.000',
-                    monthRokok: '24.208.750',
                     hourNon: '68.000',
-                    hourRokok: '85.000',
                     minuteNon: '1.300',
-                    minuteRokok: '1.625'
                 },
                 {
                     id: 'VDT-04',
@@ -1189,13 +1260,9 @@
                     traffic: '95.000 Kendaraan/Hari',
                     badgeText: 'LOKASI 4 (ALUN-ALUN PANCASILA)',
                     priceNon: '698.000',
-                    priceRokok: '872.500',
                     monthNon: '18.881.000',
-                    monthRokok: '23.601.250',
                     hourNon: '66.200',
-                    hourRokok: '82.750',
                     minuteNon: '1.200',
-                    minuteRokok: '1.500'
                 }
             ];
         }
@@ -1231,14 +1298,7 @@
 
                         <div class="grid grid-cols-2 gap-3 text-xs">
                             <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
-                                <span class="font-extrabold text-blue-700 dark:text-blue-300 text-[11px] block uppercase">Tarif Non-Rokok</span>
-                                <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                    <li><strong>Bulan:</strong> Rp ${item.monthNon || '0'}</li>
-                                    <li><strong>Hari:</strong> Rp ${item.priceNon || '0'}</li>
-                                    <li><strong>Jam:</strong> Rp ${item.hourNon || '0'}</li>
-                                    <li><strong>Menit:</strong> Rp ${item.minuteNon || '0'}</li>
-                                </ul>
-                            </div>
+                                
 
                             <div class="bg-rose-50 dark:bg-rose-950/40 p-3 rounded-2xl border border-rose-200 dark:border-rose-800 space-y-1">
                                 <span class="font-extrabold text-rose-700 dark:text-rose-300 text-[11px] block uppercase">Tarif Rokok (+25%)</span>
@@ -1384,8 +1444,8 @@
             }
         });
 
-        function openDetailLokasi(title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok) {
-            selectedLocationData = { title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok };
+        function openDetailLokasi(title, address, size, priceNon, monthNon, hourNon, minuteNon) {
+            selectedLocationData = { title, address, size, priceNon, monthNon, hourNon, minuteNon };
             document.getElementById('det-title').innerText = title;
             document.getElementById('det-address').innerText = address;
             document.getElementById('det-size').innerText = size;
@@ -1395,11 +1455,7 @@
             document.getElementById('det-rate-hour-non').innerText = `Rp ${hourNon || '0'}`;
             document.getElementById('det-rate-minute-non').innerText = `Rp ${minuteNon || '0'}`;
 
-            document.getElementById('det-rate-month-rokok').innerText = `Rp ${monthRokok || '0'}`;
-            document.getElementById('det-rate-day-rokok').innerText = `Rp ${priceRokok || '0'}`;
-            document.getElementById('det-rate-hour-rokok').innerText = `Rp ${hourRokok || '0'}`;
-            document.getElementById('det-rate-minute-rokok').innerText = `Rp ${minuteRokok || '0'}`;
-
+                                                
             switchDetailTab('deskripsi');
             showPage('detail-lokasi');
         }
@@ -1441,13 +1497,9 @@
                     size: '8 x 4 Meter',
                     traffic: '95.000 Kendaraan / Hari',
                     priceNon: '2.200.000',
-                    priceRokok: '2.750.000',
                     monthNon: '59.450.000',
-                    monthRokok: '74.312.500',
                     hourNon: '210.000',
-                    hourRokok: '262.500',
                     minuteNon: '3.800',
-                    minuteRokok: '4.750'
                 };
             }
 
@@ -1503,30 +1555,30 @@
                             <thead>
                                 <tr style="background: #0f172a; color: #ffffff; font-size: 10px; text-transform: uppercase;">
                                     <th style="padding: 8px; text-align: left; border: 1px solid #1e293b;">DURASI PENAYANGAN</th>
-                                    <th style="padding: 8px; text-align: right; border: 1px solid #1e293b; background: #1e3a8a;">PRODUK NON-ROKOK (STANDAR)</th>
-                                    <th style="padding: 8px; text-align: right; border: 1px solid #1e293b; background: #881337;">PRODUK ROKOK (+25% PERWALI)</th>
+                                    
+                                    
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr style="background: #ffffff; border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 8px; font-weight: 700;">🗓️ Tarif 1 Bulan</td>
                                     <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.monthNon || '0'}</td>
-                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.monthRokok || '0'}</td>
+                                    
                                 </tr>
                                 <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 8px; font-weight: 700;">📅 Tarif 1 Hari</td>
                                     <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.priceNon || '0'}</td>
-                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.priceRokok || '0'}</td>
+                                    
                                 </tr>
                                 <tr style="background: #ffffff; border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 8px; font-weight: 700;">⏰ Tarif 1 Jam</td>
                                     <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.hourNon || '0'}</td>
-                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.hourRokok || '0'}</td>
+                                    
                                 </tr>
                                 <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 8px; font-weight: 700;">⏱️ Tarif 1 Menit</td>
                                     <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.minuteNon || '0'}</td>
-                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.minuteRokok || '0'}</td>
+                                    
                                 </tr>
                             </tbody>
                         </table>
@@ -1763,6 +1815,7 @@
             if (isLoggedIn && currentUser) {
                 navArea.innerHTML = `
                     <div class="flex items-center gap-2">
+                        <button onclick="showPage('daftar-transaksi')" class="px-2.5 py-1.5 bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 font-bold text-xs rounded-lg transition mr-1">Transaksi</button>
                         <button onclick="showPage('profil')" class="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition" title="Kelola Profil">
                             <div class="w-5 h-5 rounded-full bg-brand-600 text-white font-bold text-[10px] flex items-center justify-center">
                                 ${currentUser.name.charAt(0)}
@@ -1865,35 +1918,37 @@
             'VDT-01': {
                 subheading: '1. Pasar Rejosari Salatiga (Jl. Hasanudin)',
                 p1: 'Pasang iklan videotron di kawasan Pasar Rejosari Salatiga menjadi pilihan utama bagi brand komersial yang menyasar pusat aktivitas perdagangan terbesar dengan arus kendaraan padat.',
-                p2: 'Berdasarkan SK Wali Kota Salatiga No. 974/148/2022, tarif sewa harian produk non-rokok di Pasar Rejosari sebesar Rp 2.200.000 / Hari (atau Rp 59.450.000 / Bulan). Untuk produk rokok dikenakan penyesuaian +25% sebesar Rp 2.750.000 / Hari sesuai Perwali 49/2018.',
+                p2: 'Berdasarkan SK Wali Kota Salatiga No. 974/148/2022, tarif sewa harian produk non-rokok di Pasar Rejosari sebesar Rp 2.200.000 / Hari (atau Rp 59.450.000 / Bulan). ',
                 p3: 'Kawasan ini memberikan paparan iklan visual 24 jam nonstop dengan daya jangkau lebih dari 65.000+ kendaraan per hari.'
             },
             'VDT-02': {
                 subheading: '1. Blotongan Gate Utara Salatiga',
                 p1: 'Pasang iklan videotron di titik Blotongan menyasar arus kendaraan antar-kota pada jalur utama Semarang - Surakarta di gerbang utara Kota Salatiga.',
-                p2: 'Tarif sewa resmi harian produk non-rokok sebesar Rp 1.268.000 / Hari (Rp 34.315.000 / Bulan), sedangkan tarif produk rokok sebesar Rp 1.585.000 / Hari.',
+                p2: 'Tarif sewa resmi harian produk non-rokok sebesar Rp 1.268.000 / Hari (Rp 34.315.000 / Bulan).',
                 p3: 'Sangat cocok untuk branding produk ritel, otomotif, hingga sosialisasi program pemerintah.'
             },
             'VDT-03': {
                 subheading: '1. Selasar Kartini Pusat Kota',
                 p1: 'Videotron Selasar Kartini berada di pusat kawasan pendidikan, perkantoran, dan fasilitas umum Kota Salatiga.',
-                p2: 'Tarif sewa resmi harian produk non-rokok sebesar Rp 716.000 / Hari (Rp 19.367.000 / Bulan), dan produk rokok sebesar Rp 895.000 / Hari.',
+                p2: 'Tarif sewa resmi harian produk non-rokok sebesar Rp 716.000 / Hari (Rp 19.367.000 / Bulan).',
                 p3: 'Media efektif untuk menjangkau audiens pelajar, mahasiswa, dan pejalan kaki di jantung kota.'
             },
             'VDT-04': {
                 subheading: '1. Alun-Alun Salatiga',
                 p1: 'Videotron Alun-Alun Salatiga terpasang di Lapangan Pancasila yang merupakan titik kumpul utama warga Salatiga.',
-                p2: 'Tarif sewa resmi harian produk non-rokok sebesar Rp 698.000 / Hari (Rp 18.881.000 / Bulan), dan produk rokok sebesar Rp 872.500 / Hari.',
+                p2: 'Tarif sewa resmi harian produk non-rokok sebesar Rp 698.000 / Hari (Rp 18.881.000 / Bulan).',
                 p3: 'Menyediakan sudut pandang paparan luas bagi berbagai event publik dan promosi brand.'
             }
         };
 
         // DYNAMIC PORTFOLIO MERGER FROM LOCALSTORAGE CMS
         function getMergedPortfolioData() {
-            let customSaved = localStorage.getItem('sevisa_portfolio');
-            let customItems = customSaved ? JSON.parse(customSaved) : [];
-            return [...customItems, ...PORTFOLIO_DATABASE];
-        }
+    let customSaved = localStorage.getItem('sevisa_portfolio');
+    let customItems = customSaved ? JSON.parse(customSaved) : [];
+    // Only show disetujui or items without status (legacy)
+    let filtered = customItems.filter(i => !i.status || i.status === 'disetujui');
+    return [...filtered, ...PORTFOLIO_DATABASE];
+}
 
         function openBlogArticleDetail(articleKey) {
             let savedBlogs = localStorage.getItem('sevisa_blogs');
@@ -1921,7 +1976,7 @@
         }
 
         function showPage(pageId) {
-            const pages = ['home', 'tentang', 'lokasi', 'detail-lokasi', 'proyek', 'blog', 'cek-status', 'profil'];
+            const pages = ['home', 'tentang', 'lokasi', 'detail-lokasi', 'proyek', 'blog', 'cek-status', 'profil', 'daftar-transaksi'];
             pages.forEach(p => {
                 const el = document.getElementById('page-' + p);
                 if (el) el.classList.add('hidden');
@@ -1940,7 +1995,10 @@
                 activeNav.className = "px-2.5 py-1.5 rounded-lg text-brand-600 dark:text-sky-400 bg-brand-50 dark:bg-slate-800 font-black transition";
             }
 
-            if (pageId === 'home') {
+            if (pageId === 'daftar-transaksi') {
+        renderDaftarTransaksi();
+    }
+    if (pageId === 'home') {
                 renderVideotronCards(getStoredUserLocations());
             }
 
@@ -2192,7 +2250,7 @@
                 
                 if (searchInput && searchInput.value.trim() !== '') {
                     const inputCode = searchInput.value.trim().toUpperCase();
-                    const foundOrder = orderDatabase.find(o => o.code === inputCode);
+                    const foundOrder = orderDatabase.find(o => o.code === inputCode || (o.phone && o.phone === inputCode));
                     if (foundOrder && resultCard && !resultCard.classList.contains('hidden')) {
                         renderOrderStatusCard(foundOrder);
                     }
@@ -2218,3 +2276,130 @@
             updateProfileStatusUI();
         });
     
+
+// JABATAN VISIBILITY LOGIC
+function toggleJabatanVisibility() {
+    const cat = document.getElementById('prof-category').value;
+    const pos = document.getElementById('prof-position');
+    if(cat === 'perorangan') {
+        if(pos) { pos.style.display = 'none'; pos.removeAttribute('required'); pos.value = ''; }
+    } else {
+        if(pos) { pos.style.display = 'block'; pos.setAttribute('required', 'true'); }
+    }
+}
+
+// FAQ LOGIC
+const DEFAULT_FAQS = [
+    { q: "Bagaimana cara melakukan penyewaan?", a: "Pilih menu Beranda, klik tombol Sewa pada lokasi yang diinginkan, lengkapi formulir (Lokasi, Paket, Tanggal, Jam), dan unggah materi iklan Anda." },
+    { q: "Bagaimana cara memilih paket?", a: "Pada form pemesanan, pilih antara Paket Alfa (min 30 menit), Paket Beta (min 20 menit), atau Paket Event (min 30 menit dengan jam spesifik)." },
+    { q: "Bagaimana cara mengetahui status transaksi?", a: "Gunakan menu Cek Status dan masukkan nomor WhatsApp Anda, atau login ke akun Anda dan buka menu Daftar Transaksi." },
+    { q: "Bagaimana sistem perhitungan tarif?", a: "Tarif dihitung berdasarkan durasi tayang dikalikan tarif per menit untuk lokasi yang dipilih. Waktu dibulatkan ke atas (kelipatan 1 menit)." }
+];
+
+function getStoredFAQs() {
+    const saved = localStorage.getItem('sevisa_faqs');
+    return saved ? JSON.parse(saved) : DEFAULT_FAQS;
+}
+
+function renderFAQs() {
+    const container = document.getElementById('faq-accordion-container');
+    if (!container) return;
+    const faqs = getStoredFAQs();
+    let html = '';
+    faqs.forEach((faq, i) => {
+        html += `
+        <div class="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+            <button onclick="document.getElementById('faq-ans-${i}').classList.toggle('hidden')" class="w-full text-left p-4 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 font-bold text-slate-800 dark:text-slate-200 transition">
+                ${faq.q}
+            </button>
+            <div id="faq-ans-${i}" class="hidden p-4 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 text-sm">
+                ${faq.a}
+            </div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    toggleJabatanVisibility();
+    renderFAQs();
+});
+
+
+function renderDaftarTransaksi() {
+    const container = document.getElementById('transaksi-list-container');
+    if (!container) return;
+    if (!isLoggedIn || !currentUser) {
+        container.innerHTML = '<p class="text-slate-500">Silakan login untuk melihat transaksi.</p>';
+        return;
+    }
+
+    const myOrders = orderDatabase.filter(o => o.userName === currentUser.name || o.phone === currentUser.phone);
+    if (myOrders.length === 0) {
+        container.innerHTML = '<div class="p-6 bg-slate-50 rounded-2xl text-center text-slate-500">Belum ada transaksi.</div>';
+        return;
+    }
+
+    let html = '';
+    myOrders.forEach(o => {
+        let testiBtn = '';
+        if (o.status === 'selesai' || o.status === 'terkonfirmasi') {
+            testiBtn = `<button onclick="openTestimoniModal('${o.code}', '${o.location}')" class="mt-3 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg text-xs">Beri Testimoni</button>`;
+        }
+        
+        html += `
+        <div class="p-5 border border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 shadow-sm">
+            <div class="flex justify-between items-start border-b border-slate-100 dark:border-slate-800 pb-3 mb-3">
+                <div>
+                    <span class="font-mono font-bold text-brand-600 text-sm">${o.code}</span>
+                    <h4 class="font-black text-slate-800 dark:text-white mt-1">${o.location}</h4>
+                </div>
+                <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-[10px] font-extrabold rounded-md uppercase border border-slate-200 dark:border-slate-700">${o.status}</span>
+            </div>
+            <div class="text-xs text-slate-600 dark:text-slate-400 space-y-1">
+                <p><strong>Paket:</strong> ${o.paket || 'Standar'}</p>
+                <p><strong>Waktu:</strong> ${o.dates}</p>
+            </div>
+            ${testiBtn}
+        </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+function openTestimoniModal(code, location) {
+    document.getElementById('testimoni-code').value = code;
+    document.getElementById('testimoni-loc').value = location;
+    openModal('testimoni-modal');
+}
+
+function submitTestimoni(e) {
+    e.preventDefault();
+    const loc = document.getElementById('testimoni-loc').value;
+    const rating = document.getElementById('testimoni-rating').value;
+    const desc = document.getElementById('testimoni-text').value;
+
+    let customSaved = localStorage.getItem('sevisa_portfolio');
+    let customItems = customSaved ? JSON.parse(customSaved) : [];
+
+    customItems.push({
+        id: 'TESTI-' + Math.floor(Math.random()*90000),
+        title: 'Testimoni Pelanggan',
+        client: currentUser.name,
+        location: loc,
+        type: 'image',
+        mediaLabel: '📝 Testimoni',
+        category: currentUser.category === 'perorangan' ? 'umkm' : currentUser.category,
+        dates: new Date().toLocaleDateString('id-ID'),
+        freq: '-',
+        description: desc,
+        rating: rating,
+        status: 'menunggu'
+    });
+
+    localStorage.setItem('sevisa_portfolio', JSON.stringify(customItems));
+    window.dispatchEvent(new Event('storage'));
+    
+    closeModal('testimoni-modal');
+    show3DToast('✅ TESTIMONI TERKIRIM', 'Terima kasih atas testimoni Anda! Menunggu persetujuan admin sebelum ditampilkan.', 'success');
+}
