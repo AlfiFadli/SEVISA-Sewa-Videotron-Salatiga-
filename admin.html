@@ -1,13 +1,114 @@
 <!DOCTYPE html>
-<html lang="id" class="light">
+
+<html class="light" lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal CMS Admin Diskominfo - SEVISA (Sewa Videotron Salatiga)</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Portal CMS Admin Diskominfo - SEVISA (Sewa Videotron Salatiga)</title>
+<!-- TAILWIND CSS CDN -->
+<script src="https://cdn.tailwindcss.com">
+// ---------------- FAQ LOGIC ----------------
+function loadAdminFAQ() {
+    let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+    if(faqs.length === 0) {
+        faqs = [
+            { q: "Bagaimana cara melakukan penyewaan?", a: "Pilih menu Beranda, klik tombol Sewa pada lokasi yang diinginkan, lengkapi formulir (Lokasi, Paket, Tanggal, Jam), dan unggah materi iklan Anda." },
+            { q: "Bagaimana cara memilih paket?", a: "Pada form pemesanan, pilih antara Paket Alfa (min 30 menit), Paket Beta (min 20 menit), atau Paket Event (min 30 menit dengan jam spesifik)." }
+        ];
+        localStorage.setItem('sevisa_faqs', JSON.stringify(faqs));
+    }
+    const tbody = document.getElementById('admin-faq-tbody');
+    if(!tbody) return;
     
-    <!-- TAILWIND CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+    let html = '';
+    faqs.forEach((f, idx) => {
+        html += `
+        <tr class="hover:bg-slate-50 transition">
+            <td class="px-4 py-3 font-bold text-slate-900">${f.q}</td>
+            <td class="px-4 py-3 text-xs">${f.a}</td>
+            <td class="px-4 py-3 text-center space-x-2">
+                <button onclick="deleteFAQ(${idx})" class="text-rose-500 hover:text-rose-700 font-bold text-xs">Hapus</button>
+            </td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+}
+
+function addFAQ() {
+    const q = prompt("Masukkan Pertanyaan:");
+    if(!q) return;
+    const a = prompt("Masukkan Jawaban:");
+    if(!a) return;
+    
+    let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+    faqs.push({q, a});
+    localStorage.setItem('sevisa_faqs', JSON.stringify(faqs));
+    loadAdminFAQ();
+}
+
+function deleteFAQ(idx) {
+    if(confirm("Hapus FAQ ini?")) {
+        let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+        faqs.splice(idx, 1);
+        localStorage.setItem('sevisa_faqs', JSON.stringify(faqs));
+        loadAdminFAQ();
+    }
+}
+
+// ---------------- TESTIMONI LOGIC ----------------
+function loadAdminPortfolio() {
+    let items = JSON.parse(localStorage.getItem('sevisa_portfolio') || '[]');
+    const tbody = document.getElementById('admin-port-tbody');
+    if(!tbody) return;
+    
+    let html = '';
+    items.forEach((p, idx) => {
+        let statusBadge = '';
+        let actBtns = '';
+        if(p.status === 'menunggu') {
+            statusBadge = '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-[10px] font-bold">Menunggu</span>';
+            actBtns = `
+                <button onclick="updateTestiStatus(${idx}, 'disetujui')" class="px-2 py-1 bg-emerald-500 text-white rounded text-[10px] font-bold">Setujui</button>
+                <button onclick="updateTestiStatus(${idx}, 'ditolak')" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">Tolak</button>
+            `;
+        } else if (p.status === 'ditolak') {
+            statusBadge = '<span class="px-2 py-1 bg-rose-100 text-rose-700 rounded text-[10px] font-bold">Ditolak</span>';
+            actBtns = `<button onclick="deleteTesti(${idx})" class="px-2 py-1 bg-slate-500 text-white rounded text-[10px] font-bold">Hapus</button>`;
+        } else {
+            statusBadge = '<span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold">Disetujui</span>';
+            actBtns = `<button onclick="deleteTesti(${idx})" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">Hapus</button>`;
+        }
+        
+        html += `
+        <tr class="hover:bg-slate-50 transition border-b">
+            <td class="px-4 py-3 font-bold text-slate-900 text-xs">${p.client}</td>
+            <td class="px-4 py-3 text-xs">${p.location}<br>⭐ ${p.rating||5}</td>
+            <td class="px-4 py-3 text-xs italic">"${p.description}"</td>
+            <td class="px-4 py-3 text-center">${statusBadge}</td>
+            <td class="px-4 py-3 text-center space-x-1">${actBtns}</td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+}
+
+function updateTestiStatus(idx, stat) {
+    let items = JSON.parse(localStorage.getItem('sevisa_portfolio') || '[]');
+    items[idx].status = stat;
+    localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
+    loadAdminPortfolio();
+}
+
+function deleteTesti(idx) {
+    if(confirm("Hapus testimoni ini?")) {
+        let items = JSON.parse(localStorage.getItem('sevisa_portfolio') || '[]');
+        items.splice(idx, 1);
+        localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
+        loadAdminPortfolio();
+    }
+}
+
+</script>
+<script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -30,722 +131,748 @@
                 }
             }
         }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <style>
+// ---------------- FAQ LOGIC ----------------
+function loadAdminFAQ() {
+    let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+    if(faqs.length === 0) {
+        faqs = [
+            { q: "Bagaimana cara melakukan penyewaan?", a: "Pilih menu Beranda, klik tombol Sewa pada lokasi yang diinginkan, lengkapi formulir (Lokasi, Paket, Tanggal, Jam), dan unggah materi iklan Anda." },
+            { q: "Bagaimana cara memilih paket?", a: "Pada form pemesanan, pilih antara Paket Alfa (min 30 menit), Paket Beta (min 20 menit), atau Paket Event (min 30 menit dengan jam spesifik)." }
+        ];
+        localStorage.setItem('sevisa_faqs', JSON.stringify(faqs));
+    }
+    const tbody = document.getElementById('admin-faq-tbody');
+    if(!tbody) return;
+    
+    let html = '';
+    faqs.forEach((f, idx) => {
+        html += `
+        <tr class="hover:bg-slate-50 transition">
+            <td class="px-4 py-3 font-bold text-slate-900">${f.q}</td>
+            <td class="px-4 py-3 text-xs">${f.a}</td>
+            <td class="px-4 py-3 text-center space-x-2">
+                <button onclick="deleteFAQ(${idx})" class="text-rose-500 hover:text-rose-700 font-bold text-xs">Hapus</button>
+            </td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+}
+
+function addFAQ() {
+    const q = prompt("Masukkan Pertanyaan:");
+    if(!q) return;
+    const a = prompt("Masukkan Jawaban:");
+    if(!a) return;
+    
+    let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+    faqs.push({q, a});
+    localStorage.setItem('sevisa_faqs', JSON.stringify(faqs));
+    loadAdminFAQ();
+}
+
+function deleteFAQ(idx) {
+    if(confirm("Hapus FAQ ini?")) {
+        let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+        faqs.splice(idx, 1);
+        localStorage.setItem('sevisa_faqs', JSON.stringify(faqs));
+        loadAdminFAQ();
+    }
+}
+
+// ---------------- TESTIMONI LOGIC ----------------
+function loadAdminPortfolio() {
+    let items = JSON.parse(localStorage.getItem('sevisa_portfolio') || '[]');
+    const tbody = document.getElementById('admin-port-tbody');
+    if(!tbody) return;
+    
+    let html = '';
+    items.forEach((p, idx) => {
+        let statusBadge = '';
+        let actBtns = '';
+        if(p.status === 'menunggu') {
+            statusBadge = '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-[10px] font-bold">Menunggu</span>';
+            actBtns = `
+                <button onclick="updateTestiStatus(${idx}, 'disetujui')" class="px-2 py-1 bg-emerald-500 text-white rounded text-[10px] font-bold">Setujui</button>
+                <button onclick="updateTestiStatus(${idx}, 'ditolak')" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">Tolak</button>
+            `;
+        } else if (p.status === 'ditolak') {
+            statusBadge = '<span class="px-2 py-1 bg-rose-100 text-rose-700 rounded text-[10px] font-bold">Ditolak</span>';
+            actBtns = `<button onclick="deleteTesti(${idx})" class="px-2 py-1 bg-slate-500 text-white rounded text-[10px] font-bold">Hapus</button>`;
+        } else {
+            statusBadge = '<span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold">Disetujui</span>';
+            actBtns = `<button onclick="deleteTesti(${idx})" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">Hapus</button>`;
+        }
+        
+        html += `
+        <tr class="hover:bg-slate-50 transition border-b">
+            <td class="px-4 py-3 font-bold text-slate-900 text-xs">${p.client}</td>
+            <td class="px-4 py-3 text-xs">${p.location}<br>⭐ ${p.rating||5}</td>
+            <td class="px-4 py-3 text-xs italic">"${p.description}"</td>
+            <td class="px-4 py-3 text-center">${statusBadge}</td>
+            <td class="px-4 py-3 text-center space-x-1">${actBtns}</td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+}
+
+function updateTestiStatus(idx, stat) {
+    let items = JSON.parse(localStorage.getItem('sevisa_portfolio') || '[]');
+    items[idx].status = stat;
+    localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
+    loadAdminPortfolio();
+}
+
+function deleteTesti(idx) {
+    if(confirm("Hapus testimoni ini?")) {
+        let items = JSON.parse(localStorage.getItem('sevisa_portfolio') || '[]');
+        items.splice(idx, 1);
+        localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
+        loadAdminPortfolio();
+    }
+}
+
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .glass-header { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
     </style>
 </head>
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
-
-    <!-- ========================================================================= -->
-    <!-- SCREEN 1: GERBANG LOGIN KHUSUS ADMIN DISKOMINFO -->
-    <!-- ========================================================================= -->
-    <div id="admin-login-screen" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-white text-center relative">
-            
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-red-600 via-brand-600 to-sky-400 p-3.5 mx-auto shadow-xl border-2 border-slate-700">
-                <img src="logo.png" alt="SEVISA Admin" class="w-full h-full object-contain">
-            </div>
-
-            <div class="space-y-1">
-                <span class="px-3 py-1 bg-red-600/30 text-red-400 border border-red-500/40 text-[10px] font-black rounded-full uppercase tracking-widest">
+<!-- ========================================================================= -->
+<!-- SCREEN 1: GERBANG LOGIN KHUSUS ADMIN DISKOMINFO -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4" id="admin-login-screen">
+<div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-white text-center relative">
+<div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-red-600 via-brand-600 to-sky-400 p-3.5 mx-auto shadow-xl border-2 border-slate-700">
+<img alt="SEVISA Admin" class="w-full h-full object-contain" src="logo.png"/>
+</div>
+<div class="space-y-1">
+<span class="px-3 py-1 bg-red-600/30 text-red-400 border border-red-500/40 text-[10px] font-black rounded-full uppercase tracking-widest">
                     AKSES KHUSUS INTERNAL
                 </span>
-                <h2 class="text-xl sm:text-2xl font-black text-white">Portal CMS Admin Diskominfo</h2>
-                <p class="text-xs text-slate-400">Masuk dengan akun terotorisasi untuk mengelola seluruh konten & transaksi SEVISA Kota Salatiga.</p>
-            </div>
-
-            <form onsubmit="handleAdminLoginSubmit(event)" class="space-y-4 text-left text-xs">
-                <div>
-                    <label class="block font-bold mb-1 text-slate-300 uppercase tracking-wider">Email Admin / Operator Staf *</label>
-                    <input type="email" id="admin-login-email" value="admin@salatiga.go.id" required placeholder="admin@salatiga.go.id" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono font-bold focus:border-sky-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block font-bold mb-1 text-slate-300 uppercase tracking-wider">Kata Sandi Akses *</label>
-                    <input type="password" id="admin-login-pass" value="admin123" required placeholder="••••••••" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono font-bold focus:border-sky-500 focus:outline-none">
-                </div>
-
-                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-red-600 via-brand-600 to-sky-600 hover:from-red-700 hover:to-sky-500 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
-                    MASUK PORTAL RESMI DISKOMINFO &rarr;
+<h2 class="text-xl sm:text-2xl font-black text-white">Portal CMS Admin Diskominfo</h2>
+<p class="text-xs text-slate-400">Masuk dengan akun terotorisasi untuk mengelola seluruh konten &amp; transaksi SEVISA Kota Salatiga.</p>
+</div>
+<form class="space-y-4 text-left text-xs" onsubmit="handleAdminLoginSubmit(event)">
+<div>
+<label class="block font-bold mb-1 text-slate-300 uppercase tracking-wider">Email Admin / Operator Staf *</label>
+<input class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono font-bold focus:border-sky-500 focus:outline-none" id="admin-login-email" placeholder="admin@salatiga.go.id" required="" type="email" value="admin@salatiga.go.id"/>
+</div>
+<div>
+<label class="block font-bold mb-1 text-slate-300 uppercase tracking-wider">Kata Sandi Akses *</label>
+<input class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono font-bold focus:border-sky-500 focus:outline-none" id="admin-login-pass" placeholder="••••••••" required="" type="password" value="admin123"/>
+</div>
+<button class="w-full py-3.5 bg-gradient-to-r from-red-600 via-brand-600 to-sky-600 hover:from-red-700 hover:to-sky-500 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition" type="submit">
+                    MASUK PORTAL RESMI DISKOMINFO →
                 </button>
-            </form>
-
-            <div class="pt-3 border-t border-slate-800 space-y-2">
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="quickSuperAdminLogin()" class="py-2.5 bg-red-950/80 hover:bg-red-900 text-red-300 font-extrabold text-[10px] rounded-xl border border-red-800 transition">
+</form>
+<div class="pt-3 border-t border-slate-800 space-y-2">
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2.5 bg-red-950/80 hover:bg-red-900 text-red-300 font-extrabold text-[10px] rounded-xl border border-red-800 transition" onclick="quickSuperAdminLogin()">
                         🛡️ Demo Super Admin
                     </button>
-                    <button onclick="quickOperatorLogin()" class="py-2.5 bg-amber-950/80 hover:bg-amber-900 text-amber-300 font-extrabold text-[10px] rounded-xl border border-amber-800 transition">
+<button class="py-2.5 bg-amber-950/80 hover:bg-amber-900 text-amber-300 font-extrabold text-[10px] rounded-xl border border-amber-800 transition" onclick="quickOperatorLogin()">
                         ⚙️ Demo Operator Staf
                     </button>
-                </div>
-            </div>
-
-            <p class="text-[10px] text-slate-500">SEVISA • Pengelolaan Resmi Dinas Komunikasi dan Informatika Kota Salatiga</p>
-        </div>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- SCREEN 2: MAIN DASHBOARD CMS ADMIN (SHOWN ON LOGIN) -->
-    <!-- ========================================================================= -->
-    <div id="admin-main-wrapper" class="hidden flex-col min-h-screen">
-        
-        <!-- HEADER NAVBAR ADMIN -->
-        <header class="sticky top-0 z-40 bg-slate-900/95 text-white border-b border-slate-800 glass-header shadow-xl">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-                
-                <div class="flex items-center gap-3">
-                    <img src="logo.png" alt="SEVISA Admin Logo" class="h-10 w-10 rounded-xl object-contain border-2 border-brand-500 bg-slate-900 shadow-md">
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span id="admin-role-badge" class="px-2 py-0.5 bg-red-600 text-white font-extrabold text-[9px] rounded uppercase tracking-widest">🛡️ SUPER ADMIN</span>
-                            <span id="admin-role-name" class="text-xs font-mono font-bold text-sky-400">Super Admin Diskominfo</span>
-                        </div>
-                        <h1 class="text-base sm:text-lg font-black text-white tracking-tight">
+</div>
+</div>
+<p class="text-[10px] text-slate-500">SEVISA • Pengelolaan Resmi Dinas Komunikasi dan Informatika Kota Salatiga</p>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- SCREEN 2: MAIN DASHBOARD CMS ADMIN (SHOWN ON LOGIN) -->
+<!-- ========================================================================= -->
+<div class="hidden flex-col min-h-screen" id="admin-main-wrapper">
+<!-- HEADER NAVBAR ADMIN -->
+<header class="sticky top-0 z-40 bg-slate-900/95 text-white border-b border-slate-800 glass-header shadow-xl">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<img alt="SEVISA Admin Logo" class="h-10 w-10 rounded-xl object-contain border-2 border-brand-500 bg-slate-900 shadow-md" src="logo.png"/>
+<div>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-red-600 text-white font-extrabold text-[9px] rounded uppercase tracking-widest" id="admin-role-badge">🛡️ SUPER ADMIN</span>
+<span class="text-xs font-mono font-bold text-sky-400" id="admin-role-name">Super Admin Diskominfo</span>
+</div>
+<h1 class="text-base sm:text-lg font-black text-white tracking-tight">
                             Portal CMS Pengelolaan Web SEVISA
                         </h1>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-3">
-                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition border border-slate-700">
-                        <svg id="admin-moon-icon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-                        <svg id="admin-sun-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                    </button>
-
-                    <button onclick="handleAdminLogout()" class="px-3.5 py-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white font-extrabold text-xs rounded-xl border border-rose-500/40 transition">
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition border border-slate-700" onclick="toggleDarkMode()">
+<svg class="w-4 h-4 hidden" fill="none" id="admin-moon-icon" stroke="currentColor" viewbox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="w-4 h-4" fill="none" id="admin-sun-icon" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="px-3.5 py-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white font-extrabold text-xs rounded-xl border border-rose-500/40 transition" onclick="handleAdminLogout()">
                         🚪 Keluar Admin
                     </button>
-                </div>
-
-            </div>
-        </header>
-
-        <!-- MAIN CONTENT AREA -->
-        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-            
-            <!-- WELCOME STATS BAR -->
-            <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div class="space-y-1.5">
-                    <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-extrabold text-[10px] rounded-full uppercase tracking-wider">
-                        SISTEM MANAGEMENT KONTEN & VERIFIKASI RESMI
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT AREA -->
+<main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+<!-- WELCOME STATS BAR -->
+<div class="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div class="space-y-1.5">
+<span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-extrabold text-[10px] rounded-full uppercase tracking-wider">
+                        SISTEM MANAGEMENT KONTEN &amp; VERIFIKASI RESMI
                     </span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-white">Panel Pusat Pengelolaan Web SEVISA</h2>
-                    <p class="text-xs text-slate-300">Edit Halaman Tentang Kami, Lokasi & Peta Maps, Portofolio Video/PPT, Blog, serta Status Permohonan Sewa.</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="resetAllTestOrders()" class="px-3.5 py-2.5 bg-rose-600/30 hover:bg-rose-600 text-rose-300 hover:text-white font-extrabold text-xs rounded-xl border border-rose-500/40 transition shadow-md">
+<h2 class="text-2xl sm:text-3xl font-black text-white">Panel Pusat Pengelolaan Web SEVISA</h2>
+<p class="text-xs text-slate-300">Edit Halaman Tentang Kami, Lokasi &amp; Peta Maps, Portofolio Video/PPT, Blog, serta Status Permohonan Sewa.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3.5 py-2.5 bg-rose-600/30 hover:bg-rose-600 text-rose-300 hover:text-white font-extrabold text-xs rounded-xl border border-rose-500/40 transition shadow-md" onclick="resetAllTestOrders()">
                         ⚡ Reset Status Demo
                     </button>
-                    <button onclick="syncAllCMSData()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-xs rounded-xl border border-slate-700 transition flex items-center gap-2 shadow-md">
-                        <span>🔄</span> Sync Data Real-Time
+<button class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-xs rounded-xl border border-slate-700 transition flex items-center gap-2 shadow-md" onclick="syncAllCMSData()">
+<span>🔄</span> Sync Data Real-Time
                     </button>
-                </div>
-            </div>
-
-            <!-- SUMMARY METRICS -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 text-xs">
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-md space-y-1">
-                    <span class="text-slate-400 font-bold text-[10px] uppercase">Permohonan Sewa</span>
-                    <div id="stat-total-orders" class="text-xl font-black text-slate-900 dark:text-white">0</div>
-                </div>
-                <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 rounded-2xl p-4 shadow-md space-y-1">
-                    <span class="text-amber-500 font-bold text-[10px] uppercase">Menunggu Verifikasi</span>
-                    <div id="stat-pending-orders" class="text-xl font-black text-amber-600 dark:text-amber-400">0</div>
-                </div>
-                <div class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 rounded-2xl p-4 shadow-md space-y-1">
-                    <span class="text-blue-500 font-bold text-[10px] uppercase">Sedang Uji Tayang</span>
-                    <div id="stat-processing-orders" class="text-xl font-black text-blue-600 dark:text-blue-400">0</div>
-                </div>
-                <div class="bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/50 rounded-2xl p-4 shadow-md space-y-1">
-                    <span class="text-emerald-500 font-bold text-[10px] uppercase">Terkonfirmasi Tayang</span>
-                    <div id="stat-approved-orders" class="text-xl font-black text-emerald-600 dark:text-emerald-400">0</div>
-                </div>
-                <div class="bg-gradient-to-tr from-slate-900 to-blue-950 text-white rounded-2xl p-4 shadow-md space-y-1 border border-sky-500/40">
-                    <span class="text-sky-300 font-bold text-[10px] uppercase">Estimasi PAD</span>
-                    <div id="stat-total-revenue" class="text-lg font-black text-amber-400">Rp 0</div>
-                </div>
-            </div>
-
-            <!-- NAVIGATION MODULE TABS SYSTEM -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
-                
-                <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 dark:border-slate-800 text-xs font-bold">
-                    <button onclick="switchCMSModule('transaksi')" id="tab-cms-transaksi" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white shadow-md font-black shrink-0">
-                        📥 Kelola Transaksi & Cek Status
+</div>
+</div>
+<!-- SUMMARY METRICS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 text-xs">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-md space-y-1">
+<span class="text-slate-400 font-bold text-[10px] uppercase">Permohonan Sewa</span>
+<div class="text-xl font-black text-slate-900 dark:text-white" id="stat-total-orders">0</div>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 rounded-2xl p-4 shadow-md space-y-1">
+<span class="text-amber-500 font-bold text-[10px] uppercase">Menunggu Verifikasi</span>
+<div class="text-xl font-black text-amber-600 dark:text-amber-400" id="stat-pending-orders">0</div>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 rounded-2xl p-4 shadow-md space-y-1">
+<span class="text-blue-500 font-bold text-[10px] uppercase">Sedang Uji Tayang</span>
+<div class="text-xl font-black text-blue-600 dark:text-blue-400" id="stat-processing-orders">0</div>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/50 rounded-2xl p-4 shadow-md space-y-1">
+<span class="text-emerald-500 font-bold text-[10px] uppercase">Terkonfirmasi Tayang</span>
+<div class="text-xl font-black text-emerald-600 dark:text-emerald-400" id="stat-approved-orders">0</div>
+</div>
+<div class="bg-gradient-to-tr from-slate-900 to-blue-950 text-white rounded-2xl p-4 shadow-md space-y-1 border border-sky-500/40">
+<span class="text-sky-300 font-bold text-[10px] uppercase">Estimasi PAD</span>
+<div class="text-lg font-black text-amber-400" id="stat-total-revenue">Rp 0</div>
+</div>
+</div>
+<!-- NAVIGATION MODULE TABS SYSTEM -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+<div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 dark:border-slate-800 text-xs font-bold">
+<button class="px-4 py-2.5 rounded-xl bg-slate-900 text-white shadow-md font-black shrink-0" id="tab-cms-transaksi" onclick="switchCMSModule('transaksi')">
+                        📥 Kelola Transaksi &amp; Cek Status
                     </button>
-                    <button onclick="switchCMSModule('lokasi')" id="tab-cms-lokasi" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
-                        🗺️ Lokasi & Peta Interactive
+<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-lokasi" onclick="switchCMSModule('lokasi')">
+                        🗺️ Lokasi &amp; Peta Interactive
                     </button>
-                    <button onclick="switchCMSModule('portofolio')" id="tab-cms-portofolio" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-portofolio" onclick="switchCMSModule('portofolio')">
                         ⭐ Manajemen Testimoni Penyewa
                     </button>
-                    <button onclick="switchCMSModule('blog')" id="tab-cms-blog" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
-                        📰 Full CRUD Blog & Berita
+<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-blog" onclick="switchCMSModule('blog')">
+                        📰 Full CRUD Blog &amp; Berita
                     </button>
-                    <button onclick="switchCMSModule('tentang')" id="tab-cms-tentang" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-tentang" onclick="switchCMSModule('tentang')">
                         📜 Edit Teks Tentang Kami
                     </button>
-                    <button onclick="switchCMSModule('users')" id="tab-cms-users" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-users" onclick="switchCMSModule('users')">
                         👥 Kelola User Terdaftar
                     </button>
-                    <button onclick="switchCMSModule('chat')" id="tab-cms-chat" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-chat" onclick="switchCMSModule('chat')">
                         💬 Inbox Live Chat Users
                     </button>
-                </div>
-
-                <!-- ========================================================================= -->
-                <!-- MODULE 1: KELOLA TRANSAKSI & CEK STATUS -->
-                <!-- ========================================================================= -->
-                <div id="sec-cms-transaksi" class="space-y-4">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-                        <h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Status Transaksi & Upload Foto Bukti Penayangan</h3>
-                        <div class="flex gap-2 w-full md:w-auto">
-                            <select id="admin-status-filter" onchange="renderAdminTable()" class="p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold">
-                                <option value="all">Semua Status</option>
-                                <option value="menunggu">🟡 Menunggu Verifikasi</option>
-                                <option value="diproses">🔵 Uji Tayang</option>
-                                <option value="terkonfirmasi">🟢 Terkonfirmasi</option>
-                            </select>
-                            <input type="text" id="admin-search-input" onkeyup="renderAdminTable()" placeholder="Cari kode, nama, lokasi..." class="p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium w-full md:w-60">
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
-                        <table class="w-full text-left border-collapse text-xs">
-                            <thead>
-                                <tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
-                                    <th class="p-3.5">Kode</th>
-                                    <th class="p-3.5">Pemesan / Instansi</th>
-                                    <th class="p-3.5">Lokasi</th>
-                                    <th class="p-3.5">Durasi & Biaya</th>
-                                    <th class="p-3.5">File Materi</th>
-                                    <th class="p-3.5">Status</th>
-                                    <th class="p-3.5 text-center">Aksi Admin</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-order-table-body" class="divide-y divide-slate-200 dark:divide-slate-800 font-medium"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- ========================================================================= -->
-                <!-- MODULE 2: FULL CRUD KELOLA LOKASI VIDEOTRON & TARIF RETRIBUSI -->
-                <!-- ========================================================================= -->
-                <div id="sec-cms-lokasi" class="hidden space-y-6">
-                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <div>
-                            <h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Titik Lokasi Videotron & Tarif Retribusi (Full CRUD)</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Tambah, Edit, dan Hapus data lokasi videotron beserta rincian tarif retribusi Perwali & koordinat peta.</p>
-                        </div>
-                    </div>
-
-                    <!-- FORM TAMBAH / EDIT LOKASI -->
-                    <form onsubmit="saveLocationAdminForm(event)" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
-                        <input type="hidden" id="loc-edit-id" value="">
-                        <h4 id="loc-form-title-label" class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2">➕ Form Tambah / Edit Titik Lokasi Videotron</h4>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <div>
-                                <label class="block font-bold mb-1">Nama Titik Lokasi *</label>
-                                <input type="text" id="loc-admin-title" required placeholder="Contoh: Pasar Rejosari" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">Alamat Lengkap *</label>
-                                <input type="text" id="loc-admin-address" required placeholder="Contoh: Jl. Hasanudin, Salatiga" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">Koordinat GPS Digital (Lat, Lng) *</label>
-                                <input type="text" id="loc-admin-coords" required placeholder="-7.3305, 110.5084" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-brand-600 dark:text-sky-400 font-bold">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <div>
-                                <label class="block font-bold mb-1">Ukuran Display (Meter)</label>
-                                <input type="text" id="loc-admin-size" placeholder="8 x 4 Meter" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">Estimasi Trafik Kendaraan</label>
-                                <input type="text" id="loc-admin-traffic" placeholder="120.000 Kendaraan/Hari" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">Badge Kategori Lokasi</label>
-                                <input type="text" id="loc-admin-badge" placeholder="LOKASI 1 (TOP TRAFFIC)" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">Orientasi & Viewing Angle</label>
-                                <input type="text" id="loc-admin-orientation" placeholder="Utara - Selatan" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-200 dark:border-slate-700">
-                            <!-- TARIF NON ROKOK -->
-                            <div class="p-4 bg-blue-50/60 dark:bg-blue-950/30 rounded-xl border border-blue-200 dark:border-blue-800 space-y-2">
-                                <h5 class="font-extrabold text-blue-700 dark:text-blue-300 text-xs uppercase">Rincian Tarif Non-Rokok (Standar)</h5>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Bulan (Rp)</label>
-                                        <input type="text" id="loc-admin-month-non" placeholder="59.450.000" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
-                                    </div>
-                                    <div>
-                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Hari (Rp)</label>
-                                        <input type="text" id="loc-admin-day-non" placeholder="2.200.000" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
-                                    </div>
-                                    <div>
-                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Jam (Rp)</label>
-                                        <input type="text" id="loc-admin-hour-non" placeholder="210.000" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
-                                    </div>
-                                    <div>
-                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Menit (Rp)</label>
-                                        <input type="text" id="loc-admin-minute-non" placeholder="3.800" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- TARIF ROKOK -->
-                            <div class="p-4 bg-rose-50/60 dark:bg-rose-950/30 rounded-xl border border-rose-200 dark:border-rose-800 space-y-2">
-                                <h5 class="font-extrabold text-rose-700 dark:text-rose-300 text-xs uppercase">Rincian Tarif Rokok (+25% Perwali)</h5>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Bulan (Rp)</label>
-                                        <input type="text" id="loc-admin-month-rokok" placeholder="74.312.500" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
-                                    </div>
-                                    <div>
-                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Hari (Rp)</label>
-                                        <input type="text" id="loc-admin-day-rokok" placeholder="2.750.000" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
-                                    </div>
-                                    <div>
-                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Jam (Rp)</label>
-                                        <input type="text" id="loc-admin-hour-rokok" placeholder="262.500" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
-                                    </div>
-                                    <div>
-                                        <label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Menit (Rp)</label>
-                                        <input type="text" id="loc-admin-minute-rokok" placeholder="4.750" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="pt-2 flex gap-2">
-                            <button type="submit" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
-                                💾 SIMPAN DATA LOKASI & TARIF &rarr;
+</div>
+<!-- ========================================================================= -->
+<!-- MODULE 1: KELOLA TRANSAKSI & CEK STATUS -->
+<!-- ========================================================================= -->
+<div class="space-y-4" id="sec-cms-transaksi">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+<h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Status Transaksi &amp; Upload Foto Bukti Penayangan</h3>
+<div class="flex gap-2 w-full md:w-auto">
+<select class="p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" id="admin-status-filter" onchange="renderAdminTable()">
+<option value="all">Semua Status</option>
+<option value="menunggu">🟡 Menunggu Verifikasi</option>
+<option value="diproses">🔵 Uji Tayang</option>
+<option value="terkonfirmasi">🟢 Terkonfirmasi</option>
+</select>
+<input class="p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium w-full md:w-60" id="admin-search-input" onkeyup="renderAdminTable()" placeholder="Cari kode, nama, lokasi..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
+<th class="p-3.5">Kode</th>
+<th class="p-3.5">Pemesan / Instansi</th>
+<th class="p-3.5">Lokasi</th>
+<th class="p-3.5">Durasi &amp; Biaya</th>
+<th class="p-3.5">File Materi</th>
+<th class="p-3.5">Status</th>
+<th class="p-3.5 text-center">Aksi Admin</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800 font-medium" id="admin-order-table-body"></tbody>
+</table>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODULE 2: FULL CRUD KELOLA LOKASI VIDEOTRON & TARIF RETRIBUSI -->
+<!-- ========================================================================= -->
+<div class="hidden space-y-6" id="sec-cms-lokasi">
+<div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+<div>
+<h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Titik Lokasi Videotron &amp; Tarif Retribusi (Full CRUD)</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Tambah, Edit, dan Hapus data lokasi videotron beserta rincian tarif retribusi Perwali &amp; koordinat peta.</p>
+</div>
+</div>
+<!-- FORM TAMBAH / EDIT LOKASI -->
+<form class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs" onsubmit="saveLocationAdminForm(event)">
+<input id="loc-edit-id" type="hidden" value=""/>
+<h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2" id="loc-form-title-label">➕ Form Tambah / Edit Titik Lokasi Videotron</h4>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+<div>
+<label class="block font-bold mb-1">Nama Titik Lokasi *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="loc-admin-title" placeholder="Contoh: Pasar Rejosari" required="" type="text"/>
+</div>
+<div>
+<label class="block font-bold mb-1">Alamat Lengkap *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="loc-admin-address" placeholder="Contoh: Jl. Hasanudin, Salatiga" required="" type="text"/>
+</div>
+<div>
+<label class="block font-bold mb-1">Koordinat GPS Digital (Lat, Lng) *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-brand-600 dark:text-sky-400 font-bold" id="loc-admin-coords" placeholder="-7.3305, 110.5084" required="" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div>
+<label class="block font-bold mb-1">Ukuran Display (Meter)</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="loc-admin-size" placeholder="8 x 4 Meter" type="text"/>
+</div>
+<div>
+<label class="block font-bold mb-1">Estimasi Trafik Kendaraan</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="loc-admin-traffic" placeholder="120.000 Kendaraan/Hari" type="text"/>
+</div>
+<div>
+<label class="block font-bold mb-1">Badge Kategori Lokasi</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="loc-admin-badge" placeholder="LOKASI 1 (TOP TRAFFIC)" type="text"/>
+</div>
+<div>
+<label class="block font-bold mb-1">Orientasi &amp; Viewing Angle</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="loc-admin-orientation" placeholder="Utara - Selatan" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-200 dark:border-slate-700">
+<!-- TARIF NON ROKOK -->
+<div class="p-4 bg-blue-50/60 dark:bg-blue-950/30 rounded-xl border border-blue-200 dark:border-blue-800 space-y-2">
+<h5 class="font-extrabold text-blue-700 dark:text-blue-300 text-xs uppercase">Rincian Tarif Non-Rokok (Standar)</h5>
+<div class="grid grid-cols-2 gap-2">
+<div>
+<label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Bulan (Rp)</label>
+<input class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs" id="loc-admin-month-non" placeholder="59.450.000" type="text"/>
+</div>
+<div>
+<label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Hari (Rp)</label>
+<input class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs" id="loc-admin-day-non" placeholder="2.200.000" type="text"/>
+</div>
+<div>
+<label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Jam (Rp)</label>
+<input class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs" id="loc-admin-hour-non" placeholder="210.000" type="text"/>
+</div>
+<div>
+<label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Menit (Rp)</label>
+<input class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs" id="loc-admin-minute-non" placeholder="3.800" type="text"/>
+</div>
+</div>
+</div>
+<!-- TARIF ROKOK -->
+<div class="p-4 bg-rose-50/60 dark:bg-rose-950/30 rounded-xl border border-rose-200 dark:border-rose-800 space-y-2">
+<h5 class="font-extrabold text-rose-700 dark:text-rose-300 text-xs uppercase">Rincian Tarif Rokok (+25% Perwali)</h5>
+<div class="grid grid-cols-2 gap-2">
+<div>
+<label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Bulan (Rp)</label>
+<input class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs" id="loc-admin-month-rokok" placeholder="74.312.500" type="text"/>
+</div>
+<div>
+<label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Hari (Rp)</label>
+<input class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs" id="loc-admin-day-rokok" placeholder="2.750.000" type="text"/>
+</div>
+<div>
+<label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Jam (Rp)</label>
+<input class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs" id="loc-admin-hour-rokok" placeholder="262.500" type="text"/>
+</div>
+<div>
+<label class="block font-semibold text-[10px] text-slate-500">Tarif 1 Menit (Rp)</label>
+<input class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs" id="loc-admin-minute-rokok" placeholder="4.750" type="text"/>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-2 flex gap-2">
+<button class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition" type="submit">
+                                💾 SIMPAN DATA LOKASI &amp; TARIF →
                             </button>
-                            <button type="button" onclick="resetLocationForm()" class="px-5 py-3 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl">
+<button class="px-5 py-3 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl" onclick="resetLocationForm()" type="button">
                                 ❌ Batal / Reset
                             </button>
-                        </div>
-                    </form>
-
-                    <!-- LISTING CARDS LOKASI CMS -->
-                    <div id="cms-locations-list" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-                        <!-- DYNAMICALLY POPULATED -->
-                    </div>
-                </div>
-
-                <!-- ========================================================================= -->
-                <!-- MODULE 3: FULL CRUD PORTOFOLIO -->
-                <!-- ========================================================================= -->
-                <div id="sec-cms-portofolio" class="hidden space-y-6">
-                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <div>
-                            <h3 class="text-base font-black text-slate-900 dark:text-white">Manajemen Testimoni & Pengalaman Penyewa</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Tambah, Edit, dan Hapus ulasan/testimoni pelanggan yang tampil di website publik.</p>
-                        </div>
-                    </div>
-
-                    <form onsubmit="savePortfolioAdminForm(event)" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
-                        <input type="hidden" id="port-edit-id" value="">
-                        <h4 id="port-form-title-label" class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2">➕ Form Tambah / Edit Testimoni</h4>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block font-bold mb-1">Nama Penyewa / Klien *</label>
-                                <input type="text" id="port-admin-client" required placeholder="Contoh: PT ABC / Dinas Pendidikan" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">Rating Bintang (1-5) *</label>
-                                <select id="port-admin-rating" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-amber-600">
-                                    <option value="5">⭐⭐⭐⭐⭐ (5 Bintang)</option>
-                                    <option value="4">⭐⭐⭐⭐ (4 Bintang)</option>
-                                    <option value="3">⭐⭐⭐ (3 Bintang)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block font-bold mb-1">Titik Lokasi Videotron *</label>
-                                <select id="port-admin-location" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                                    <option value="Pasar Rejosari">Pasar Rejosari</option>
-                                    <option value="Selasar Kartini">Selasar Kartini</option>
-                                    <option value="Blotongan">Blotongan</option>
-                                    <option value="Alun-Alun Salatiga">Alun-Alun Salatiga</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">Jenis Instansi / Kategori *</label>
-                                <select id="port-admin-category" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                                    <option value="Instansi Pemerintah">Instansi Pemerintah</option>
-                                    <option value="Perusahaan Swasta">Perusahaan Swasta</option>
-                                    <option value="UMKM / Personal">UMKM / Personal</option>
-                                    <option value="Event Organizer">Event Organizer</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block font-bold mb-1">Teks Ulasan / Testimoni *</label>
-                            <textarea id="port-admin-desc" rows="3" required placeholder="Tuliskan pengalaman penyewa di sini..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium"></textarea>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block font-bold mb-1">📁 Upload Foto Klien / Logo (Opsional)</label>
-                                <input type="file" id="port-admin-file" accept="image/*" class="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold">
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">🔗 Atau URL Foto / Logo Klien</label>
-                                <input type="text" id="port-admin-url" placeholder="Opsional, contoh: logo_klien.jpg" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button type="submit" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
-                                💾 SIMPAN TESTIMONI &rarr;
+</div>
+</form>
+<!-- LISTING CARDS LOKASI CMS -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs" id="cms-locations-list">
+<!-- DYNAMICALLY POPULATED -->
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODULE 3: FULL CRUD PORTOFOLIO -->
+<!-- ========================================================================= -->
+<div class="hidden space-y-6" id="sec-cms-portofolio">
+<div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+<div>
+<h3 class="text-base font-black text-slate-900 dark:text-white">Manajemen Testimoni &amp; Pengalaman Penyewa</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Tambah, Edit, dan Hapus ulasan/testimoni pelanggan yang tampil di website publik.</p>
+</div>
+</div>
+<form class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs" onsubmit="savePortfolioAdminForm(event)">
+<input id="port-edit-id" type="hidden" value=""/>
+<h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2" id="port-form-title-label">➕ Form Tambah / Edit Testimoni</h4>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block font-bold mb-1">Nama Penyewa / Klien *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="port-admin-client" placeholder="Contoh: PT ABC / Dinas Pendidikan" required="" type="text"/>
+</div>
+<div>
+<label class="block font-bold mb-1">Rating Bintang (1-5) *</label>
+<select class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-amber-600" id="port-admin-rating" required="">
+<option value="5">⭐⭐⭐⭐⭐ (5 Bintang)</option>
+<option value="4">⭐⭐⭐⭐ (4 Bintang)</option>
+<option value="3">⭐⭐⭐ (3 Bintang)</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block font-bold mb-1">Titik Lokasi Videotron *</label>
+<select class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="port-admin-location" required="">
+<option value="Pasar Rejosari">Pasar Rejosari</option>
+<option value="Selasar Kartini">Selasar Kartini</option>
+<option value="Blotongan">Blotongan</option>
+<option value="Alun-Alun Salatiga">Alun-Alun Salatiga</option>
+</select>
+</div>
+<div>
+<label class="block font-bold mb-1">Jenis Instansi / Kategori *</label>
+<select class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="port-admin-category" required="">
+<option value="Instansi Pemerintah">Instansi Pemerintah</option>
+<option value="Perusahaan Swasta">Perusahaan Swasta</option>
+<option value="UMKM / Personal">UMKM / Personal</option>
+<option value="Event Organizer">Event Organizer</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block font-bold mb-1">Teks Ulasan / Testimoni *</label>
+<textarea class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="port-admin-desc" placeholder="Tuliskan pengalaman penyewa di sini..." required="" rows="3"></textarea>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block font-bold mb-1">📁 Upload Foto Klien / Logo (Opsional)</label>
+<input accept="image/*" class="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" id="port-admin-file" type="file"/>
+</div>
+<div>
+<label class="block font-bold mb-1">🔗 Atau URL Foto / Logo Klien</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="port-admin-url" placeholder="Opsional, contoh: logo_klien.jpg" type="text"/>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition" type="submit">
+                                💾 SIMPAN TESTIMONI →
                             </button>
-                            <button type="button" onclick="resetPortfolioForm()" class="px-4 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl">
+<button class="px-4 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl" onclick="resetPortfolioForm()" type="button">
                                 Batal
                             </button>
-                        </div>
-                    </form>
-
-                    <div id="admin-portfolio-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs"></div>
-                </div>
-
-                <!-- ========================================================================= -->
-                <!-- MODULE 4: FULL CRUD BLOG -->
-                <!-- ========================================================================= -->
-                <div id="sec-cms-blog" class="hidden space-y-6">
-                    <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <h3 class="text-base font-black text-slate-900 dark:text-white">Full CRUD Halaman Blog & Berita Publikasi Diskominfo</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Kelola artikel panduan sewa, berita periklanan daerah, dan regulasi terkini.</p>
-                    </div>
-
-                    <form onsubmit="saveBlogAdminForm(event)" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
-                        <input type="hidden" id="blog-edit-id" value="">
-                        <h4 id="blog-form-title-label" class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2">➕ Form Tambah / Edit Artikel Blog</h4>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block font-bold mb-1">Judul Artikel Blog *</label>
-                                <input type="text" id="blog-admin-title" required placeholder="Judul berita / artikel publik..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                            </div>
-                            <div>
-                                <label class="block font-bold mb-1">Sub-Judul / Sub-heading *</label>
-                                <input type="text" id="blog-admin-subheading" required placeholder="Sub-judul penjelas..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block font-bold mb-1">Isi Paragraf 1 *</label>
-                            <textarea id="blog-admin-p1" rows="2" required placeholder="Paragraf pertama..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium"></textarea>
-                        </div>
-                        <div>
-                            <label class="block font-bold mb-1">Isi Paragraf 2 *</label>
-                            <textarea id="blog-admin-p2" rows="2" required placeholder="Paragraf kedua (Rincian tarif & regulasi)..." class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium"></textarea>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button type="submit" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
-                                💾 SIMPAN ARTIKEL BLOG &rarr;
+</div>
+</form>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs" id="admin-portfolio-list-container"></div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODULE 4: FULL CRUD BLOG -->
+<!-- ========================================================================= -->
+<div class="hidden space-y-6" id="sec-cms-blog">
+<div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+<h3 class="text-base font-black text-slate-900 dark:text-white">Full CRUD Halaman Blog &amp; Berita Publikasi Diskominfo</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Kelola artikel panduan sewa, berita periklanan daerah, dan regulasi terkini.</p>
+</div>
+<form class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs" onsubmit="saveBlogAdminForm(event)">
+<input id="blog-edit-id" type="hidden" value=""/>
+<h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2" id="blog-form-title-label">➕ Form Tambah / Edit Artikel Blog</h4>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block font-bold mb-1">Judul Artikel Blog *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="blog-admin-title" placeholder="Judul berita / artikel publik..." required="" type="text"/>
+</div>
+<div>
+<label class="block font-bold mb-1">Sub-Judul / Sub-heading *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="blog-admin-subheading" placeholder="Sub-judul penjelas..." required="" type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-bold mb-1">Isi Paragraf 1 *</label>
+<textarea class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="blog-admin-p1" placeholder="Paragraf pertama..." required="" rows="2"></textarea>
+</div>
+<div>
+<label class="block font-bold mb-1">Isi Paragraf 2 *</label>
+<textarea class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="blog-admin-p2" placeholder="Paragraf kedua (Rincian tarif &amp; regulasi)..." required="" rows="2"></textarea>
+</div>
+<div class="flex gap-2">
+<button class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition" type="submit">
+                                💾 SIMPAN ARTIKEL BLOG →
                             </button>
-                            <button type="button" onclick="resetBlogForm()" class="px-4 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl">
+<button class="px-4 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl" onclick="resetBlogForm()" type="button">
                                 Batal
                             </button>
-                        </div>
-                    </form>
-
-                    <div id="admin-blog-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs"></div>
-                </div>
-
-                <!-- ========================================================================= -->
-                <!-- MODULE 5: EDIT TENTANG KAMI -->
-                <!-- ========================================================================= -->
-                <div id="sec-cms-tentang" class="hidden space-y-6">
-                    <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <h3 class="text-base font-black text-slate-900 dark:text-white">Edit Teks & Informasi Halaman "Tentang Kami"</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Perbarui deskripsi operasional, pesan pimpinan Diskominfo, dan rincian dasar hukum periklanan.</p>
-                    </div>
-
-                    <form onsubmit="saveAboutAdminCMS(event)" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
-                        <div>
-                            <label class="block font-bold mb-1">Sub-Judul Utama Halaman Tentang Kami *</label>
-                            <input type="text" id="about-admin-title" required value="Layanan Publik Sewa Videotron Kota Salatiga" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                        </div>
-
-                        <div>
-                            <label class="block font-bold mb-1">Deskripsi Singkat SEVISA *</label>
-                            <textarea id="about-admin-desc" rows="3" required class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium">Pengelolaan media periklanan videotron luar ruang (DOOH) resmi di bawah Dinas Komunikasi dan Informatika Kota Salatiga yang mengelola 4 lokasi videotron strategis (Pasar Rejosari, Selasar Kartini, Blotongan, dan Alun-Alun Salatiga).</textarea>
-                        </div>
-
-                        <div>
-                            <label class="block font-bold mb-1">Catatan Tambahan Koordinasi Pajak BPKPD *</label>
-                            <input type="text" id="about-admin-tax" required value="Penghitungan Pajak dapat berkoordinasi dengan BPKPD Kota Salatiga (Badan Pengelola Keuangan dan Pendapatan Daerah)" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                        </div>
-
-                        <button type="submit" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
-                            💾 UPDATE HALAMAN TENTANG KAMI &rarr;
+</div>
+</form>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs" id="admin-blog-list-container"></div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODULE 5: EDIT TENTANG KAMI -->
+<!-- ========================================================================= -->
+<div class="hidden space-y-6" id="sec-cms-tentang">
+<div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+<h3 class="text-base font-black text-slate-900 dark:text-white">Edit Teks &amp; Informasi Halaman "Tentang Kami"</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Perbarui deskripsi operasional, pesan pimpinan Diskominfo, dan rincian dasar hukum periklanan.</p>
+</div>
+<form class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs" onsubmit="saveAboutAdminCMS(event)">
+<div>
+<label class="block font-bold mb-1">Sub-Judul Utama Halaman Tentang Kami *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="about-admin-title" required="" type="text" value="Layanan Publik Sewa Videotron Kota Salatiga"/>
+</div>
+<div>
+<label class="block font-bold mb-1">Deskripsi Singkat SEVISA *</label>
+<textarea class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="about-admin-desc" required="" rows="3">Pengelolaan media periklanan videotron luar ruang (DOOH) resmi di bawah Dinas Komunikasi dan Informatika Kota Salatiga yang mengelola 4 lokasi videotron strategis (Pasar Rejosari, Selasar Kartini, Blotongan, dan Alun-Alun Salatiga).</textarea>
+</div>
+<div>
+<label class="block font-bold mb-1">Catatan Tambahan Koordinasi Pajak BPKPD *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="about-admin-tax" required="" type="text" value="Penghitungan Pajak dapat berkoordinasi dengan BPKPD Kota Salatiga (Badan Pengelola Keuangan dan Pendapatan Daerah)"/>
+</div>
+<button class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition" type="submit">
+                            💾 UPDATE HALAMAN TENTANG KAMI →
                         </button>
-                    </form>
-                </div>
-
-                <!-- ========================================================================= -->
-                <!-- MODULE 6: KELOLA AKUN USER & OPERATOR -->
-                <!-- ========================================================================= -->
-                <div id="sec-cms-users" class="hidden space-y-6">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-200 dark:border-slate-800 pb-4 gap-3">
-                        <div>
-                            <h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Akun User Penyewa & Staf Operator Penyiaran</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Atur akun terdaftar, kelola hak akses operasional, serta tambahkan staf operator penyiaran baru.</p>
-                        </div>
-
-                        <!-- TAB SUB-NAVIGATION FOR USER VS OPERATOR ACCOUNTS -->
-                        <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 shrink-0">
-                            <button onclick="switchAccountSubTab('user')" id="btn-acc-tab-user" class="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 text-brand-600 dark:text-sky-400 shadow-sm transition font-black">
+</form>
+</div>
+<!-- ========================================================================= -->
+<!-- MODULE 6: KELOLA AKUN USER & OPERATOR -->
+<!-- ========================================================================= -->
+<div class="hidden space-y-6" id="sec-cms-users">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-200 dark:border-slate-800 pb-4 gap-3">
+<div>
+<h3 class="text-base font-black text-slate-900 dark:text-white">Kelola Akun User Penyewa &amp; Staf Operator Penyiaran</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Atur akun terdaftar, kelola hak akses operasional, serta tambahkan staf operator penyiaran baru.</p>
+</div>
+<!-- TAB SUB-NAVIGATION FOR USER VS OPERATOR ACCOUNTS -->
+<div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 shrink-0">
+<button class="px-3.5 py-2 rounded-lg bg-white dark:bg-slate-900 text-brand-600 dark:text-sky-400 shadow-sm transition font-black" id="btn-acc-tab-user" onclick="switchAccountSubTab('user')">
                                 👥 User Penyewa (Publik)
                             </button>
-                            <button onclick="switchAccountSubTab('operator')" id="btn-acc-tab-operator" class="px-3.5 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">
+<button class="px-3.5 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition" id="btn-acc-tab-operator" onclick="switchAccountSubTab('operator')">
                                 ⚙️ Operator Penyiaran (Staf)
                             </button>
-                        </div>
-                    </div>
-
-                    <!-- SUB-CONTENT 1: USER PENYEWA TABLE -->
-                    <div id="sub-acc-user" class="space-y-4">
-                        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
-                            <table class="w-full text-left border-collapse text-xs">
-                                <thead>
-                                    <tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
-                                        <th class="p-3.5">Nama & Email</th>
-                                        <th class="p-3.5">Perusahaan / Instansi</th>
-                                        <th class="p-3.5">NIK KTP</th>
-                                        <th class="p-3.5">No. WhatsApp</th>
-                                        <th class="p-3.5">Status Akun</th>
-                                        <th class="p-3.5 text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="admin-user-table-body" class="divide-y divide-slate-200 dark:divide-slate-800 font-medium"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- SUB-CONTENT 2: OPERATOR STAF TABLE & FORM -->
-                    <div id="sub-acc-operator" class="hidden space-y-6">
-                        
-                        <!-- FORM TAMBAH OPERATOR BARU (SUPER ADMIN ONLY) -->
-                        <div id="form-container-operator-add" class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs">
-                            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
-                                <h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider">
+</div>
+</div>
+<!-- SUB-CONTENT 1: USER PENYEWA TABLE -->
+<div class="space-y-4" id="sub-acc-user">
+<div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
+<th class="p-3.5">Nama &amp; Email</th>
+<th class="p-3.5">Perusahaan / Instansi</th>
+<th class="p-3.5">NIK KTP</th>
+<th class="p-3.5">No. WhatsApp</th>
+<th class="p-3.5">Status Akun</th>
+<th class="p-3.5 text-center">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800 font-medium" id="admin-user-table-body"></tbody>
+</table>
+</div>
+</div>
+<!-- SUB-CONTENT 2: OPERATOR STAF TABLE & FORM -->
+<div class="hidden space-y-6" id="sub-acc-operator">
+<!-- FORM TAMBAH OPERATOR BARU (SUPER ADMIN ONLY) -->
+<div class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs" id="form-container-operator-add">
+<div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
+<h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider">
                                     ➕ Form Tambah Akun Staf Operator Penyiaran Baru
                                 </h4>
-                                <span class="px-2 py-0.5 bg-red-600/20 text-red-400 font-black text-[9px] rounded border border-red-500/30 uppercase">
+<span class="px-2 py-0.5 bg-red-600/20 text-red-400 font-black text-[9px] rounded border border-red-500/30 uppercase">
                                     🛡️ Khusus Super Admin
                                 </span>
-                            </div>
-                            
-                            <form onsubmit="saveOperatorAccountForm(event)" class="space-y-4">
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block font-bold mb-1">Nama Lengkap Staf Operator *</label>
-                                        <input type="text" id="op-add-name" required placeholder="Contoh: Ahmad Subagyo, S.ST" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold">
-                                    </div>
-                                    <div>
-                                        <label class="block font-bold mb-1">Email Login Staf *</label>
-                                        <input type="email" id="op-add-email" required placeholder="Contoh: ahmad@salatiga.go.id" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold">
-                                    </div>
-                                </div>
-
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="block font-bold mb-1">Kata Sandi Login *</label>
-                                        <input type="password" id="op-add-pass" required placeholder="••••••••" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold">
-                                    </div>
-                                    <div>
-                                        <label class="block font-bold mb-1">NIP / Identitas Staf *</label>
-                                        <input type="text" id="op-add-nip" required placeholder="199001012015031002" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold">
-                                    </div>
-                                    <div>
-                                        <label class="block font-bold mb-1">No. WhatsApp *</label>
-                                        <input type="text" id="op-add-phone" required placeholder="081234567890" class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold">
-                                    </div>
-                                </div>
-
-                                <div class="pt-2 flex gap-2">
-                                    <button type="submit" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
-                                        💾 SIMPAN AKUN OPERATOR BARU &rarr;
+</div>
+<form class="space-y-4" onsubmit="saveOperatorAccountForm(event)">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block font-bold mb-1">Nama Lengkap Staf Operator *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="op-add-name" placeholder="Contoh: Ahmad Subagyo, S.ST" required="" type="text"/>
+</div>
+<div>
+<label class="block font-bold mb-1">Email Login Staf *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold" id="op-add-email" placeholder="Contoh: ahmad@salatiga.go.id" required="" type="email"/>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div>
+<label class="block font-bold mb-1">Kata Sandi Login *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold" id="op-add-pass" placeholder="••••••••" required="" type="password"/>
+</div>
+<div>
+<label class="block font-bold mb-1">NIP / Identitas Staf *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold" id="op-add-nip" placeholder="199001012015031002" required="" type="text"/>
+</div>
+<div>
+<label class="block font-bold mb-1">No. WhatsApp *</label>
+<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold" id="op-add-phone" placeholder="081234567890" required="" type="text"/>
+</div>
+</div>
+<div class="pt-2 flex gap-2">
+<button class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition" type="submit">
+                                        💾 SIMPAN AKUN OPERATOR BARU →
                                     </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- OPERATORS TABLE LIST -->
-                        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
-                            <table class="w-full text-left border-collapse text-xs">
-                                <thead>
-                                    <tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
-                                        <th class="p-3.5">Nama & Email Operator</th>
-                                        <th class="p-3.5">NIP / Identitas Staf</th>
-                                        <th class="p-3.5">No. WhatsApp</th>
-                                        <th class="p-3.5">Hak Akses Role</th>
-                                        <th class="p-3.5 text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="admin-operator-table-body" class="divide-y divide-slate-200 dark:divide-slate-800 font-medium"></tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- ========================================================================= -->
-                <!-- MODULE 7: LIVE CHAT KONSULTASI USERS -->
-                <!-- ========================================================================= -->
-                <div id="sec-cms-chat" class="hidden space-y-6">
-                    <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <h3 class="text-base font-black text-slate-900 dark:text-white">Kotak Masuk Live Chat & Konsultasi Real-Time</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Pantau dan balas pesan konsultasi penyewaan dari pengguna publik secara real-time.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="md:col-span-2 bg-slate-950 text-white rounded-3xl p-6 border border-slate-800 space-y-4 shadow-xl">
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                                <span class="text-xs font-black text-sky-400 uppercase tracking-widest flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                                    <span>RIWAYAT OBROLAN LIVE CHAT USERS</span>
-                                </span>
-                                <div class="flex gap-2">
-                                    <button onclick="simulateIncomingUserChat()" class="px-3 py-1 bg-emerald-700 hover:bg-emerald-600 text-white text-[10px] font-extrabold rounded-lg shadow transition">
+</div>
+</form>
+</div>
+<!-- OPERATORS TABLE LIST -->
+<div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-800">
+<th class="p-3.5">Nama &amp; Email Operator</th>
+<th class="p-3.5">NIP / Identitas Staf</th>
+<th class="p-3.5">No. WhatsApp</th>
+<th class="p-3.5">Hak Akses Role</th>
+<th class="p-3.5 text-center">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800 font-medium" id="admin-operator-table-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODULE 7: LIVE CHAT KONSULTASI USERS -->
+<!-- ========================================================================= -->
+<div class="hidden space-y-6" id="sec-cms-chat">
+<div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+<h3 class="text-base font-black text-slate-900 dark:text-white">Kotak Masuk Live Chat &amp; Konsultasi Real-Time</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Pantau dan balas pesan konsultasi penyewaan dari pengguna publik secara real-time.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 bg-slate-950 text-white rounded-3xl p-6 border border-slate-800 space-y-4 shadow-xl">
+<div class="flex items-center justify-between border-b border-slate-800 pb-3">
+<span class="text-xs font-black text-sky-400 uppercase tracking-widest flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+<span>RIWAYAT OBROLAN LIVE CHAT USERS</span>
+</span>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-emerald-700 hover:bg-emerald-600 text-white text-[10px] font-extrabold rounded-lg shadow transition" onclick="simulateIncomingUserChat()">
                                         ➕ Tes Chat User Demo
                                     </button>
-                                    <button onclick="renderAdminChatBox()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-extrabold rounded-lg">
+<button class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-extrabold rounded-lg" onclick="renderAdminChatBox()">
                                         🔄 Refresh Chat
                                     </button>
-                                </div>
-                            </div>
-
-                            <div id="admin-chat-messages-container" class="h-72 overflow-y-auto p-4 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3 text-xs font-medium">
-                                <!-- CHAT MESSAGES POPULATE DYNAMICALLY -->
-                            </div>
-
-                            <!-- QUICK RESPONSE TEMPLATE BUTTONS -->
-                            <div class="flex flex-wrap gap-1.5 pt-1 text-[10px]">
-                                <span class="text-slate-400 font-bold self-center mr-1">⚡ Templat Cepat:</span>
-                                <button type="button" onclick="insertAdminChatTemplate('🟢 Halo! Slot penayangan untuk titik lokasi yang Anda tanyakan masih tersedia. Silakan ajukan booking sewa!')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold rounded-lg border border-slate-700 transition">
+</div>
+</div>
+<div class="h-72 overflow-y-auto p-4 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3 text-xs font-medium" id="admin-chat-messages-container">
+<!-- CHAT MESSAGES POPULATE DYNAMICALLY -->
+</div>
+<!-- QUICK RESPONSE TEMPLATE BUTTONS -->
+<div class="flex flex-wrap gap-1.5 pt-1 text-[10px]">
+<span class="text-slate-400 font-bold self-center mr-1">⚡ Templat Cepat:</span>
+<button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold rounded-lg border border-slate-700 transition" onclick="insertAdminChatTemplate('🟢 Halo! Slot penayangan untuk titik lokasi yang Anda tanyakan masih tersedia. Silakan ajukan booking sewa!')" type="button">
                                     🟢 Slot Tersedia
                                 </button>
-                                <button type="button" onclick="insertAdminChatTemplate('📄 Silakan lampirkan surat permohonan resmi dan file materi iklan (Video MP4 / Poster HD) pada formulir booking.')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-sky-400 font-bold rounded-lg border border-slate-700 transition">
+<button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-sky-400 font-bold rounded-lg border border-slate-700 transition" onclick="insertAdminChatTemplate('📄 Silakan lampirkan surat permohonan resmi dan file materi iklan (Video MP4 / Poster HD) pada formulir booking.')" type="button">
                                     📄 Berkas Syarat
                                 </button>
-                                <button type="button" onclick="insertAdminChatTemplate('💳 Silakan lakukan pembayaran retribusi via Bank Kasda Salatiga (Bank Jateng) atau QRIS Pemkot, lalu unggah bukti transfer.')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold rounded-lg border border-slate-700 transition">
+<button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold rounded-lg border border-slate-700 transition" onclick="insertAdminChatTemplate('💳 Silakan lakukan pembayaran retribusi via Bank Kasda Salatiga (Bank Jateng) atau QRIS Pemkot, lalu unggah bukti transfer.')" type="button">
                                     💳 Panduan Bayar
                                 </button>
-                                <button type="button" onclick="insertAdminChatTemplate('✅ Pembayaran retribusi Anda telah diverifikasi Lunas! Kuitansi PDF resmi sudah dapat Anda cetak.')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-teal-400 font-bold rounded-lg border border-slate-700 transition">
+<button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-teal-400 font-bold rounded-lg border border-slate-700 transition" onclick="insertAdminChatTemplate('✅ Pembayaran retribusi Anda telah diverifikasi Lunas! Kuitansi PDF resmi sudah dapat Anda cetak.')" type="button">
                                     ✅ Konfirmasi Lunas
                                 </button>
-                            </div>
-
-                            <form onsubmit="sendAdminChatMessage(event)" class="flex gap-2 pt-2">
-                                <input type="text" id="admin-chat-input" required placeholder="Tulis balasan resmi Diskominfo..." class="flex-1 p-3 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-medium focus:outline-none">
-                                <button type="submit" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition">
-                                    Kirim Balasan &rarr;
+</div>
+<form class="flex gap-2 pt-2" onsubmit="sendAdminChatMessage(event)">
+<input class="flex-1 p-3 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-medium focus:outline-none" id="admin-chat-input" placeholder="Tulis balasan resmi Diskominfo..." required="" type="text"/>
+<button class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition" type="submit">
+                                    Kirim Balasan →
                                 </button>
-                            </form>
-                        </div>
-
-                        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 space-y-4">
-                            <h4 class="font-black text-slate-900 dark:text-white text-xs uppercase tracking-wider">💡 Petunjuk Respon Admin:</h4>
-                            <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed">
-                                <li class="flex items-start gap-2">
-                                    <span>•</span>
-                                    <span>Balasan Admin akan **langsung muncul secara real-time** pada widget floating chat pengguna di <strong class="text-emerald-600">index.html</strong>.</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span>•</span>
-                                    <span>Gunakan bahasa resmi, ramah, dan informatif mewakili Dinas Komunikasi dan Informatika Kota Salatiga.</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </main>
-    </div>
-
-    <!-- MODAL EDIT STATUS TRANSAKSI -->
-    <div id="admin-manage-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
-        <div class="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 my-auto relative text-slate-800 dark:text-slate-100">
-            <button onclick="closeAdminModal('admin-manage-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-xl font-bold p-1">&times;</button>
-            
-            <div class="text-center space-y-1">
-                <span class="px-3 py-1 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[10px] rounded-full uppercase tracking-wider border border-brand-200 dark:border-slate-800">
+</form>
+</div>
+<div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 space-y-4">
+<h4 class="font-black text-slate-900 dark:text-white text-xs uppercase tracking-wider">💡 Petunjuk Respon Admin:</h4>
+<ul class="text-xs text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed">
+<li class="flex items-start gap-2">
+<span>•</span>
+<span>Balasan Admin akan **langsung muncul secara real-time** pada widget floating chat pengguna di <strong class="text-emerald-600">index.html</strong>.</span>
+</li>
+<li class="flex items-start gap-2">
+<span>•</span>
+<span>Gunakan bahasa resmi, ramah, dan informatif mewakili Dinas Komunikasi dan Informatika Kota Salatiga.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- MODAL EDIT STATUS TRANSAKSI -->
+<div class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto" id="admin-manage-modal">
+<div class="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 my-auto relative text-slate-800 dark:text-slate-100">
+<button class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-xl font-bold p-1" onclick="closeAdminModal('admin-manage-modal')">×</button>
+<div class="text-center space-y-1">
+<span class="px-3 py-1 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[10px] rounded-full uppercase tracking-wider border border-brand-200 dark:border-slate-800">
                     Panel Verifikasi Admin Diskominfo
                 </span>
-                <h3 class="text-xl font-black text-slate-900 dark:text-white">Kelola Status & Bukti Penayangan</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Kode Transaksi: <strong id="modal-manage-code" class="font-mono text-brand-600 dark:text-sky-400 font-black">SVS-XXX</strong></p>
-            </div>
-
-            <form onsubmit="saveAdminStatusUpdate(event)" class="space-y-4 text-xs">
-                <div class="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-1 text-xs">
-                    <span id="modal-manage-user" class="font-black text-slate-900 dark:text-white block">Budi Santoso (PT Salatiga Digital Indo)</span>
-                    <span id="modal-manage-location" class="text-slate-600 dark:text-slate-300 block font-semibold">Pasar Rejosari • 2026-08-15 s.d. 2026-08-22</span>
-                    <span id="modal-manage-file" class="text-emerald-600 dark:text-emerald-400 font-mono font-bold block text-[11px]">📁 Materi: Video_Promosi.mp4</span>
-                </div>
-
-                <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider">1. Ubah Status Pengajuan *</label>
-                    <select id="modal-status-select" required class="w-full p-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-extrabold rounded-xl focus:outline-none">
-                        <option value="menunggu">🟡 MENUNGGU VERIFIKASI DISKOMINFO (Tahap 1)</option>
-                        <option value="diproses">🔵 SEDANG DIPROSES / UJI TAYANG (Tahap 2)</option>
-                        <option value="terkonfirmasi">🟢 TERKONFIRMASI & SIAP PENAYANGAN (Tahap 3)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider">2. Pesan / Catatan Resmi Diskominfo untuk Pemesan *</label>
-                    <textarea id="modal-status-notes" rows="3" required placeholder="Tuliskan catatan verifikasi materi, jadwal penyiaran, atau instruksi resmi..." class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-xl font-medium focus:outline-none"></textarea>
-                </div>
-
-                <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider">3. Foto Bukti Penayangan Videotron di Lapangan</label>
-                    <select id="modal-proof-preset" class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold rounded-xl focus:outline-none">
-                        <option value="header_banner.jpg">📸 Foto Standar Penayangan Videotron Diskominfo</option>
-                        <option value="header_banner.jpg">📸 Videotron Pasar Rejosari (Kawasan Pasar)</option>
-                        <option value="header_banner.jpg">📸 Videotron Selasar Kartini (Pusat Kota)</option>
-                        <option value="header_banner.jpg">📸 Videotron Blotongan (Gate Utara)</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
-                    💾 SIMPAN PERUBAHAN STATUS & KIRIM PESAN &rarr;
+<h3 class="text-xl font-black text-slate-900 dark:text-white">Kelola Status &amp; Bukti Penayangan</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Kode Transaksi: <strong class="font-mono text-brand-600 dark:text-sky-400 font-black" id="modal-manage-code">SVS-XXX</strong></p>
+</div>
+<form class="space-y-4 text-xs" onsubmit="saveAdminStatusUpdate(event)">
+<div class="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-1 text-xs">
+<span class="font-black text-slate-900 dark:text-white block" id="modal-manage-user">Budi Santoso (PT Salatiga Digital Indo)</span>
+<span class="text-slate-600 dark:text-slate-300 block font-semibold" id="modal-manage-location">Pasar Rejosari • 2026-08-15 s.d. 2026-08-22</span>
+<span class="text-emerald-600 dark:text-emerald-400 font-mono font-bold block text-[11px]" id="modal-manage-file">📁 Materi: Video_Promosi.mp4</span>
+</div>
+<div>
+<label class="block font-bold mb-1 uppercase tracking-wider">1. Ubah Status Pengajuan *</label>
+<select class="w-full p-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-extrabold rounded-xl focus:outline-none" id="modal-status-select" required="">
+<option value="menunggu">🟡 MENUNGGU VERIFIKASI DISKOMINFO (Tahap 1)</option>
+<option value="diproses">🔵 SEDANG DIPROSES / UJI TAYANG (Tahap 2)</option>
+<option value="terkonfirmasi">🟢 TERKONFIRMASI &amp; SIAP PENAYANGAN (Tahap 3)</option>
+</select>
+</div>
+<div>
+<label class="block font-bold mb-1 uppercase tracking-wider">2. Pesan / Catatan Resmi Diskominfo untuk Pemesan *</label>
+<textarea class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-xl font-medium focus:outline-none" id="modal-status-notes" placeholder="Tuliskan catatan verifikasi materi, jadwal penyiaran, atau instruksi resmi..." required="" rows="3"></textarea>
+</div>
+<div>
+<label class="block font-bold mb-1 uppercase tracking-wider">3. Foto Bukti Penayangan Videotron di Lapangan</label>
+<select class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold rounded-xl focus:outline-none" id="modal-proof-preset">
+<option value="header_banner.jpg">📸 Foto Standar Penayangan Videotron Diskominfo</option>
+<option value="header_banner.jpg">📸 Videotron Pasar Rejosari (Kawasan Pasar)</option>
+<option value="header_banner.jpg">📸 Videotron Selasar Kartini (Pusat Kota)</option>
+<option value="header_banner.jpg">📸 Videotron Blotongan (Gate Utara)</option>
+</select>
+</div>
+<button class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition" type="submit">
+                    💾 SIMPAN PERUBAHAN STATUS &amp; KIRIM PESAN →
                 </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- TOAST NOTIFICATION -->
-    <div id="admin-toast" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border border-slate-700 max-w-sm space-y-1">
-        <h4 id="admin-toast-title" class="font-extrabold text-xs text-sky-400">INFO ADMIN</h4>
-        <p id="admin-toast-msg" class="text-xs text-slate-200 font-medium">Pesan admin berhasil disimpan.</p>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC CMS ADMIN -->
-    <script>
+</form>
+</div>
+</div>
+<!-- TOAST NOTIFICATION -->
+<div class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border border-slate-700 max-w-sm space-y-1" id="admin-toast">
+<h4 class="font-extrabold text-xs text-sky-400" id="admin-toast-title">INFO ADMIN</h4>
+<p class="text-xs text-slate-200 font-medium" id="admin-toast-msg">Pesan admin berhasil disimpan.</p>
+</div>
+<!-- JAVASCRIPT LOGIC CMS ADMIN -->
+<script>
         let currentTargetOrderCode = null;
 
         const DEFAULT_OPERATORS = [
@@ -2011,6 +2138,107 @@
             renderAdminChatBox();
             updateAdminChatBadge();
         });
-    </script>
+    
+// ---------------- FAQ LOGIC ----------------
+function loadAdminFAQ() {
+    let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+    if(faqs.length === 0) {
+        faqs = [
+            { q: "Bagaimana cara melakukan penyewaan?", a: "Pilih menu Beranda, klik tombol Sewa pada lokasi yang diinginkan, lengkapi formulir (Lokasi, Paket, Tanggal, Jam), dan unggah materi iklan Anda." },
+            { q: "Bagaimana cara memilih paket?", a: "Pada form pemesanan, pilih antara Paket Alfa (min 30 menit), Paket Beta (min 20 menit), atau Paket Event (min 30 menit dengan jam spesifik)." }
+        ];
+        localStorage.setItem('sevisa_faqs', JSON.stringify(faqs));
+    }
+    const tbody = document.getElementById('admin-faq-tbody');
+    if(!tbody) return;
+    
+    let html = '';
+    faqs.forEach((f, idx) => {
+        html += `
+        <tr class="hover:bg-slate-50 transition">
+            <td class="px-4 py-3 font-bold text-slate-900">${f.q}</td>
+            <td class="px-4 py-3 text-xs">${f.a}</td>
+            <td class="px-4 py-3 text-center space-x-2">
+                <button onclick="deleteFAQ(${idx})" class="text-rose-500 hover:text-rose-700 font-bold text-xs">Hapus</button>
+            </td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+}
+
+function addFAQ() {
+    const q = prompt("Masukkan Pertanyaan:");
+    if(!q) return;
+    const a = prompt("Masukkan Jawaban:");
+    if(!a) return;
+    
+    let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+    faqs.push({q, a});
+    localStorage.setItem('sevisa_faqs', JSON.stringify(faqs));
+    loadAdminFAQ();
+}
+
+function deleteFAQ(idx) {
+    if(confirm("Hapus FAQ ini?")) {
+        let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+        faqs.splice(idx, 1);
+        localStorage.setItem('sevisa_faqs', JSON.stringify(faqs));
+        loadAdminFAQ();
+    }
+}
+
+// ---------------- TESTIMONI LOGIC ----------------
+function loadAdminPortfolio() {
+    let items = JSON.parse(localStorage.getItem('sevisa_portfolio') || '[]');
+    const tbody = document.getElementById('admin-port-tbody');
+    if(!tbody) return;
+    
+    let html = '';
+    items.forEach((p, idx) => {
+        let statusBadge = '';
+        let actBtns = '';
+        if(p.status === 'menunggu') {
+            statusBadge = '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-[10px] font-bold">Menunggu</span>';
+            actBtns = `
+                <button onclick="updateTestiStatus(${idx}, 'disetujui')" class="px-2 py-1 bg-emerald-500 text-white rounded text-[10px] font-bold">Setujui</button>
+                <button onclick="updateTestiStatus(${idx}, 'ditolak')" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">Tolak</button>
+            `;
+        } else if (p.status === 'ditolak') {
+            statusBadge = '<span class="px-2 py-1 bg-rose-100 text-rose-700 rounded text-[10px] font-bold">Ditolak</span>';
+            actBtns = `<button onclick="deleteTesti(${idx})" class="px-2 py-1 bg-slate-500 text-white rounded text-[10px] font-bold">Hapus</button>`;
+        } else {
+            statusBadge = '<span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold">Disetujui</span>';
+            actBtns = `<button onclick="deleteTesti(${idx})" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">Hapus</button>`;
+        }
+        
+        html += `
+        <tr class="hover:bg-slate-50 transition border-b">
+            <td class="px-4 py-3 font-bold text-slate-900 text-xs">${p.client}</td>
+            <td class="px-4 py-3 text-xs">${p.location}<br>⭐ ${p.rating||5}</td>
+            <td class="px-4 py-3 text-xs italic">"${p.description}"</td>
+            <td class="px-4 py-3 text-center">${statusBadge}</td>
+            <td class="px-4 py-3 text-center space-x-1">${actBtns}</td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+}
+
+function updateTestiStatus(idx, stat) {
+    let items = JSON.parse(localStorage.getItem('sevisa_portfolio') || '[]');
+    items[idx].status = stat;
+    localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
+    loadAdminPortfolio();
+}
+
+function deleteTesti(idx) {
+    if(confirm("Hapus testimoni ini?")) {
+        let items = JSON.parse(localStorage.getItem('sevisa_portfolio') || '[]');
+        items.splice(idx, 1);
+        localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
+        loadAdminPortfolio();
+    }
+}
+
+</script>
 </body>
 </html>
