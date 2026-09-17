@@ -1246,7 +1246,7 @@ function deleteTesti(idx) {
         ];
 
         function getStoredCMSLocations() {
-            const saved = localStorage.getItem('sevisa_locations');
+            const saved = localStorage.getItem('sevisa_locations_v2');
             if (saved) {
                 try { return JSON.parse(saved); } catch(e) {}
             }
@@ -1254,7 +1254,7 @@ function deleteTesti(idx) {
         }
 
         function saveStoredCMSLocations(locs) {
-            localStorage.setItem('sevisa_locations', JSON.stringify(locs));
+            localStorage.setItem('sevisa_locations_v2', JSON.stringify(locs));
             window.dispatchEvent(new Event('storage'));
         }
 
