@@ -386,7 +386,7 @@
                     <tbody class="divide-y divide-slate-200 font-medium">
                         <tr>
                             <td class="p-2.5" id="inv-table-desc">Sewa Layanan Penyiaran Videotron Selasar Kartini (5 Bulan)</td>
-                            <td class="p-2.5 text-center font-bold text-rose-600" id="inv-table-cat">Produk Rokok (+25%)</td>
+                            <td class="p-2.5 text-center font-bold text-rose-600" id="inv-table-cat">Instansi</td>
                             <td class="p-2.5 text-right font-black font-mono text-slate-900" id="inv-table-price">Rp 121.043.750</td>
                         </tr>
                         <tr class="bg-slate-50 font-bold">
@@ -431,54 +431,7 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- FLOATING LIVE CHAT DRAWER WIDGET (USER ↔️ ADMIN REAL-TIME) -->
-    <!-- ========================================================================= -->
-    <div id="live-chat-drawer" class="fixed bottom-5 right-5 z-50 flex flex-col items-end">
-        
-        <!-- CHAT WINDOW (HIDDEN BY DEFAULT) -->
-        <div id="chat-window-box" class="hidden w-80 sm:w-96 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex-col mb-3 transition-all duration-300">
-            <!-- CHAT HEADER -->
-            <div class="p-4 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white flex items-center justify-between border-b border-slate-800">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-full bg-emerald-500 text-white font-black text-xs flex items-center justify-center shadow-md">
-                        💬
-                    </div>
-                    <div>
-                        <h4 class="font-black text-xs text-white">Live Chat Diskominfo Salatiga</h4>
-                        <span class="text-[9px] font-bold text-emerald-400 flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Petugas Admin Online
-                        </span>
-                    </div>
-                </div>
-                <button onclick="toggleLiveChatDrawer()" class="text-slate-400 hover:text-white text-lg font-bold p-1">&times;</button>
-            </div>
-
-            <!-- CHAT MESSAGES BODY -->
-            <div id="chat-messages-container" class="p-4 h-64 overflow-y-auto space-y-3 text-xs bg-slate-50 dark:bg-slate-950/60 font-medium">
-                <div class="bg-blue-100 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 text-blue-950 dark:text-blue-200 p-3 rounded-2xl max-w-[85%] space-y-1 shadow-sm">
-                    <strong class="font-bold text-[10px] text-blue-600 block">👤 Admin Diskominfo Salatiga</strong>
-                    <p class="text-[11px] leading-relaxed">Halo! Selamat datang di layanan konsultasi penyewaan videotron resmi Kota Salatiga. Ada yang bisa kami bantu mengenai jadwal slot atau berkas pengajuan?</p>
-                </div>
-            </div>
-
-            <!-- CHAT INPUT FORM -->
-            <form onsubmit="sendUserChatMessage(event)" class="p-3 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex gap-2">
-                <input type="text" id="chat-user-input" required placeholder="Tulis pertanyaan Anda..." class="flex-1 p-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white font-medium focus:outline-none">
-                <button type="submit" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-md transition">
-                    Kirim
-                </button>
-            </form>
-        </div>
-
-        <!-- TOGGLE BUTTON -->
-        <button onclick="toggleLiveChatDrawer()" class="px-4 py-3 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs rounded-full shadow-2xl flex items-center gap-2 border-2 border-white dark:border-slate-800 hover:scale-105 transition duration-300">
-            <span class="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
-            <span>💬 Live Chat Diskominfo</span>
-        </button>
-
-    </div>
-
-    <!-- ========================================================================= -->
+        <!-- ========================================================================= -->
     <!-- MAIN APPLICATION WRAPPER -->
     <!-- ========================================================================= -->
     <div id="main-app-wrapper" class="flex flex-col min-h-screen">
@@ -516,7 +469,7 @@
                     </button>
                     <button onclick="showPage('profil')" id="nav-profil" class="px-2.5 py-1.5 rounded-lg hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition flex items-center gap-1">
                         <span>Data Diri</span>
-                        <span id="profile-dot-status" class="w-2 h-2 rounded-full bg-rose-500" title="Belum Lengkap"></span>
+                        
                     </button>
                 </nav>
 
@@ -549,17 +502,6 @@
 
             </div>
         </header>
-
-        <!-- FLOATING STATUS BANNER -->
-        <div id="profile-warning-banner" class="bg-amber-500 dark:bg-amber-600 text-white px-4 py-2 text-xs font-semibold shadow-sm flex items-center justify-between transition-all duration-300">
-            <div class="max-w-6xl mx-auto flex items-center justify-between w-full">
-                <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                    <span>Status Data Diri: <strong id="banner-status-text">Belum Lengkap</strong>. Lengkapi data diri Anda untuk mengaktifkan izin pemesanan sewa videotron.</span>
-                </div>
-                <button onclick="showPage('profil')" class="underline font-extrabold ml-2 hover:text-amber-100 shrink-0">Lengkapi Sekarang &rarr;</button>
-            </div>
-        </div>
 
         <!-- MAIN PAGES CONTAINER -->
         <main class="flex-grow">
@@ -602,44 +544,6 @@
                     </div>
                 </div>
 
-                <!-- FLOATING FILTER BOX -->
-                <div class="max-w-4xl mx-auto px-4 -mt-6 relative z-20">
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-5 rounded-2xl shadow-xl space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-extrabold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-                                <svg class="w-3.5 h-3.5 text-red-600 dark:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
-                                <span>Filter Titik Strategis Beranda</span>
-                            </span>
-                            <button onclick="resetVideotronFilters()" class="text-[11px] font-bold text-red-600 dark:text-red-400 hover:underline">
-                                Reset Filter
-                            </button>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <div>
-                                <select id="filter-kategori" onchange="applyVideotronFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-red-500 focus:outline-none">
-                                    <option value="all">Kategori Produk (Semua)</option>
-                                    <option value="nonrokok">Produk Non-Rokok</option>
-                                    <option value="rokok">Produk Rokok (+25% Perwali 49/2018)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <select id="filter-lokasi" onchange="applyVideotronFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-red-500 focus:outline-none">
-                                    <option value="all">Lokasi Utama (Pasar Rejosari & Selasar Kartini)</option>
-                                    <option value="rejosari">Pasar Rejosari</option>
-                                    <option value="kartini">Selasar Kartini</option>
-                                </select>
-                            </div>
-                            <div>
-                                <select id="filter-layout" onchange="applyVideotronFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-red-500 focus:outline-none">
-                                    <option value="all">Tata Letak Iklan (Semua)</option>
-                                    <option value="landscape">Horizontal (Landscape 16:9)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- SPOTLIGHT PAKET TAYANG & PRICING -->
                 <div class="py-12 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
                     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -659,7 +563,7 @@
                             <!-- Card Alpha -->
                             <div class="bg-[#8cc63f] rounded-2xl overflow-hidden shadow-xl flex flex-col transform hover:scale-105 transition-transform duration-300">
                                 <div class="bg-white pt-6 pb-10 px-6 text-center relative" style="clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);">
-                                    <h4 class="text-3xl font-black text-[#8cc63f] italic uppercase">PAKET <span class="font-serif">α</span></h4>
+                                    <h4 class="text-3xl font-black text-[#8cc63f] italic uppercase">PAKET <span class="font-serif normal-case">α</span></h4>
                                     <span class="text-sm font-black text-slate-800 uppercase tracking-widest block -mt-1">ALPHA</span>
                                 </div>
                                 <div class="pt-6 pb-6 px-6 text-center text-white flex-grow flex flex-col justify-center border-b border-[#7ab32e]/50">
@@ -680,7 +584,7 @@
                             <!-- Card Beta -->
                             <div class="bg-[#7ab32e] rounded-2xl overflow-hidden shadow-xl flex flex-col transform hover:scale-105 transition-transform duration-300">
                                 <div class="bg-white pt-6 pb-10 px-6 text-center relative" style="clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);">
-                                    <h4 class="text-3xl font-black text-[#7ab32e] italic uppercase">PAKET <span class="font-serif">β</span></h4>
+                                    <h4 class="text-3xl font-black text-[#7ab32e] italic uppercase">PAKET <span class="font-serif normal-case">β</span></h4>
                                     <span class="text-sm font-black text-slate-800 uppercase tracking-widest block -mt-1">BETA</span>
                                 </div>
                                 <div class="pt-6 pb-6 px-6 text-center text-white flex-grow flex flex-col justify-center border-b border-[#689f1d]/50">
@@ -701,7 +605,7 @@
                             <!-- Card Event -->
                             <div class="bg-[#5c8a14] rounded-2xl overflow-hidden shadow-xl flex flex-col transform hover:scale-105 transition-transform duration-300">
                                 <div class="bg-white pt-6 pb-10 px-6 text-center relative" style="clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);">
-                                    <h4 class="text-3xl font-black text-[#5c8a14] italic uppercase">PAKET <span class="font-serif">ε</span></h4>
+                                    <h4 class="text-3xl font-black text-[#5c8a14] italic uppercase">PAKET <span class="font-serif normal-case">ε</span></h4>
                                     <span class="text-sm font-black text-slate-800 uppercase tracking-widest block -mt-1">EVENT</span>
                                 </div>
                                 <div class="pt-6 pb-6 px-6 text-center text-white flex-grow flex flex-col justify-center border-b border-[#4a720c]/50">
@@ -726,7 +630,7 @@
                             <div class="flex flex-wrap justify-center lg:justify-start gap-x-8 gap-y-6">
                                 <div class="flex gap-3 items-center">
                                     <div class="w-16 h-12 bg-white rounded-md flex items-center justify-center p-0.5 shrink-0 border border-slate-200 shadow-sm">
-                                       <img src="header_banner.jpg" alt="Pasar Sapi" class="w-full h-full object-cover rounded">
+                                       <img src="pasar_sapi.jpg" alt="Pasar Sapi" class="w-full h-full object-cover rounded">
                                     </div>
                                     <div>
                                         <div class="text-slate-900 dark:text-white font-black text-lg leading-none mb-1">Pasar Sapi</div>
@@ -735,7 +639,7 @@
                                 </div>
                                 <div class="flex gap-3 items-center">
                                     <div class="w-16 h-12 bg-white rounded-md flex items-center justify-center p-0.5 shrink-0 border border-slate-200 shadow-sm">
-                                        <img src="header_banner.jpg" alt="Blotongan" class="w-full h-full object-cover rounded">
+                                        <img src="blotongan.jpg" alt="Blotongan" class="w-full h-full object-cover rounded">
                                     </div>
                                     <div>
                                         <div class="text-slate-900 dark:text-white font-black text-lg leading-none mb-1">Blotongan</div>
@@ -744,7 +648,7 @@
                                 </div>
                                 <div class="flex gap-3 items-center">
                                     <div class="w-16 h-12 bg-white rounded-md flex items-center justify-center p-0.5 shrink-0 border border-slate-200 shadow-sm">
-                                        <img src="header_banner.jpg" alt="Selasar Kartini" class="w-full h-full object-cover rounded">
+                                        <img src="selasar_kartini.jpg" alt="Selasar Kartini" class="w-full h-full object-cover rounded">
                                     </div>
                                     <div>
                                         <div class="text-slate-900 dark:text-white font-black text-lg leading-none mb-1">Selasar Kartini</div>
@@ -763,45 +667,6 @@
 
                     </div>
                 </div>
-
-                <!-- 2 LOKASI STRATEGIS BERANDA SECTION -->
-                <div class="py-12 bg-slate-50 dark:bg-slate-950">
-                    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-                        <div class="flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
-                            <div>
-                                <span class="text-xs font-bold text-red-600 dark:text-red-500 uppercase tracking-widest block">2 Titik Paling Utama & Padat Traffic</span>
-                                <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Lokasi Videotron Utama Salatiga</h2>
-                            </div>
-                            <span id="filter-count-badge" class="px-3 py-1 bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 font-extrabold text-[11px] rounded-full">
-                                Menampilkan 2 Titik Strategis Utama
-                            </span>
-                        </div>
-
-                        <div id="videotron-card-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Dynamic 2 Strategic Official Cards -->
-                        </div>
-
-                        <!-- CALLOUT BANNER UNTUK Halaman DAFTAR LOKASI -->
-                        <div class="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 border border-blue-800/50">
-                            <div class="space-y-1 text-center sm:text-left">
-                                <span class="px-2.5 py-0.5 bg-sky-500/20 text-sky-300 border border-sky-400/30 text-[10px] font-extrabold rounded-md uppercase tracking-wider">LOKASI LAINNYA</span>
-                                <h3 class="text-lg font-black text-white">Ingin Melihat Titik Lokasi Lainnya?</h3>
-                                <p class="text-xs text-slate-300">Tersedia juga titik videotron di <strong>Blotongan (Gate Utara)</strong> & <strong>Alun-Alun Salatiga</strong> pada Halaman Daftar Lokasi.</p>
-                            </div>
-                            <button onclick="showPage('lokasi')" class="px-6 py-3.5 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition shrink-0">
-                                LIHAT DAFTAR LOKASI LENGKAP &rarr;
-                            </button>
-                        </div>
-
-                        <div id="filter-empty-state" class="hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 text-center space-y-3 max-w-md mx-auto">
-                            <div class="w-12 h-12 bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 rounded-xl flex items-center justify-center font-bold text-xl mx-auto border border-amber-200 dark:border-amber-800">🔍</div>
-                            <h3 class="text-base font-black text-slate-900 dark:text-white">Lokasi Tidak Ditemukan</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Maaf, tidak ada lokasi videotron yang cocok dengan kriteria filter Anda.</p>
-                            <button onclick="resetVideotronFilters()" class="px-4 py-2 bg-red-600 text-white font-bold text-xs rounded-lg shadow-sm">Reset Filter Pencarian</button>
-                        </div>
-
-                        </div>
-                    </div>
 
                 <!-- ALUR PEMESANAN (FLOWCHART) -->
                 <div class="py-14 sm:py-16 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 relative z-10 overflow-hidden">
@@ -1149,20 +1014,13 @@
 
                         <div id="tab-content-deskripsi" class="space-y-3 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                             <h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider">Rincian Tabel Tarif Resmi Diskominfo Salatiga</h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 gap-4">
                                 <div class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-1">
-                                    <strong class="text-brand-600 dark:text-sky-400 font-extrabold block text-xs">Tarif Produk Non-Rokok:</strong>
+                                    <strong class="text-brand-600 dark:text-sky-400 font-extrabold block text-xs">Tarif Sewa Resmi:</strong>
                                     <p>Bulan: <strong id="det-rate-month-non">Rp 59.450.000</strong></p>
                                     <p>Hari: <strong id="det-rate-day-non">Rp 2.200.000</strong></p>
                                     <p>Jam: <strong id="det-rate-hour-non">Rp 210.000</strong></p>
                                     <p>Menit: <strong id="det-rate-minute-non">Rp 3.800</strong></p>
-                                </div>
-                                <div class="p-4 bg-rose-50 dark:bg-rose-950/40 rounded-2xl border border-rose-200 dark:border-rose-800 space-y-1">
-                                    <strong class="text-rose-600 dark:text-rose-300 font-extrabold block text-xs">Tarif Produk Rokok (+25% Perwali 49/2018):</strong>
-                                    <p>Bulan: <strong id="det-rate-month-rokok">Rp 74.312.500</strong></p>
-                                    <p>Hari: <strong id="det-rate-day-rokok">Rp 2.750.000</strong></p>
-                                    <p>Jam: <strong id="det-rate-hour-rokok">Rp 262.500</strong></p>
-                                    <p>Menit: <strong id="det-rate-minute-rokok">Rp 4.750</strong></p>
                                 </div>
                             </div>
                         </div>
@@ -1202,15 +1060,15 @@
                                 </div>
                                 <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                                     <span class="text-slate-400 font-bold block text-[9px]">PITCH LED</span>
-                                    <strong class="text-slate-900 dark:text-white text-xs">P10 Outdoor DIP</strong>
+                                    <strong id="det-pitch" class="text-slate-900 dark:text-white text-xs">P4 Outdoor LED</strong>
                                 </div>
                                 <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                                     <span class="text-slate-400 font-bold block text-[9px]">RESOLUSI</span>
-                                    <strong class="text-slate-900 dark:text-white text-xs">1920 x 1080 Full HD</strong>
+                                    <strong id="det-res" class="text-slate-900 dark:text-white text-xs">1536 x 1024 Pixel</strong>
                                 </div>
                                 <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                                     <span class="text-slate-400 font-bold block text-[9px]">JAM OPERASIONAL</span>
-                                    <strong class="text-slate-900 dark:text-white text-xs">06:00 - 23:00 WIB</strong>
+                                    <strong id="det-ops" class="text-slate-900 dark:text-white text-xs">05.00 - 22.00 WIB</strong>
                                 </div>
                             </div>
                         </div>
@@ -1491,7 +1349,7 @@
                                 <h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider">1. Informasi Identitas Penanggung Jawab</h4>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 gap-4">
                                 <div>
                                     <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Nama Lengkap Penanggung Jawab *</label>
                                     <input type="text" id="prof-name" value="" required placeholder="Contoh: Budi Santoso, S.T." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
@@ -1507,7 +1365,7 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 gap-4">
                                 <div>
                                     <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Nama Perusahaan / Instansi / Brand *</label>
                                     <input type="text" id="prof-company" value="" required placeholder="Contoh: PT Salatiga Digital Indo / Dinas Pariwisata" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
@@ -1522,7 +1380,7 @@
                                 <h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider">2. Kontak & Verifikasi Legalitas</h4>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 gap-4">
                                 <div>
                                     <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Nomor WhatsApp / HP Aktif *</label>
                                     <input type="tel" id="prof-phone" value="" required placeholder="Contoh: 081234567890" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
@@ -1668,19 +1526,9 @@
                     </select>
                 </div>
 
-                <!-- 2. KATEGORI PEMOHON -->
+                <!-- 2. PILIHAN PAKET -->
                 <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">2. Kategori Pemohon *</label>
-                    <select id="book-ad-category" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
-                        <option value="perorangan" selected>Perorangan</option>
-                        <option value="nonperorangan">Non Perorangan</option>
-                        <option value="instansi">Instansi</option>
-                    </select>
-                </div>
-
-                <!-- 3. PILIHAN PAKET -->
-                <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">3. Pilihan Paket *</label>
+                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">2. Pilihan Paket *</label>
                     <select id="book-paket" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
                         <option value="alfa" selected>Paket Alfa</option>
                         <option value="beta">Paket Beta</option>
@@ -1688,19 +1536,19 @@
                     </select>
                 </div>
 
-                <!-- 4. DURASI ROTASI & KALI TAYANG -->
+                <!-- 3 & 4. DURASI ROTASI & KALI TAYANG -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                     <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">4. Jumlah Rotasi (Detik) *</label>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">3. Jumlah Rotasi (Detik) *</label>
                         <input type="number" id="book-rotasi-detik" value="15" min="1" oninput="calculateBookingPrice()" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
                     </div>
                     <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">5. Kali Tayang Di Satu Hari *</label>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">4. Kali Tayang Di Satu Hari *</label>
                         <input type="number" id="book-qty" value="1" min="1" oninput="calculateBookingPrice()" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
                     </div>
                 </div>
 
-                <!-- 6 & 7. TANGGAL MULAI & SELESAI -->
+                <!-- 5 & 6. TANGGAL MULAI & SELESAI -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">6. Tanggal Mulai Sewa *</label>
@@ -1849,18 +1697,13 @@
                 id: 'VDT-01',
                 title: 'Pasar Rejosari',
                 address: 'Jl. Hasanudin, Salatiga',
-                kategori: 'nonrokok',
                 lokasiCode: 'rejosari',
                 layoutCode: 'landscape',
                 size: '8 x 4 Meter',
                 priceNon: '2.200.000',
-                priceRokok: '2.750.000',
                 monthNon: '59.450.000',
-                monthRokok: '74.312.500',
                 hourNon: '210.000',
-                hourRokok: '262.500',
                 minuteNon: '3.800',
-                minuteRokok: '4.750',
                 traffic: '65.000+',
                 ledSpec: 'P10 Outdoor DIP • 1920x1080',
                 badgeText: 'LOKASI 1 (TOP TRAFFIC)'
@@ -1869,58 +1712,49 @@
                 id: 'VDT-03',
                 title: 'Selasar Kartini',
                 address: 'Jl. Kartini, Salatiga',
-                kategori: 'nonrokok',
                 lokasiCode: 'kartini',
                 layoutCode: 'landscape',
                 size: '6 x 3 Meter',
                 priceNon: '716.000',
-                priceRokok: '895.000',
                 monthNon: '19.367.000',
-                monthRokok: '24.208.750',
                 hourNon: '68.000',
-                hourRokok: '85.000',
                 minuteNon: '1.300',
-                minuteRokok: '1.625',
                 traffic: '40.000+',
                 ledSpec: 'P6 Outdoor LED • Pusat Edukasi Publik',
+                pitchLed: 'P6',
+                resolution: '864 x 576 Pixel',
+                opHours: '05.00 - 22.00 WIB',
                 badgeText: 'LOKASI 2 (PUSAT EDUKASI)'
             },
             {
                 id: 'VDT-02',
                 title: 'Blotongan',
                 address: 'Jl. Semarang - Surakarta, Blotongan',
-                kategori: 'nonrokok',
                 lokasiCode: 'blotongan',
                 layoutCode: 'portrait',
                 size: '6 x 4 Meter',
                 priceNon: '1.268.000',
-                priceRokok: '1.585.000',
                 monthNon: '34.315.000',
-                monthRokok: '42.893.750',
                 hourNon: '120.500',
-                hourRokok: '150.625',
                 minuteNon: '2.200',
-                minuteRokok: '2.750',
                 traffic: '55.000+',
-                ledSpec: 'P8 Outdoor LED • Gate Utara Salatiga',
+                ledSpec: 'P6 Outdoor LED • Gate Utara Salatiga',
+                pitchLed: 'P6',
+                resolution: '1296 x 720 Pixel',
+                opHours: '05.00 - 22.00 WIB',
                 badgeText: 'LOKASI 3 (GATE UTARA)'
             },
             {
                 id: 'VDT-04',
                 title: 'Alun-Alun Salatiga',
                 address: 'Lapangan Pancasila, Salatiga',
-                kategori: 'nonrokok',
                 lokasiCode: 'alunalun',
                 layoutCode: 'dual',
                 size: '10 x 5 Meter',
                 priceNon: '698.000',
-                priceRokok: '872.500',
                 monthNon: '18.881.000',
-                monthRokok: '23.601.250',
                 hourNon: '66.200',
-                hourRokok: '82.750',
                 minuteNon: '1.200',
-                minuteRokok: '1.500',
                 traffic: '60.000+',
                 ledSpec: 'P10 Outdoor Dual • Alun-Alun Pancasila',
                 badgeText: 'LOKASI 4 (ALUN-ALUN PANCASILA)'
@@ -2016,7 +1850,7 @@
                 userName: 'Alfi Fadli',
                 company: 'Pt Mencari Cinta sejati',
                 location: 'Selasar Kartini',
-                dates: '2026-08-11 s.d. 2026-09-11 (5 Bulan • Produk Rokok (+25%) • Rp 121.043.750)',
+                dates: '2026-08-11 s.d. 2026-09-11 (5 Bulan • Instansi • Rp 121.043.750)',
                 file: 'logo savisa.jpeg',
                 status: 'terkonfirmasi',
                 statusLabel: 'TERKONFIRMASI & SIAP PENAYANGAN',
@@ -2028,7 +1862,7 @@
                 userName: 'Budi Santoso',
                 company: 'PT Salatiga Digital Indo',
                 location: 'Pasar Rejosari',
-                dates: '2026-08-15 s.d. 2026-08-22 (7 Hari • Produk Non-Rokok • Rp 15.400.000)',
+                dates: '2026-08-15 s.d. 2026-08-22 (7 Hari • Perorangan • Rp 15.400.000)',
                 file: 'Video_Promosi_Produk.mp4',
                 status: 'menunggu',
                 statusLabel: 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO',
@@ -2040,7 +1874,7 @@
                 userName: 'Dinas Pariwisata Salatiga',
                 company: 'Pemerintah Kota Salatiga',
                 location: 'Blotongan',
-                dates: '2026-08-18 s.d. 2026-08-25 (7 Hari • Produk Non-Rokok • Rp 8.876.000)',
+                dates: '2026-08-18 s.d. 2026-08-25 (7 Hari • Perorangan • Rp 8.876.000)',
                 file: 'Sosialisasi_Pariwisata.mp4',
                 status: 'diproses',
                 statusLabel: 'SEDANG DIPROSES / UJI TAYANG',
@@ -2052,7 +1886,7 @@
                 userName: 'Komunitas UMKM Salatiga',
                 company: 'Brand Kuliner Salatiga',
                 location: 'Alun-Alun Salatiga',
-                dates: '2026-08-20 s.d. 2026-08-30 (10 Hari • Produk Non-Rokok • Rp 6.980.000)',
+                dates: '2026-08-20 s.d. 2026-08-30 (10 Hari • Perorangan • Rp 6.980.000)',
                 file: 'Poster_Promo_Event.png',
                 status: 'terkonfirmasi',
                 statusLabel: 'TERKONFIRMASI & SIAP PENAYANGAN',
@@ -2229,14 +2063,14 @@
 
         function calculateBookingPrice() {
             const locEl = document.getElementById('book-location');
-            const catEl = document.getElementById('book-ad-category'); // Perorangan / Non Perorangan / Instansi
+            const catEl = { value: 'perorangan' };
             const paketEl = document.getElementById('book-paket');
             const rotasiEl = document.getElementById('book-rotasi-detik');
             const qtyEl = document.getElementById('book-qty'); // Kali tayang
             const startEl = document.getElementById('book-start-date');
             const endEl = document.getElementById('book-end-date');
 
-            if (!locEl || !catEl || !paketEl || !rotasiEl || !qtyEl) return;
+            if (!locEl || !paketEl || !rotasiEl || !qtyEl) return;
 
             const locName = locEl.value;
             const item = VIDEOTRON_DATA.find(v => v.title.toLowerCase().includes(locName.toLowerCase())) || VIDEOTRON_DATA[0];
@@ -2292,11 +2126,7 @@
                 return;
             }
 
-            if (!isProfileComplete) {
-                showPage('profil');
-                show3DToast('⚠️ LENGKAPI DATA DIRI', 'Silakan lengkapi data diri Anda secara menyeluruh terlebih dahulu untuk mengaktifkan izin penyewaan videotron.', 'error');
-                return;
-            }
+
 
             if (locationTitle) {
                 const selectEl = document.getElementById('book-location');
@@ -2611,11 +2441,13 @@
                 const titleStr = item.title || item.name || 'Videotron';
                 const sizeStr = item.size || '8 x 4 Meter';
                 const priceNonStr = item.priceNon || item.priceDay || '2.200.000';
-                const priceRokokStr = item.priceRokok || '2.750.000';
                 const badgeStr = item.badgeText || 'LOKASI UTAMA';
                 const trafficStr = item.traffic || '95.000+';
                 const ledSpecStr = item.ledSpec || 'P10 Outdoor DIP • 1920x1080';
                 const addressStr = item.address || 'Salatiga';
+                const pitchStr = item.pitchLed || 'P4 Outdoor LED';
+                const resStr = item.resolution || '1536 x 1024 Pixel';
+                const opsStr = item.opHours || '05.00 - 22.00 WIB';
 
                 html += `
                     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 flex flex-col justify-between">
@@ -2635,27 +2467,31 @@
                                     <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400">${trafficStr} Kendaraan/Hari</span>
                                 </div>
                                 <h3 class="font-black text-slate-900 dark:text-white text-base pt-0.5">${titleStr}</h3>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">${addressStr}</p>
+                                <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
+                                    📍 ${addressStr}
+                                </p>
                             </div>
                         </div>
 
-                        <div class="px-5 pb-5 pt-3 space-y-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-                            <div class="space-y-1 text-xs">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-slate-500 dark:text-slate-400 font-medium">Tarif Non-Rokok (Hari):</span>
-                                    <span class="font-extrabold text-amber-600 dark:text-amber-400 text-xs">Rp ${priceNonStr}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-slate-400">
-                                    <span>Tarif Rokok (+25%):</span>
-                                    <span class="font-semibold text-rose-600 dark:text-rose-400 text-xs">Rp ${priceRokokStr}</span>
-                                </div>
+                        <div class="px-5 pb-5 space-y-3">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-full bg-slate-100 dark:bg-slate-800 h-[1px]"></div>
+                                <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider shrink-0">Info Tarif</span>
+                                <div class="w-full bg-slate-100 dark:bg-slate-800 h-[1px]"></div>
                             </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button onclick="openDetailLokasi('${titleStr}', '${addressStr}', '${sizeStr}', '${priceNonStr}', '${priceRokokStr}', '${item.monthNon || ''}', '${item.monthRokok || ''}', '${item.hourNon || ''}', '${item.hourRokok || ''}', '${item.minuteNon || ''}', '${item.minuteRokok || ''}')" class="py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
-                                    Rincian Brosur
+
+                            <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <span class="text-slate-500 dark:text-slate-400 font-medium text-xs">Tarif Sewa (Hari):</span>
+                                <span class="font-black text-brand-600 dark:text-brand-400 text-sm tracking-tight">Rp ${priceNonStr}</span>
+                            </div>
+
+                            <div class="flex items-center gap-1.5 pt-1">
+                                <button onclick="openDetailLokasi('${titleStr}', '${addressStr}', '${sizeStr}', '${priceNonStr}', '${item.monthNon || ''}', '${item.hourNon || ''}', '${item.minuteNon || ''}', '${pitchStr}', '${resStr}', '${opsStr}')" class="py-2.5 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[10px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700 flex-1 flex items-center justify-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Detail Brosur
                                 </button>
-                                <button onclick="triggerBookingFlow('${titleStr}')" class="py-2.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs rounded-xl shadow-md transition text-center">
-                                    Ajukan Sewa &rarr;
+                                <button onclick="triggerBookingFlow('${titleStr}')" class="py-2.5 px-3 bg-gradient-to-r from-brand-600 to-sky-500 hover:from-brand-700 hover:to-sky-600 text-white font-extrabold text-[10px] rounded-xl shadow-md transition text-center flex-1">
+                                    Sewa Sekarang &rarr;
                                 </button>
                             </div>
                         </div>
@@ -2828,7 +2664,7 @@
         }
 
         function getStoredLocations() {
-            const saved = localStorage.getItem('sevisa_locations');
+            const saved = localStorage.getItem('sevisa_locations_v2');
             if (saved) {
                 try { return JSON.parse(saved); } catch(e) {}
             }
@@ -2912,85 +2748,25 @@
             }, 150);
         }
 
+        
+        // MIGRATION SCRIPT: Clear old localstorage schema
+        try {
+            const saved = localStorage.getItem('sevisa_locations_v2');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed.length > 0 && (typeof parsed[0].monthNon === 'undefined' || !parsed[1] || typeof parsed[1].pitchLed === 'undefined' || !parsed[2] || typeof parsed[2].pitchLed === 'undefined')) {
+                    localStorage.removeItem('sevisa_locations_v2');
+                    console.log('Old schema detected. Flushed sevisa_locations from localStorage.');
+                }
+            }
+        } catch(e) {}
+
         function getStoredUserLocations() {
-            const saved = localStorage.getItem('sevisa_locations');
+            const saved = localStorage.getItem('sevisa_locations_v2');
             if (saved) {
                 try { return JSON.parse(saved); } catch(e) {}
             }
-            return [
-                {
-                    id: 'VDT-01',
-                    title: 'PASAR REJOSARI',
-                    address: 'Jl. Hasanudin, Salatiga',
-                    coords: '-7.3305, 110.5084',
-                    orientation: 'Utara - Selatan (Kawasan Pasar & Komersial Rejosari)',
-                    size: '8 x 4 Meter',
-                    traffic: '120.000 Kendaraan/Hari',
-                    badgeText: 'LOKASI 1 (TOP TRAFFIC)',
-                    priceNon: '2.200.000',
-                    priceRokok: '2.750.000',
-                    monthNon: '59.450.000',
-                    monthRokok: '74.312.500',
-                    hourNon: '210.000',
-                    hourRokok: '262.500',
-                    minuteNon: '3.800',
-                    minuteRokok: '4.750'
-                },
-                {
-                    id: 'VDT-02',
-                    title: 'BLOTONGAN',
-                    address: 'Jl. Semarang - Surakarta, Blotongan',
-                    coords: '-7.3150, 110.4910',
-                    orientation: 'Utara - Selatan (Gate Masuk Salatiga dari Semarang)',
-                    size: '8 x 4 Meter',
-                    traffic: '110.000 Kendaraan/Hari',
-                    badgeText: 'LOKASI 2 (GATE UTARA)',
-                    priceNon: '1.268.000',
-                    priceRokok: '1.585.000',
-                    monthNon: '34.315.000',
-                    monthRokok: '42.893.750',
-                    hourNon: '120.500',
-                    hourRokok: '150.625',
-                    minuteNon: '2.200',
-                    minuteRokok: '2.750'
-                },
-                {
-                    id: 'VDT-03',
-                    title: 'SELASAR KARTINI',
-                    address: 'Jl. Kartini, Salatiga',
-                    coords: '-7.3275, 110.5012',
-                    orientation: 'Barat - Timur (Pusat Kota & Kawasan Kuliner Kartini)',
-                    size: '8 x 4 Meter',
-                    traffic: '85.000 Kendaraan/Hari',
-                    badgeText: 'LOKASI 3 (PUSAT EDUKASI)',
-                    priceNon: '716.000',
-                    priceRokok: '895.000',
-                    monthNon: '19.367.000',
-                    monthRokok: '24.208.750',
-                    hourNon: '68.000',
-                    hourRokok: '85.000',
-                    minuteNon: '1.300',
-                    minuteRokok: '1.625'
-                },
-                {
-                    id: 'VDT-04',
-                    title: 'ALUN-ALUN SALATIGA',
-                    address: 'Lapangan Pancasila / Simpang ABC, Salatiga',
-                    coords: '-7.3392, 110.5025',
-                    orientation: 'Timur - Barat (Persimpangan Jl. Jend. Sudirman & Argoyuwono)',
-                    size: '8 x 4 Meter',
-                    traffic: '95.000 Kendaraan/Hari',
-                    badgeText: 'LOKASI 4 (ALUN-ALUN PANCASILA)',
-                    priceNon: '698.000',
-                    priceRokok: '872.500',
-                    monthNon: '18.881.000',
-                    monthRokok: '23.601.250',
-                    hourNon: '66.200',
-                    hourRokok: '82.750',
-                    minuteNon: '1.200',
-                    minuteRokok: '1.500'
-                }
-            ];
+            return VIDEOTRON_DATA;
         }
 
         function renderUserLokasiPageCards() {
@@ -3006,54 +2782,61 @@
                 const mapCardId = `card-map-dynamic-${idx}`;
                 const gmapsLink = `https://maps.google.com/?q=${encodeURIComponent(coordsStr)}`;
 
+                const pitchStr = item.pitchLed || 'P4 Outdoor LED';
+                const resStr = item.resolution || '1536 x 1024 Pixel';
+                const opsStr = item.opHours || '05.00 - 22.00 WIB';
+
                 html += `
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-lg space-y-4">
-                        <div class="flex justify-between items-start border-b border-slate-200 dark:border-slate-800 pb-3">
-                            <div>
-                                <span class="px-2.5 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[10px] rounded-md">${item.badgeText || 'TITIK LOKASI'}</span>
-                                <h3 class="text-lg font-black text-slate-900 dark:text-white mt-1">${titleStr.toUpperCase()}</h3>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">${item.address}</p>
-                            </div>
-                            <span class="px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px] rounded-lg border border-emerald-500/30">
-                                ${coordsStr}
-                            </span>
-                        </div>
-
-                        <!-- CARD LEAFLET MAP CONTAINER -->
-                        <div id="${mapCardId}" style="height: 180px; width: 100%; position: relative; overflow: hidden;" class="rounded-2xl border border-slate-200 dark:border-slate-700 shadow-inner z-0"></div>
-
-                        <div class="grid grid-cols-2 gap-3 text-xs">
-                            <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
-                                <span class="font-extrabold text-blue-700 dark:text-blue-300 text-[11px] block uppercase">Tarif Non-Rokok</span>
-                                <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                    <li><strong>Bulan:</strong> Rp ${item.monthNon || '0'}</li>
-                                    <li><strong>Hari:</strong> Rp ${item.priceNon || '0'}</li>
-                                    <li><strong>Jam:</strong> Rp ${item.hourNon || '0'}</li>
-                                    <li><strong>Menit:</strong> Rp ${item.minuteNon || '0'}</li>
-                                </ul>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition">
+                        <div class="space-y-3 mb-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-black text-slate-900 dark:text-white text-base">${titleStr}</h3>
+                                    <p class="text-[10px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5">
+                                        📍 ${item.address}
+                                    </p>
+                                </div>
+                                <span class="px-2 py-1 bg-brand-50 dark:bg-brand-900/40 text-brand-700 dark:text-brand-400 font-extrabold text-[9px] rounded-lg border border-brand-200 dark:border-brand-800 uppercase tracking-wider text-right">
+                                    ${item.size || '8 x 4 Meter'}
+                                </span>
                             </div>
 
-                            <div class="bg-rose-50 dark:bg-rose-950/40 p-3 rounded-2xl border border-rose-200 dark:border-rose-800 space-y-1">
-                                <span class="font-extrabold text-rose-700 dark:text-rose-300 text-[11px] block uppercase">Tarif Rokok (+25%)</span>
-                                <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                    <li><strong>Bulan:</strong> Rp ${item.monthRokok || '0'}</li>
-                                    <li><strong>Hari:</strong> Rp ${item.priceRokok || '0'}</li>
-                                    <li><strong>Jam:</strong> Rp ${item.hourRokok || '0'}</li>
-                                    <li><strong>Menit:</strong> Rp ${item.minuteRokok || '0'}</li>
-                                </ul>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-[9px] rounded-lg border border-slate-200 dark:border-slate-700 flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12zm1-9H9v5h5v-2h-3V7z"></path></svg>
+                                    ${item.traffic || '95.000+'} Kendaraan/Hari
+                                </span>
+                                <span class="px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px] rounded-lg border border-emerald-500/30">
+                                    ${coordsStr}
+                                </span>
                             </div>
-                        </div>
 
-                        <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                            <a href="${gmapsLink}" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
-                                📍 Google Maps GPS
-                            </a>
-                            <button onclick="openDetailLokasi('${titleStr}', '${item.address}', '${item.size || '8 x 4 Meter'}', '${item.priceNon}', '${item.priceRokok}', '${item.monthNon}', '${item.monthRokok}', '${item.hourNon}', '${item.hourRokok}', '${item.minuteNon}', '${item.minuteRokok}')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
-                                🔍 Detail Brosur
-                            </button>
-                            <button onclick="triggerBookingFlow('${titleStr}')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
-                                Sewa &rarr;
-                            </button>
+                            <!-- CARD LEAFLET MAP CONTAINER -->
+                            <div id="${mapCardId}" style="height: 180px; width: 100%; position: relative; overflow: hidden;" class="rounded-2xl border border-slate-200 dark:border-slate-700 shadow-inner z-0"></div>
+
+                            <div class="grid grid-cols-1 gap-3 text-xs">
+                                <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
+                                    <span class="font-extrabold text-blue-700 dark:text-blue-300 text-[11px] block uppercase">Tarif Sewa Resmi</span>
+                                    <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
+                                        <li><strong>Bulan:</strong> Rp ${item.monthNon || '0'}</li>
+                                        <li><strong>Hari:</strong> Rp ${item.priceNon || '0'}</li>
+                                        <li><strong>Jam:</strong> Rp ${item.hourNon || '0'}</li>
+                                        <li><strong>Menit:</strong> Rp ${item.minuteNon || '0'}</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                                <a href="${gmapsLink}" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
+                                    📍 Google Maps GPS
+                                </a>
+                                <button onclick="openDetailLokasi('${titleStr}', '${item.address}', '${item.size || '8 x 4 Meter'}', '${item.priceNon}', '${item.monthNon}', '${item.hourNon}', '${item.minuteNon}', '${pitchStr}', '${resStr}', '${opsStr}')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
+                                    🔍 Detail Brosur
+                                </button>
+                                <button onclick="triggerBookingFlow('${titleStr}')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
+                                    Sewa &rarr;
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -3171,14 +2954,14 @@
         }
 
         window.addEventListener('storage', (e) => {
-            if (!e.key || e.key === 'sevisa_locations') {
+            if (!e.key || e.key === 'sevisa_locations_v2') {
                 renderUserLokasiPageCards();
                 initPageLokasiMaps();
             }
         });
 
-        function openDetailLokasi(title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok) {
-            selectedLocationData = { title, address, size, priceNon, priceRokok, monthNon, monthRokok, hourNon, hourRokok, minuteNon, minuteRokok };
+        function openDetailLokasi(title, address, size, priceNon, monthNon, hourNon, minuteNon, pitchLed, resolution, opHours) {
+            selectedLocationData = { title, address, size, priceNon, monthNon, hourNon, minuteNon };
             document.getElementById('det-title').innerText = title;
             document.getElementById('det-address').innerText = address;
             document.getElementById('det-size').innerText = size;
@@ -3188,10 +2971,9 @@
             document.getElementById('det-rate-hour-non').innerText = `Rp ${hourNon || '0'}`;
             document.getElementById('det-rate-minute-non').innerText = `Rp ${minuteNon || '0'}`;
 
-            document.getElementById('det-rate-month-rokok').innerText = `Rp ${monthRokok || '0'}`;
-            document.getElementById('det-rate-day-rokok').innerText = `Rp ${priceRokok || '0'}`;
-            document.getElementById('det-rate-hour-rokok').innerText = `Rp ${hourRokok || '0'}`;
-            document.getElementById('det-rate-minute-rokok').innerText = `Rp ${minuteRokok || '0'}`;
+            if(document.getElementById('det-pitch')) document.getElementById('det-pitch').innerText = pitchLed || 'P4 Outdoor LED';
+            if(document.getElementById('det-res')) document.getElementById('det-res').innerText = resolution || '1536 x 1024 Pixel';
+            if(document.getElementById('det-ops')) document.getElementById('det-ops').innerText = opHours || '05.00 - 22.00 WIB';
 
             switchDetailTab('deskripsi');
             showPage('detail-lokasi');
@@ -3234,13 +3016,9 @@
                     size: '8 x 4 Meter',
                     traffic: '95.000 Kendaraan / Hari',
                     priceNon: '2.200.000',
-                    priceRokok: '2.750.000',
                     monthNon: '59.450.000',
-                    monthRokok: '74.312.500',
                     hourNon: '210.000',
-                    hourRokok: '262.500',
                     minuteNon: '3.800',
-                    minuteRokok: '4.750'
                 };
             }
 
@@ -3296,30 +3074,25 @@
                             <thead>
                                 <tr style="background: #0f172a; color: #ffffff; font-size: 10px; text-transform: uppercase;">
                                     <th style="padding: 8px; text-align: left; border: 1px solid #1e293b;">DURASI PENAYANGAN</th>
-                                    <th style="padding: 8px; text-align: right; border: 1px solid #1e293b; background: #1e3a8a;">PRODUK NON-ROKOK (STANDAR)</th>
-                                    <th style="padding: 8px; text-align: right; border: 1px solid #1e293b; background: #881337;">PRODUK ROKOK (+25% PERWALI)</th>
+                                    <th style="padding: 8px; text-align: right; border: 1px solid #1e293b; background: #1e3a8a;">TARIF SEWA RESMI</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr style="background: #ffffff; border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 8px; font-weight: 700;">🗓️ Tarif 1 Bulan</td>
                                     <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.monthNon || '0'}</td>
-                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.monthRokok || '0'}</td>
                                 </tr>
                                 <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 8px; font-weight: 700;">📅 Tarif 1 Hari</td>
                                     <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.priceNon || '0'}</td>
-                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.priceRokok || '0'}</td>
                                 </tr>
                                 <tr style="background: #ffffff; border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 8px; font-weight: 700;">⏰ Tarif 1 Jam</td>
                                     <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.hourNon || '0'}</td>
-                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.hourRokok || '0'}</td>
                                 </tr>
                                 <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                                     <td style="padding: 8px; font-weight: 700;">⏱️ Tarif 1 Menit</td>
                                     <td style="padding: 8px; text-align: right; font-weight: 800; color: #2563eb;">Rp ${item.minuteNon || '0'}</td>
-                                    <td style="padding: 8px; text-align: right; font-weight: 800; color: #e11d48;">Rp ${item.minuteRokok || '0'}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -3516,7 +3289,7 @@
 
                 show3DToast(
                     '✨ SELAMAT DATANG DI SEVISA!',
-                    'Halo <strong>' + foundUser.name + '</strong> 👋<br><br>Selamat datang di <strong>Portal Resmi Penyewaan Videotron Kota Salatiga</strong>. Silakan lengkapi Data Diri Anda jika ingin mengajukan penyewaan videotron.',
+                    'Halo <strong>' + foundUser.name + '</strong> 👋<br><br>Selamat datang di <strong>Portal Resmi Penyewaan Videotron Kota Salatiga</strong>.',
                     'success'
                 );
             }
@@ -3577,35 +3350,7 @@
         }
 
         function updateProfileStatusUI() {
-            const banner = document.getElementById('profile-warning-banner');
-            const dot = document.getElementById('profile-dot-status');
-            const statusBadge = document.getElementById('prof-status-badge');
-            const bannerText = document.getElementById('banner-status-text');
-
-            if (isProfileComplete) {
-                if (banner) banner.style.display = 'none';
-                if (dot) {
-                    dot.className = "w-2 h-2 rounded-full bg-emerald-500";
-                    dot.title = "Profile Lengkap";
-                }
-                if (statusBadge) {
-                    statusBadge.className = "px-2.5 py-0.5 bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-extrabold text-[10px] rounded-full border border-emerald-200 dark:border-emerald-800";
-                    statusBadge.innerText = "Status: Verified 100% Lengkap";
-                }
-            } else {
-                if (banner && isLoggedIn) banner.style.display = 'flex';
-                else if (banner) banner.style.display = 'none';
-
-                if (dot) {
-                    dot.className = "w-2 h-2 rounded-full bg-rose-500 animate-pulse";
-                    dot.title = "Belum Lengkap";
-                }
-                if (statusBadge) {
-                    statusBadge.className = "px-2.5 py-0.5 bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 font-extrabold text-[10px] rounded-full border border-rose-200 dark:border-rose-800";
-                    statusBadge.innerText = "Status: Belum Lengkap";
-                }
-                if (bannerText) bannerText.innerText = "Belum Lengkap";
-            }
+            // Profile banner and dot removed
         }
 
         function saveUserProfile(event) {
@@ -3658,13 +3403,13 @@
             'VDT-01': {
                 subheading: '1. Pasar Rejosari Salatiga (Jl. Hasanudin)',
                 p1: 'Pasang iklan videotron di kawasan Pasar Rejosari Salatiga menjadi pilihan utama bagi brand komersial yang menyasar pusat aktivitas perdagangan terbesar dengan arus kendaraan padat.',
-                p2: 'Berdasarkan SK Wali Kota Salatiga No. 974/148/2022, tarif sewa harian produk non-rokok di Pasar Rejosari sebesar Rp 2.200.000 / Hari (atau Rp 59.450.000 / Bulan). Untuk produk rokok dikenakan penyesuaian +25% sebesar Rp 2.750.000 / Hari sesuai Perwali 49/2018.',
+                p2: 'Berdasarkan SK Wali Kota Salatiga No. 974/148/2022, tarif sewa harian di Pasar Rejosari sebesar Rp 2.200.000 / Hari (atau Rp 59.450.000 / Bulan).',
                 p3: 'Kawasan ini memberikan paparan iklan visual 24 jam nonstop dengan daya jangkau lebih dari 65.000+ kendaraan per hari.'
             },
             'VDT-02': {
                 subheading: '1. Blotongan Gate Utara Salatiga',
                 p1: 'Pasang iklan videotron di titik Blotongan menyasar arus kendaraan antar-kota pada jalur utama Semarang - Surakarta di gerbang utara Kota Salatiga.',
-                p2: 'Tarif sewa resmi harian produk non-rokok sebesar Rp 1.268.000 / Hari (Rp 34.315.000 / Bulan), sedangkan tarif produk rokok sebesar Rp 1.585.000 / Hari.',
+                p2: 'Tarif sewa resmi harian sebesar Rp 1.268.000 / Hari (Rp 34.315.000 / Bulan).',
                 p3: 'Sangat cocok untuk branding produk ritel, otomotif, hingga sosialisasi program pemerintah.'
             },
             'VDT-03': {
@@ -3842,164 +3587,6 @@
 
             openModal('official-invoice-modal');
         }
-
-        // TOGGLE & SEND LIVE CHAT
-        function toggleLiveChatDrawer() {
-            const box = document.getElementById('chat-window-box');
-            if (box.classList.contains('hidden')) {
-                box.classList.remove('hidden');
-                box.classList.add('flex');
-                renderLiveChatMessages();
-            } else {
-                box.classList.add('hidden');
-                box.classList.remove('flex');
-            }
-        }
-
-        function openLiveChatDrawer() {
-            const box = document.getElementById('chat-window-box');
-            box.classList.remove('hidden');
-            box.classList.add('flex');
-            renderLiveChatMessages();
-        }
-
-        const DEFAULT_SAMPLE_CHATS = [
-            { sender: 'user', userName: 'Alfi Fadli', text: 'Halo Admin Diskominfo! Mau tanya apakah slot Videotron Selasar Kartini untuk bulan September 2026 masih tersedia?', time: '10:15' },
-            { sender: 'admin', userName: 'Admin Diskominfo', text: 'Halo Sdr/i Alfi Fadli! Slot Videotron Selasar Kartini masih tersedia. Silakan melakukan booking pengajuan sewa pada website.', time: '10:18' },
-            { sender: 'user', userName: 'Budi Santoso', text: 'Selamat pagi Admin, berapa lama proses verifikasi bukti bayar retribusi PAD?', time: '10:45' }
-        ];
-
-        function getStoredChats() {
-            const saved = localStorage.getItem('sevisa_chats');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-                } catch(e) {}
-            }
-            localStorage.setItem('sevisa_chats', JSON.stringify(DEFAULT_SAMPLE_CHATS));
-            return DEFAULT_SAMPLE_CHATS;
-        }
-
-        function editUserChatMessage(idx) {
-            let chats = getStoredChats();
-            if (!chats[idx]) return;
-            const currentText = chats[idx].text;
-            const newText = prompt('Edit pesan obrolan Anda:', currentText);
-            if (newText !== null && newText.trim() !== '') {
-                chats[idx].text = newText.trim();
-                chats[idx].time = (chats[idx].time || '').replace(' (diedit)', '') + ' (diedit)';
-                localStorage.setItem('sevisa_chats', JSON.stringify(chats));
-                window.dispatchEvent(new Event('storage'));
-                renderLiveChatMessages();
-                show3DToast('✏️ PESAN DIEDIT', 'Pesan obrolan Anda berhasil diperbarui.', 'success');
-            }
-        }
-
-        function deleteUserChatMessage(idx) {
-            if (confirm('Hapus pesan obrolan ini dari percakapan?')) {
-                let chats = getStoredChats();
-                chats.splice(idx, 1);
-                localStorage.setItem('sevisa_chats', JSON.stringify(chats));
-                window.dispatchEvent(new Event('storage'));
-                renderLiveChatMessages();
-                show3DToast('🗑️ PESAN DIHAPUS', 'Pesan obrolan telah dihapus.', 'info');
-            }
-        }
-
-        function renderLiveChatMessages() {
-            const container = document.getElementById('chat-messages-container');
-            let chats = getStoredChats();
-
-            let html = `
-                <div class="bg-blue-100 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 text-blue-950 dark:text-blue-200 p-3 rounded-2xl max-w-[85%] space-y-1 shadow-sm">
-                    <strong class="font-bold text-[10px] text-blue-600 block">👤 Admin Diskominfo Salatiga</strong>
-                    <p class="text-[11px] leading-relaxed">Halo! Selamat datang di layanan konsultasi penyewaan videotron resmi Kota Salatiga. Ada yang bisa kami bantu mengenai jadwal slot atau berkas pengajuan?</p>
-                </div>
-            `;
-
-            chats.forEach((msg, idx) => {
-                if (msg.sender === 'user') {
-                    html += `
-                        <div class="bg-emerald-600 text-white p-3 rounded-2xl max-w-[85%] ml-auto space-y-1 shadow-sm relative group">
-                            <div class="flex items-center justify-between gap-2 border-b border-emerald-500/50 pb-1 mb-1">
-                                <strong class="font-bold text-[10px] text-emerald-200">${msg.userName || 'Anda'} • ${msg.time || ''}</strong>
-                                <div class="flex gap-1.5 opacity-90">
-                                    <button onclick="editUserChatMessage(${idx})" title="Edit Pesan" class="hover:text-amber-300 transition text-[10px] font-bold">✏️ Edit</button>
-                                    <button onclick="deleteUserChatMessage(${idx})" title="Hapus Pesan" class="hover:text-rose-300 transition text-[10px] font-bold">🗑️ Hapus</button>
-                                </div>
-                            </div>
-                            <p class="text-[11px] leading-relaxed">${msg.text}</p>
-                        </div>
-                    `;
-                } else {
-                    html += `
-                        <div class="bg-blue-100 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 text-blue-950 dark:text-blue-200 p-3 rounded-2xl max-w-[85%] space-y-1 shadow-sm">
-                            <strong class="font-bold text-[10px] text-blue-600 block">👤 Admin Diskominfo Salatiga • ${msg.time || ''}</strong>
-                            <p class="text-[11px] leading-relaxed">${msg.text}</p>
-                        </div>
-                    `;
-                }
-            });
-
-            container.innerHTML = html;
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function sendUserChatMessage(e) {
-            e.preventDefault();
-            const input = document.getElementById('chat-user-input');
-            const msgText = input.value.trim();
-            if (!msgText) return;
-
-            let chats = getStoredChats();
-
-            chats.push({
-                sender: 'user',
-                userName: currentUser ? currentUser.name : 'Pengguna',
-                text: msgText,
-                time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-            });
-
-            localStorage.setItem('sevisa_chats', JSON.stringify(chats));
-            window.dispatchEvent(new Event('storage'));
-
-            input.value = '';
-            renderLiveChatMessages();
-        }
-
-        // LISTEN FOR CMS DATA UPDATES & REAL-TIME STATUS / CHAT CHANGES FROM ADMIN PORTAL (ADMIN.HTML)
-        let storageDebounceTimer = null;
-        window.addEventListener('storage', () => {
-            if (storageDebounceTimer) cancelAnimationFrame(storageDebounceTimer);
-            storageDebounceTimer = requestAnimationFrame(() => {
-                orderDatabase = getStoredOrders();
-                renderVideotronCards(getStoredUserLocations());
-                renderPortfolioGrid(getMergedPortfolioData());
-                renderAboutPageCMS();
-                renderUserLokasiPageCards();
-                renderLiveChatMessages();
-
-                const searchInput = document.getElementById('status-search-code');
-                const resultCard = document.getElementById('status-result-card');
-                
-                if (searchInput && searchInput.value.trim() !== '') {
-                    const inputCode = searchInput.value.trim().toUpperCase();
-                    const foundOrder = orderDatabase.find(o => o.code === inputCode);
-                    if (foundOrder && resultCard && !resultCard.classList.contains('hidden')) {
-                        renderOrderStatusCard(foundOrder);
-                    }
-                }
-            });
-        });
-
-        // AUTO REFRESH LIVE CHAT MESSAGES EVERY 2 SECONDS IN BACKGROUND
-        setInterval(() => {
-            const box = document.getElementById('chat-window-box');
-            if (box && !box.classList.contains('hidden')) {
-                renderLiveChatMessages();
-            }
-        }, 2000);
 
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
