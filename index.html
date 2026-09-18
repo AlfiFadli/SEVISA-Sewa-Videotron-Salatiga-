@@ -431,6 +431,10 @@
 <button class="px-2.5 py-1.5 rounded-lg hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition" id="nav-proyek" onclick="showPage('proyek')">
                         Testimoni
                     </button>
+
+<button class="hidden px-2.5 py-1.5 rounded-lg hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition font-bold" id="nav-transaksi" onclick="showPage('transaksi')">
+    Daftar Transaksi
+</button>
 <button class="px-3 py-1.5 rounded-lg text-brand-700 dark:text-sky-300 bg-brand-50 dark:bg-slate-800 hover:bg-brand-100 transition border border-brand-200 dark:border-slate-700 font-bold" id="nav-cek-status" onclick="showPage('cek-status')">
                         Cek Status
                     </button>
@@ -1096,6 +1100,36 @@
 </div>
 </section>
 <!-- 7. HALAMAN CEK STATUS -->
+
+<!-- PAGE: DAFTAR TRANSAKSI -->
+<section class="hidden" id="page-transaksi">
+    <div class="relative py-12 sm:py-20 overflow-hidden min-h-[60vh]">
+        <div class="absolute inset-0 bg-slate-50 dark:bg-slate-900"></div>
+        <div class="container mx-auto px-4 relative z-10 max-w-4xl">
+            <div class="text-center space-y-4 mb-10">
+                <span class="px-4 py-1.5 bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-sky-300 font-black text-xs rounded-full uppercase tracking-widest border border-brand-200 dark:border-brand-800">
+                    Riwayat Anda
+                </span>
+                <h2 class="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+                    Daftar <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-sky-500">Transaksi</span>
+                </h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+                    Berikut adalah rekam jejak pengajuan penyewaan videotron yang pernah Anda lakukan menggunakan akun ini.
+                </p>
+            </div>
+            
+            <div id="transaksi-list-container" class="space-y-4">
+                <!-- Transactions will be injected here -->
+            </div>
+            <div id="transaksi-empty-prompt" class="hidden text-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-10 shadow-lg mt-8">
+                <span class="text-5xl block mb-4">📭</span>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Belum Ada Transaksi</h3>
+                <p class="text-xs text-slate-500 mt-2">Anda belum pernah melakukan pengajuan penyewaan menggunakan akun ini.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="hidden" id="page-cek-status">
 <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white py-10 sm:py-12 relative overflow-hidden">
 <div class="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none mix-blend-screen" style="background-image: url('header_banner.jpg');"></div>
@@ -1112,9 +1146,9 @@
 <!-- SEARCH INPUT BOX -->
 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-7 space-y-4 shadow-lg">
 <div>
-<label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Masukkan Kode Transaksi Pemesanan *</label>
+<label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Masukkan Kode Transaksi / Nomor WA *</label>
 <div class="flex flex-col sm:flex-row gap-2">
-<input class="flex-grow bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3.5 rounded-xl text-xs font-mono font-bold uppercase text-slate-800 dark:text-slate-100 focus:border-brand-600 focus:outline-none" id="status-search-code" placeholder="Masukkan Nomor WhatsApp yang didaftarkan..." type="text" value=""/>
+<input class="flex-grow bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3.5 rounded-xl text-xs font-mono font-bold uppercase text-slate-800 dark:text-slate-100 focus:border-brand-600 focus:outline-none" id="status-search-code" placeholder="Masukkan Nomor WA atau Kode..." type="text" value=""/>
 <button class="px-6 py-3.5 bg-gradient-to-r from-brand-700 to-blue-600 hover:from-brand-600 hover:to-blue-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-md transition shrink-0" onclick="searchOrderStatus()">
                                     Cek Status →
                                 </button>
@@ -1275,7 +1309,7 @@
                                 </div>
                                 <div>
                                     <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Kategori / Tipe Akun Pemesan *</label>
-                                    <select id="prof-category" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
+                                    <select id="prof-category" required onchange="togglePositionField()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
                                         <option value="personal">Personal / Perorangan</option>
                                         <option value="perusahaan">Perusahaan Swasta / PT / CV</option>
                                         <option value="pemerintah">Instansi Pemerintah / Dinas</option>
@@ -1289,9 +1323,9 @@
                                     <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Nama Perusahaan / Instansi / Brand *</label>
                                     <input type="text" id="prof-company" value="" required placeholder="Contoh: PT Salatiga Digital Indo / Dinas Pariwisata" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
                                 </div>
-                                <div>
-                                    <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Jabatan / Posisi dalam Instansi *</label>
-                                    <input type="text" id="prof-position" value="" required placeholder="Contoh: Manajer Pemasaran / Kepala Bidang" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
+                                <div id="prof-position-container" class="hidden">
+                                    <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Jabatan / Posisi dalam Instansi</label>
+                                    <input type="text" id="prof-position" value="" placeholder="Contoh: Manajer Pemasaran / Kepala Bidang" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
                                 </div>
                             </div>
 
@@ -1311,8 +1345,8 @@
                             </div>
 
                             <div>
-                                <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Nomor NIK KTP / NPWP Resmi *</label>
-                                <input type="text" id="prof-nik" value="" required placeholder="Masukkan 16 Digit NIK KTP atau NPWP Perusahaan" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
+                                <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Nomor NIK KTP / NPWP Resmi</label>
+                                <input type="text" id="prof-nik" value="" placeholder="Masukkan 16 Digit NIK KTP atau NPWP Perusahaan" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
                             </div>
 
                             <div>
@@ -1460,49 +1494,60 @@
             <form onsubmit="submitBookingSewa(event)" class="space-y-4 text-xs">
                 
                 <!-- 1. PILIH TITIK LOKASI VIDEOTRON -->
-                <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">1. Titik Lokasi Videotron Resmi Pemkot *</label>
-                    <select id="book-location" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
-                        <option value="Pasar Rejosari">1. Pasar Rejosari (Jl. Hasanudin - Top Traffic)</option>
-                        <option value="Blotongan">2. Blotongan (Jl. Semarang - Surakarta - Gate Utara)</option>
-                        <option value="Selasar Kartini">3. Selasar Kartini (Jl. Kartini - Pusat Edukasi)</option>
-                        <option value="Alun-Alun Salatiga">4. Alun-Alun Salatiga (Lapangan Pancasila)</option>
-                    </select>
-                </div>
+<div>
+<label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">1. Titik Lokasi Videotron Resmi Pemkot *</label>
+<div class="space-y-2 mt-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-xl">
+<label class="flex items-center gap-3 cursor-pointer text-slate-800 dark:text-slate-200 font-bold"><input type="checkbox" name="book-location" value="Pasar Rejosari" onchange="calculateBookingPrice()" class="w-5 h-5 accent-brand-600 rounded"> 1. Pasar Rejosari (Jl. Hasanudin - Top Traffic)</label>
+<label class="flex items-center gap-3 cursor-pointer text-slate-800 dark:text-slate-200 font-bold"><input type="checkbox" name="book-location" value="Blotongan" onchange="calculateBookingPrice()" class="w-5 h-5 accent-brand-600 rounded"> 2. Blotongan (Jl. Semarang - Surakarta - Gate Utara)</label>
+<label class="flex items-center gap-3 cursor-pointer text-slate-800 dark:text-slate-200 font-bold"><input type="checkbox" name="book-location" value="Selasar Kartini" onchange="calculateBookingPrice()" class="w-5 h-5 accent-brand-600 rounded"> 3. Selasar Kartini (Jl. Kartini - Pusat Edukasi)</label>
+<label class="flex items-center gap-3 cursor-pointer text-slate-800 dark:text-slate-200 font-bold"><input type="checkbox" name="book-location" value="Alun-Alun Salatiga" onchange="calculateBookingPrice()" class="w-5 h-5 accent-brand-600 rounded"> 4. Alun-Alun Salatiga (Lapangan Pancasila)</label>
+</div>
+</div>
 
-                <!-- 2. PILIHAN PAKET -->
-                <div>
-                    <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">2. Pilihan Paket *</label>
-                    <select id="book-paket" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
-                        <option value="alfa" selected>Paket Alfa</option>
-                        <option value="beta">Paket Beta</option>
-                        <option value="event">Paket Event</option>
-                    </select>
-                </div>
+<!-- 2. PILIHAN PAKET -->
+<div>
+<label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">2. Pilihan Paket *</label>
+<select id="book-paket" onchange="toggleEventHours(); calculateBookingPrice();" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
+<option value="alfa" selected>Paket Alfa</option>
+<option value="beta">Paket Beta</option>
+<option value="event">Paket Event</option>
+</select>
+<div id="book-event-hours" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+<div>
+<label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">Jam Mulai</label>
+<input type="time" id="book-start-time" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
+</div>
+<div>
+<label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">Jam Selesai</label>
+<input type="time" id="book-end-time" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
+</div>
+</div>
+</div>
 
-                <!-- 3 & 4. DURASI ROTASI & KALI TAYANG -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                    <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">3. Jumlah Rotasi (Detik) *</label>
-                        <input type="number" id="book-rotasi-detik" value="15" min="1" oninput="calculateBookingPrice()" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">4. Kali Tayang Di Satu Hari *</label>
-                        <input type="number" id="book-qty" value="1" min="1" oninput="calculateBookingPrice()" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
-                    </div>
-                </div>
+<!-- 3 & 4. DURASI ROTASI & KALI TAYANG -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+<div>
+<label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">3. Jumlah Rotasi (Detik) *</label>
+<input type="number" id="book-rotasi-detik" value="15" min="1" oninput="calculateBookingPrice()" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
+</div>
+<div>
+<label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">4. Kali Tayang Di Satu Hari *</label>
+<input type="number" id="book-qty" value="1" min="1" oninput="calculateBookingPrice()" onchange="calculateBookingPrice()" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-bold">
+</div>
+</div>
 
-                <!-- 5 & 6. TANGGAL MULAI & SELESAI -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">6. Tanggal Mulai Sewa *</label>
-                        <input type="date" id="book-start-date" required onchange="calculateBookingPrice()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">7. Tanggal Selesai Sewa *</label>
-                        <input type="date" id="book-end-date" required onchange="calculateBookingPrice()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
-                    </div>
-                </div>
+<!-- 5 & 6. TANGGAL MULAI & SELESAI -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div>
+<label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">6. Tanggal Mulai Sewa *</label>
+<input type="date" id="book-start-date" required onchange="calculateBookingPrice()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
+</div>
+<div>
+<label class="block font-bold mb-1 uppercase tracking-wider text-slate-700 dark:text-slate-300">7. Tanggal Selesai Sewa *</label>
+<input type="date" id="book-end-date" required onchange="calculateBookingPrice()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
+<p class="text-[10px] text-slate-500 mt-1 italic">Jika satu hari tanggal mulai dan tanggal selesai sama</p>
+</div>
+</div>
 
                 <!-- DYNAMIC REAL-TIME PRICE CALCULATOR CARD -->
                 <div class="bg-gradient-to-tr from-slate-900 via-slate-800 to-blue-950 text-white p-4 sm:p-5 rounded-2xl border border-sky-500/40 shadow-xl space-y-3">
@@ -1989,6 +2034,9 @@
             updateProfileStatusUI();
             showPage('home');
             
+            
+            const navTransaksi = document.getElementById('nav-transaksi');
+            if (navTransaksi) navTransaksi.classList.add('hidden');
             show3DToast('ℹ️ BERHASIL KELUAR', 'Anda telah keluar dari akun pengguna SEVISA.', 'info');
         }
 
@@ -1998,78 +2046,114 @@
             return parseInt(priceStr.toString().replace(/\./g, ''), 10);
         }
 
-        function calculateBookingPrice() {
-            const locEl = document.getElementById('book-location');
-            const catEl = { value: 'perorangan' };
-            const paketEl = document.getElementById('book-paket');
-            const rotasiEl = document.getElementById('book-rotasi-detik');
-            const qtyEl = document.getElementById('book-qty'); // Kali tayang
-            const startEl = document.getElementById('book-start-date');
-            const endEl = document.getElementById('book-end-date');
+        function toggleEventHours() {
+    const paket = document.getElementById('book-paket').value;
+    const container = document.getElementById('book-event-hours');
+    const qtyEl = document.getElementById('book-qty');
+    
+    // Update minimum tayang and set value automatically
+    if (qtyEl) {
+        let minTayang = 1;
+        if (paket === 'alfa') minTayang = 30;
+        else if (paket === 'beta') minTayang = 20;
+        else if (paket === 'event') minTayang = 30;
+        
+        qtyEl.min = minTayang;
+        qtyEl.value = minTayang; // The user specified: "langsung terisi sesuai minimal tayang paket"
+    }
 
-            if (!locEl || !paketEl || !rotasiEl || !qtyEl) return;
-
-            const locName = locEl.value;
-            const item = VIDEOTRON_DATA.find(v => v.title.toLowerCase().includes(locName.toLowerCase())) || VIDEOTRON_DATA[0];
-            
-            const minuteRate = getRawPriceNumber(item.minuteNon);
-            
-            const rateMinEl = document.getElementById('calc-rate-minute');
-            const badgeEl = document.getElementById('calc-rate-badge');
-
-            if (rateMinEl) rateMinEl.innerText = 'Rp ' + minuteRate.toLocaleString('id-ID');
-            if (badgeEl) {
-                let catText = "Perorangan";
-                if(catEl.value === 'nonperorangan') catText = "Non Perorangan";
-                if(catEl.value === 'instansi') catText = "Instansi";
-                badgeEl.innerText = catText;
-            }
-
-            let rotasiDetik = parseInt(rotasiEl.value) || 15;
-            let kaliTayang = parseInt(qtyEl.value) || 1;
-            
-            let totalDays = 1;
-            if (startEl && endEl && startEl.value && endEl.value) {
-                const start = new Date(startEl.value);
-                const end = new Date(endEl.value);
-                const diffTime = end - start;
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; 
-                if (diffDays > 0) totalDays = diffDays;
-            }
-
-            const rotasiMenit = rotasiDetik / 60;
-            const subtotal = rotasiMenit * minuteRate * kaliTayang * totalDays;
-            const tax = subtotal * 0.25;
-            const totalPrice = subtotal + tax;
-
-            const subtotalEl = document.getElementById('calc-subtotal');
-            const taxEl = document.getElementById('calc-tax');
-            const unitDetailEl = document.getElementById('calc-unit-detail');
-            const totalPriceEl = document.getElementById('calc-total-price');
-
-            if (subtotalEl) subtotalEl.innerText = 'Rp ' + Math.round(subtotal).toLocaleString('id-ID');
-            if (taxEl) taxEl.innerText = 'Rp ' + Math.round(tax).toLocaleString('id-ID');
-            if (unitDetailEl) unitDetailEl.innerText = `${totalDays} Hari (${kaliTayang} Tayang/Hari)`;
-            if (totalPriceEl) totalPriceEl.innerText = 'Rp ' + Math.round(totalPrice).toLocaleString('id-ID');
-
-            return { totalDays, rotasiDetik, kaliTayang, minuteRate, subtotal, tax, totalPrice, categoryLabel: badgeEl ? badgeEl.innerText : '', paketLabel: paketEl.options[paketEl.selectedIndex].text };
+    if (container) {
+        if (paket === 'event') {
+            container.classList.remove('hidden');
+        } else {
+            container.classList.add('hidden');
         }
+    }
+}
 
-        // TRIGGER BOOKING FLOW WHEN USER CLICKS "AJUKAN PENYEWAAN" OR "PESAN SEWA SEKARANG"
-        function triggerBookingFlow(locationTitle = null) {
+function calculateBookingPrice() {
+    const locEls = Array.from(document.querySelectorAll('input[name="book-location"]:checked'));
+    const catEl = { value: typeof currentUser !== 'undefined' && currentUser ? currentUser.category : 'personal' };
+    const paketEl = document.getElementById('book-paket');
+    const rotasiEl = document.getElementById('book-rotasi-detik');
+    const qtyEl = document.getElementById('book-qty');
+    const startEl = document.getElementById('book-start-date');
+    const endEl = document.getElementById('book-end-date');
+
+    if (!paketEl || !rotasiEl || !qtyEl) return;
+
+    let minuteRate = 0;
+    locEls.forEach(el => {
+        const locName = el.value;
+        const item = typeof VIDEOTRON_DATA !== 'undefined' ? VIDEOTRON_DATA.find(v => v.title.toLowerCase().includes(locName.toLowerCase())) || VIDEOTRON_DATA[0] : {minuteNon: 0};
+        minuteRate += getRawPriceNumber(item.minuteNon);
+    });
+
+    const rateMinEl = document.getElementById('calc-rate-minute');
+    const badgeEl = document.getElementById('calc-rate-badge');
+
+    if (rateMinEl) rateMinEl.innerText = 'Rp ' + minuteRate.toLocaleString('id-ID');
+    if (badgeEl) {
+        let catText = "Personal";
+        if(catEl.value === 'perusahaan') catText = "Perusahaan";
+        if(catEl.value === 'pemerintah') catText = "Pemerintah";
+        if(catEl.value === 'umkm') catText = "UMKM";
+        badgeEl.innerText = catText;
+    }
+
+    let rotasiDetik = parseInt(rotasiEl.value) || 15;
+    let kaliTayang = parseInt(qtyEl.value) || 1;
+
+    let totalDays = 1;
+    if (startEl && endEl && startEl.value && endEl.value) {
+        const start = new Date(startEl.value);
+        const end = new Date(endEl.value);
+        const diffTime = end - start;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        if (diffDays > 0) totalDays = diffDays;
+    }
+
+    const rotasiMenit = Math.ceil(rotasiDetik / 60);
+    const subtotal = rotasiMenit * minuteRate * kaliTayang * totalDays;
+    const tax = subtotal * 0.25;
+    const totalPrice = subtotal + tax;
+
+    const subtotalEl = document.getElementById('calc-subtotal');
+    const taxEl = document.getElementById('calc-tax');
+    const unitDetailEl = document.getElementById('calc-unit-detail');
+    const totalPriceEl = document.getElementById('calc-total-price');
+
+    if (subtotalEl) subtotalEl.innerText = 'Rp ' + Math.round(subtotal).toLocaleString('id-ID');
+    if (taxEl) taxEl.innerText = 'Rp ' + Math.round(tax).toLocaleString('id-ID');
+    if (unitDetailEl) unitDetailEl.innerText = `${totalDays} Hari (${kaliTayang} Tayang/Hari)`;
+    if (totalPriceEl) totalPriceEl.innerText = 'Rp ' + Math.round(totalPrice).toLocaleString('id-ID');
+
+    return { totalDays, rotasiDetik, kaliTayang, minuteRate, subtotal, tax, totalPrice, categoryLabel: badgeEl ? badgeEl.innerText : '', paketLabel: paketEl.options[paketEl.selectedIndex].text };
+}
+
+
+// TRIGGER BOOKING FLOW 
+function triggerBookingFlow(locationTitle = null) {
             if (!isLoggedIn) {
                 openAuthGateModal('login');
                 show3DToast('ℹ️ SILAKAN MASUK AKUN', 'Untuk mengajukan penyewaan videotron, silakan <strong>Masuk Akun</strong> atau <strong>Daftar</strong> terlebih dahulu.', 'info');
                 return;
             }
 
+            if (!currentUser.phone || !currentUser.address) {
+                show3DToast('⚠️ LENGKAPI DATA DIRI', 'Harap lengkapi profil (Minimal Nomor WA dan Alamat) di menu Data Diri terlebih dahulu sebelum mengajukan penyewaan.', 'error');
+                showPage('profil');
+                return;
+            }
+
 
 
             if (locationTitle) {
-                const selectEl = document.getElementById('book-location');
-                for (let i = 0; i < selectEl.options.length; i++) {
-                    if (selectEl.options[i].value.toLowerCase().includes(locationTitle.toLowerCase())) {
-                        selectEl.selectedIndex = i;
+                const checkboxes = document.querySelectorAll('input[name="book-location"]');
+                checkboxes.forEach(cb => cb.checked = false);
+                for (let cb of checkboxes) {
+                    if (cb.value.toLowerCase().includes(locationTitle.toLowerCase())) {
+                        cb.checked = true;
                         break;
                     }
                 }
@@ -2109,49 +2193,113 @@
         }
 
         function submitBookingSewa(event) {
-            event.preventDefault();
-            const location = document.getElementById('book-location').value;
-            const startDate = document.getElementById('book-start-date').value;
-            const endDate = document.getElementById('book-end-date').value;
-            const fileInput = document.getElementById('book-ad-file');
+    event.preventDefault();
+    
+    const locEls = Array.from(document.querySelectorAll('input[name="book-location"]:checked'));
+    if (locEls.length === 0) {
+        show3DToast('⚠️ LOKASI BELUM DIPILIH', 'Harap pilih minimal satu lokasi videotron!', 'error');
+        return;
+    }
+    const locations = locEls.map(el => el.value);
+    const locationStr = locations.join(', ');
 
-            if (!fileInput.files || fileInput.files.length === 0) {
-                show3DToast('⚠️ MATERI IKLAN BELUM TERLAMPIR', 'Harap lampirkan file materi iklan (Video/PPT/Gambar/PDF) Anda!', 'error');
+    const paket = document.getElementById('book-paket').value;
+    const qty = parseInt(document.getElementById('book-qty').value) || 1;
+
+    if (paket === 'alfa' && qty < 30) {
+        show3DToast('⚠️ MINIMAL TAYANG BELUM TERPENUHI', 'Untuk Paket Alfa, jumlah tayang minimal adalah 30 kali per hari!', 'error');
+        return;
+    }
+    if (paket === 'beta' && qty < 20) {
+        show3DToast('⚠️ MINIMAL TAYANG BELUM TERPENUHI', 'Untuk Paket Beta, jumlah tayang minimal adalah 20 kali per hari!', 'error');
+        return;
+    }
+    if (paket === 'event' && qty < 30) {
+        show3DToast('⚠️ MINIMAL TAYANG BELUM TERPENUHI', 'Untuk Paket Event, jumlah tayang minimal adalah 30 kali per hari!', 'error');
+        return;
+    }
+
+    const startDate = document.getElementById('book-start-date').value;
+    const endDate = document.getElementById('book-end-date').value;
+    const fileInput = document.getElementById('book-ad-file');
+
+    let startTime = '';
+    let endTime = '';
+    let eventNotes = '';
+    if (paket === 'event') {
+        startTime = document.getElementById('book-start-time').value;
+        endTime = document.getElementById('book-end-time').value;
+        if (startTime && endTime) {
+            eventNotes = ` (Jam Event: ${startTime} - ${endTime})`;
+        }
+    }
+
+    if (!fileInput.files || fileInput.files.length === 0) {
+        show3DToast('⚠️ MATERI IKLAN BELUM TERLAMPIR', 'Harap lampirkan file materi iklan (Video/PPT/Gambar/PDF) Anda!', 'error');
+        return;
+    }
+
+    const newStart = new Date(startDate + 'T' + (startTime || '00:00') + ':00');
+    const newEnd = new Date(endDate + 'T' + (endTime || '23:59') + ':59');
+    
+    for (const order of orderDatabase) {
+        if (order.status === 'ditolak' || order.status === 'selesai' || order.status === 'dibatalkan') continue;
+
+        let orderLocs = Array.isArray(order.locationArray) ? order.locationArray : [order.location];
+        const hasMatchingLoc = locations.some(l => orderLocs.includes(l));
+        
+        if (hasMatchingLoc && order.rawStartDate && order.rawEndDate) {
+            const orderStart = new Date(order.rawStartDate + 'T' + (order.rawStartTime || '00:00') + ':00');
+            const orderEnd = new Date(order.rawEndDate + 'T' + (order.rawEndTime || '23:59') + ':59');
+            
+            if (newStart <= orderEnd && orderStart <= newEnd) {
+                show3DToast('⚠️ JADWAL BENTROK', 'Tanggal dan jam pada lokasi yang Anda pilih sudah dipesan oleh pihak lain. Silakan pilih jadwal atau lokasi lain.', 'error');
                 return;
             }
-
-            const calcResult = calculateBookingPrice();
-            const fileName = fileInput.files[0].name;
-            const randomSuffix = Math.floor(100000 + Math.random() * 900000);
-            const bookingCode = 'SVS-' + randomSuffix;
-
-            const newOrder = {
-                code: bookingCode,
-                userName: currentUser ? currentUser.name : 'Pengguna',
-                company: currentUser ? (currentUser.company || 'Personal') : 'Personal',
-                location: location,
-                dates: `${startDate} s.d. ${endDate} (${calcResult.totalDays} Hari • ${calcResult.paketLabel} • Rp ${calcResult.totalPrice.toLocaleString('id-ID')})`,
-                file: fileName,
-                status: 'menunggu',
-                statusLabel: 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO',
-                statusDesc: `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa lokasi <strong>${location}</strong> (Kategori: ${calcResult.categoryLabel} • Paket: ${calcResult.paketLabel} • Total: Rp ${calcResult.totalPrice.toLocaleString('id-ID')}) sedang dalam antrean verifikasi.`
-            };
-
-            orderDatabase.unshift(newOrder);
-            saveStoredOrders(orderDatabase);
-
-            closeModal('booking-modal');
-
-            show3DToast(
-                '🎉 PENGAJUAN BERHASIL DISIMPAN!',
-                `Kode Transaksi Pemesanan Anda:<br><strong class="text-xl font-black font-mono text-amber-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-amber-500/40 inline-block my-2 shadow-inner tracking-wider">${bookingCode}</strong><br>Silakan <strong>salin / catat Kode Transaksi</strong> di atas. Anda harus memasukkannya terlebih dahulu ke dalam kolom <strong>"Masukkan Kode Transaksi Pemesanan"</strong> pada Halaman Cek Status untuk menampilkan status & tahapan pengajuan.`,
-                'success',
-                'MENUJU HALAMAN CEK STATUS &rarr;',
-                `navigateToStatusPage('${bookingCode}')`
-            );
         }
+    }
 
-        function navigateToStatusPage(code) {
+    const calcResult = calculateBookingPrice();
+    const fileName = fileInput.files[0].name;
+    const randomSuffix = Math.floor(100000 + Math.random() * 900000);
+    const bookingCode = 'SVS-' + randomSuffix;
+
+    
+    const userPhone = currentUser ? currentUser.phone : '';
+    const newOrder = {
+        phone: userPhone,
+        code: bookingCode,
+        userName: currentUser ? currentUser.name : 'Pengguna',
+        company: currentUser ? (currentUser.company || 'Personal') : 'Personal',
+        location: locationStr,
+        locationArray: locations,
+        rawStartDate: startDate,
+        rawEndDate: endDate,
+        rawStartTime: startTime,
+        rawEndTime: endTime,
+        dates: `${startDate} s.d. ${endDate}${eventNotes} (${calcResult.totalDays} Hari • ${calcResult.paketLabel} • Rp ${calcResult.totalPrice.toLocaleString('id-ID')})`,
+        file: fileName,
+        status: 'menunggu',
+        statusLabel: 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO',
+        statusDesc: `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa lokasi <strong>${locationStr}</strong> (Kategori: ${calcResult.categoryLabel} • Paket: ${calcResult.paketLabel} • Total: Rp ${calcResult.totalPrice.toLocaleString('id-ID')}) sedang dalam antrean verifikasi.`
+    };
+
+    orderDatabase.unshift(newOrder);
+    saveStoredOrders(orderDatabase);
+
+    closeModal('booking-modal');
+
+    show3DToast(
+        '🎉 PENGAJUAN BERHASIL DISIMPAN!',
+        `Kode Transaksi Pemesanan Anda:<br><strong class="text-xl font-black font-mono text-amber-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-amber-500/40 inline-block my-2 shadow-inner tracking-wider">${bookingCode}</strong><br>Silakan <strong>salin / catat Kode Transaksi</strong> di atas. Anda harus memasukkannya terlebih dahulu ke dalam kolom <strong>"Masukkan Kode Transaksi Pemesanan"</strong> pada Halaman Cek Status untuk menampilkan status & tahapan pengajuan.`,
+        'success',
+        'MENUJU HALAMAN CEK STATUS &rarr;',
+        `navigateToStatusPage('${bookingCode}')`
+    );
+}
+
+
+function navigateToStatusPage(code) {
             close3DToast();
             showPage('cek-status');
             
@@ -2171,37 +2319,191 @@
             );
         }
 
-        function searchOrderStatus() {
+        
+        function loadUserTransactions() {
+            if (!isLoggedIn || !currentUser) return;
+            const container = document.getElementById('transaksi-list-container');
+            const emptyPrompt = document.getElementById('transaksi-empty-prompt');
+            
+            orderDatabase = getStoredOrders();
+            const userOrders = orderDatabase.filter(o => o.phone === currentUser.phone);
+            
+            container.innerHTML = '';
+            if (userOrders.length === 0) {
+                emptyPrompt.classList.remove('hidden');
+                return;
+            }
+            
+            emptyPrompt.classList.add('hidden');
+            
+            userOrders.forEach(order => {
+                let statusColor = 'text-amber-500';
+                if(order.status === 'diproses') statusColor = 'text-blue-500';
+                if(order.status === 'selesai') statusColor = 'text-green-500';
+                if(order.status === 'ditolak') statusColor = 'text-red-500';
+
+                const card = document.createElement('div');
+                card.className = 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm';
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3 mb-3">
+                        <div>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">Kode Transaksi</span>
+                            <div class="text-brand-600 font-mono font-black text-sm">${order.code}</div>
+                        </div>
+                        <div class="font-bold text-xs ${statusColor} uppercase px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-md border border-slate-200 dark:border-slate-700">
+                            ${order.statusLabel}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <span class="text-slate-400 font-bold block text-[10px] uppercase">Lokasi</span>
+                            <strong class="text-slate-800 dark:text-slate-100 block truncate">${order.location}</strong>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 font-bold block text-[10px] uppercase">Jadwal & Paket</span>
+                            <strong class="text-slate-800 dark:text-slate-100 block">${order.dates}</strong>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+
+function searchOrderStatus() {
             orderDatabase = getStoredOrders();
             const inputCode = document.getElementById('status-search-code').value.trim().toUpperCase();
             const resultCard = document.getElementById('status-result-card');
             const emptyPrompt = document.getElementById('status-empty-prompt');
+            const container = resultCard ? resultCard.parentElement : null;
 
             if (!inputCode) {
                 if (resultCard) resultCard.classList.add('hidden');
                 if (emptyPrompt) emptyPrompt.classList.remove('hidden');
-                show3DToast('⚠️ MASUKKAN KODE TRANSAKSI', 'Harap masukkan Kode Transaksi Pemesanan Anda terlebih dahulu pada kolom yang tersedia!', 'error');
+                document.querySelectorAll('.dynamic-result-card').forEach(e => e.remove());
+                show3DToast('⚠️ MASUKKAN KODE ATAU NOMOR WA', 'Harap masukkan Kode Transaksi atau Nomor WA Anda!', 'error');
                 return;
             }
 
-            const foundOrder = orderDatabase.find(o => o.code === inputCode);
+            // Find all matching orders by code or phone
+            const foundOrders = orderDatabase.filter(o => o.code === inputCode || (o.phone && o.phone.toUpperCase() === inputCode));
+            document.querySelectorAll('.dynamic-result-card').forEach(e => e.remove());
 
-            if (!foundOrder) {
+            if (foundOrders.length === 0) {
                 if (resultCard) resultCard.classList.add('hidden');
                 if (emptyPrompt) emptyPrompt.classList.remove('hidden');
 
                 show3DToast(
-                    '🚨 KODE TIDAK DITEMUKAN',
-                    `Kode transaksi <strong>${inputCode}</strong> tidak ditemukan dalam sistem.<br><br>Silakan periksa kembali kode transaksi Anda atau gunakan tombol cepat demo.`,
+                    '🚨 DATA TIDAK DITEMUKAN',
+                    `Data dengan input <strong>${inputCode}</strong> tidak ditemukan.<br><br>Silakan periksa kembali kode/WA Anda.`,
                     'error'
                 );
                 return;
             }
 
             if (emptyPrompt) emptyPrompt.classList.add('hidden');
-            if (resultCard) resultCard.classList.remove('hidden');
+            if (resultCard) resultCard.classList.add('hidden');
 
-            renderOrderStatusCard(foundOrder);
+            foundOrders.forEach((order, index) => {
+                const cardClone = resultCard.cloneNode(true);
+                cardClone.id = 'status-result-card-' + index;
+                cardClone.classList.remove('hidden');
+                cardClone.classList.add('dynamic-result-card');
+                cardClone.classList.add('mt-4'); // add spacing
+                
+                // Safe query selector updates
+                const elCode = cardClone.querySelector('#track-code-display');
+                if (elCode) elCode.innerText = order.code || '';
+                
+                const elLoc = cardClone.querySelector('#track-location');
+                if (elLoc) elLoc.innerText = order.location || '';
+                
+                const elDates = cardClone.querySelector('#track-dates');
+                if (elDates) elDates.innerText = order.dates || '';
+                
+                const elUser = cardClone.querySelector('#track-user');
+                if (elUser) elUser.innerText = `${order.userName || 'Pengguna'} (${order.company || '-'}) `;
+                
+                const elFile = cardClone.querySelector('#track-file');
+                if (elFile) elFile.innerText = order.file || '';
+
+                // Handle badge and steps
+                const badgeContainer = cardClone.querySelector('#track-status-badge-container');
+                let badgeHtml = '';
+                
+                const s1 = cardClone.querySelector('#step-track-1');
+                const s1i = cardClone.querySelector('#step-track-1-icon');
+                const s2 = cardClone.querySelector('#step-track-2');
+                const s2i = cardClone.querySelector('#step-track-2-icon');
+                const s3 = cardClone.querySelector('#step-track-3');
+                const s3i = cardClone.querySelector('#step-track-3-icon');
+
+                if (order.status === 'menunggu') {
+                    badgeHtml = `<span class="px-3.5 py-1.5 bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-black text-xs uppercase tracking-wider rounded-xl border border-amber-300 dark:border-amber-800 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span><span>${order.statusLabel || 'MENUNGGU VERIFIKASI ADMIN'}</span></span>`;
+                    if (s1) s1.className = 'bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-400 rounded-2xl p-3 text-center space-y-1 transition duration-300';
+                    if (s1i) s1i.className = 'w-7 h-7 rounded-full bg-amber-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md';
+                    if (s2) s2.className = 'bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 text-center space-y-1 opacity-50 transition duration-300';
+                    if (s2i) s2i.className = 'w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center';
+                    if (s3) s3.className = 'bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 text-center space-y-1 opacity-50 transition duration-300';
+                    if (s3i) s3i.className = 'w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center';
+                } else if (order.status === 'diproses') {
+                    badgeHtml = `<span class="px-3.5 py-1.5 bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-black text-xs uppercase tracking-wider rounded-xl border border-blue-300 dark:border-blue-800 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span><span>${order.statusLabel || 'SEDANG DIPROSES'}</span></span>`;
+                    if (s1) s1.className = 'bg-brand-50 dark:bg-brand-900/30 border border-brand-200 dark:border-brand-800 rounded-2xl p-3 text-center space-y-1 transition duration-300';
+                    if (s1i) s1i.className = 'w-7 h-7 rounded-full bg-brand-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center';
+                    if (s2) s2.className = 'bg-blue-50 dark:bg-blue-950/40 border-2 border-blue-400 rounded-2xl p-3 text-center space-y-1 transition duration-300 shadow-sm scale-105';
+                    if (s2i) s2i.className = 'w-7 h-7 rounded-full bg-blue-600 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md';
+                    if (s3) s3.className = 'bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 text-center space-y-1 opacity-50 transition duration-300';
+                    if (s3i) s3i.className = 'w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center';
+                } else if (order.status === 'selesai' || order.status === 'terkonfirmasi') {
+                    badgeHtml = `<span class="px-3.5 py-1.5 bg-green-100 dark:bg-green-950 text-green-800 dark:text-green-300 font-black text-xs uppercase tracking-wider rounded-xl border border-green-300 dark:border-green-800 flex items-center gap-1.5"><svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>${order.statusLabel || 'SELESAI'}</span></span>`;
+                    if (s1) s1.className = 'bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-2xl p-3 text-center space-y-1 transition duration-300';
+                    if (s1i) s1i.className = 'w-7 h-7 rounded-full bg-green-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center';
+                    if (s2) s2.className = 'bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-2xl p-3 text-center space-y-1 transition duration-300';
+                    if (s2i) s2i.className = 'w-7 h-7 rounded-full bg-green-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center';
+                    if (s3) s3.className = 'bg-green-50 dark:bg-green-950/40 border-2 border-green-500 rounded-2xl p-3 text-center space-y-1 transition duration-300 shadow-sm scale-105';
+                    if (s3i) s3i.className = 'w-7 h-7 rounded-full bg-green-600 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md';
+                } else if (order.status === 'ditolak') {
+                    badgeHtml = `<span class="px-3.5 py-1.5 bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-300 font-black text-xs uppercase tracking-wider rounded-xl border border-red-300 dark:border-red-800 flex items-center gap-1.5"><svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span>${order.statusLabel || 'DITOLAK'}</span></span>`;
+                }
+
+                if (badgeContainer) badgeContainer.innerHTML = badgeHtml;
+
+                // Handle message box formatting
+                let noteContent = order.statusDesc || '';
+                if (noteContent.includes('<br>')) {
+                    noteContent = noteContent.split('<br>').slice(1).join('<br>');
+                } else {
+                    noteContent = noteContent.replace(/^(📌|⚙️|✅)\s*<strong>.*?<\/strong>\s*/g, '');
+                }
+
+                let boxHeader = '📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong>';
+                let boxClass = 'p-3.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl text-xs text-amber-900 dark:text-amber-200 leading-relaxed font-medium';
+
+                if (order.status === 'diproses') {
+                    boxHeader = '⚙️ <strong>Status: Sedang Diproses / Review Uji Tayang</strong>';
+                    boxClass = 'p-3.5 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl text-xs text-blue-900 dark:text-blue-200 leading-relaxed font-medium';
+                } else if (order.status === 'terkonfirmasi' || order.status === 'selesai') {
+                    boxHeader = '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong>';
+                    boxClass = 'p-3.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs text-emerald-900 dark:text-emerald-200 leading-relaxed font-medium';
+                }
+
+                const messageBoxEl = cardClone.querySelector('#track-status-message-box');
+                if (messageBoxEl) {
+                    messageBoxEl.className = boxClass;
+                    messageBoxEl.innerHTML = `${boxHeader}<br>${noteContent || 'Materi iklan Anda telah disetujui resmi oleh Diskominfo Salatiga dan siap ditayangkan sesuai jadwal.'}`;
+                }
+
+                const proofBox = cardClone.querySelector('#track-proof-box');
+                const proofImg = cardClone.querySelector('#track-proof-img');
+                if (order.proofImg && (order.status === 'diproses' || order.status === 'terkonfirmasi' || order.status === 'selesai')) {
+                    if (proofImg) proofImg.src = order.proofImg;
+                    if (proofBox) proofBox.classList.remove('hidden');
+                } else {
+                    if (proofBox) proofBox.classList.add('hidden');
+                }
+
+                if (container) container.insertBefore(cardClone, emptyPrompt);
+            });
         }
 
         function quickTestStatus(code) {
@@ -3217,7 +3519,7 @@
                 closeAuthGateModal();
                 updateUserNavArea();
 
-                if (foundUser.phone && foundUser.nik && foundUser.address) {
+                if (foundUser.phone && foundUser.address) {
                     isProfileComplete = true;
                 } else {
                     isProfileComplete = false;
@@ -3232,6 +3534,16 @@
             }
         }
 
+        function togglePositionField() {
+            const category = document.getElementById('prof-category').value;
+            const container = document.getElementById('prof-position-container');
+            if (category === 'personal') {
+                container.classList.add('hidden');
+            } else {
+                container.classList.remove('hidden');
+            }
+        }
+
         function populateProfileFormData(user) {
             if (!user) return;
             document.getElementById('prof-name').value = user.name || '';
@@ -3242,6 +3554,7 @@
             document.getElementById('prof-nik').value = user.nik || '';
             document.getElementById('prof-address').value = user.address || '';
             document.getElementById('prof-category').value = user.category || 'personal';
+            togglePositionField();
 
             document.getElementById('prof-display-name').innerText = user.name || 'Pengguna SEVISA';
             document.getElementById('prof-display-email').innerText = user.email || '';
@@ -3263,7 +3576,9 @@
             const navArea = document.getElementById('nav-user-area');
             if (!navArea) return;
 
+            const navTransaksi = document.getElementById('nav-transaksi');
             if (isLoggedIn && currentUser) {
+                if (navTransaksi) navTransaksi.classList.remove('hidden');
                 navArea.innerHTML = `
                     <div class="flex items-center gap-2">
                         <button onclick="showPage('profil')" class="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition" title="Kelola Profil">
@@ -3278,6 +3593,7 @@
                     </div>
                 `;
             } else {
+                if (navTransaksi) navTransaksi.classList.add('hidden');
                 navArea.innerHTML = `
                     <button onclick="openAuthGateModal('login')" class="px-3 py-1.5 text-xs font-bold text-brand-600 dark:text-sky-400 bg-brand-50 dark:bg-slate-800 hover:bg-brand-100 border border-brand-200 dark:border-slate-700 rounded-lg transition">
                         Masuk / Daftar
@@ -3301,7 +3617,7 @@
             const nik = document.getElementById('prof-nik').value.trim();
             const category = document.getElementById('prof-category').value;
 
-            if (!phone || !address || !nik || !company) {
+            if (!phone || !address || !company) {
                 show3DToast('⚠️ KOLOM KOSONG', 'Harap lengkapi semua kolom data diri secara mendalam!', 'error');
                 return;
             }
@@ -3396,7 +3712,7 @@
         }
 
         function showPage(pageId) {
-            const pages = ['home', 'tentang', 'lokasi', 'detail-lokasi', 'proyek', 'cek-status', 'profil'];
+            const pages = ['home', 'tentang', 'lokasi', 'detail-lokasi', 'proyek', 'cek-status', 'profil', 'transaksi'];
             pages.forEach(p => {
                 const el = document.getElementById('page-' + p);
                 if (el) el.classList.add('hidden');
@@ -3408,6 +3724,7 @@
             });
 
             const target = document.getElementById('page-' + pageId);
+            if (pageId === 'transaksi') loadUserTransactions();
             if (target) target.classList.remove('hidden');
 
             const activeNav = document.getElementById('nav-' + pageId);
