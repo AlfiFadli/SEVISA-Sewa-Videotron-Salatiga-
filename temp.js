@@ -876,85 +876,63 @@
 
         // RENDER BERANDA VIDEOTRON CARDS (SHOW ONLY 2 STRATEGIC LOCATIONS: PASAR REJOSARI & SELASAR KARTINI)
         function renderVideotronCards(items) {
-            const gridContainer = document.getElementById('videotron-card-grid');
-            const emptyState = document.getElementById('filter-empty-state');
-            const countBadge = document.getElementById('filter-count-badge');
+    const gridContainer = document.getElementById('videotron-card-grid');
+    const emptyState = document.getElementById('filter-empty-state');
+    const countBadge = document.getElementById('filter-count-badge');
+    if (!gridContainer) return;
 
-            if (!gridContainer) return;
+    const sourceData = (items && items.length > 0) ? items : getStoredUserLocations();
 
-            const sourceData = (items && items.length > 0) ? items : getStoredUserLocations();
+    const displayItems = sourceData.filter(item => {
+        const titleStr = (item.title || item.name || '').toLowerCase();
+        const codeStr = (item.lokasiCode || '').toLowerCase();
+        return titleStr.includes('sapi') || titleStr.includes('kartini') || codeStr === 'pasarsapi' || codeStr === 'kartini';
+    });
+    const finalItems = displayItems.length > 0 ? displayItems : sourceData.slice(0, 2);
 
-            // EXCLUSIVELY SHOW PASAR REJOSARI & SELASAR KARTINI ON BERANDA HOMEPAGE
-            const displayItems = sourceData.filter(item => {
-                const titleStr = (item.title || item.name || '').toLowerCase();
-                const codeStr = (item.lokasiCode || '').toLowerCase();
-                return titleStr.includes('rejosari') || titleStr.includes('kartini') || codeStr === 'rejosari' || codeStr === 'kartini';
-            });
+    if (emptyState) emptyState.classList.add('hidden');
+    if (countBadge) countBadge.innerText = `Menampilkan ${finalItems.length} Titik Lokasi Paling Strategis (Pasar Sapi P4 & Kartini)`;
 
-            const finalItems = displayItems.length > 0 ? displayItems : sourceData.slice(0, 2);
+    let html = '';
+    finalItems.forEach(item => {
+        const titleStr = item.title || item.name || 'Videotron';
+        const sizeStr = item.size || '8 x 4 Meter';
+        const minuteRateStr = item.minuteNon || '3.800';
+        const badgeStr = item.badgeText || 'LOKASI UTAMA';
+        const trafficStr = item.traffic || '95.000+';
+        const ledSpecStr = item.ledSpec || 'P10 Outdoor DIP • 1920x1080';
+        const addressStr = item.address || 'Salatiga';
 
-            if (emptyState) emptyState.classList.add('hidden');
-            if (countBadge) countBadge.innerText = `Menampilkan ${finalItems.length} Titik Lokasi Paling Strategis (Pasar Rejosari & Selasar Kartini)`;
-
-            let html = '';
-            finalItems.forEach(item => {
-                const titleStr = item.title || item.name || 'Videotron';
-                const sizeStr = item.size || '8 x 4 Meter';
-                const priceNonStr = item.priceNon || item.priceDay || '2.200.000';
-                const priceRokokStr = item.priceRokok || '2.750.000';
-                const badgeStr = item.badgeText || 'LOKASI UTAMA';
-                const trafficStr = item.traffic || '95.000+';
-                const ledSpecStr = item.ledSpec || 'P10 Outdoor DIP • 1920x1080';
-                const addressStr = item.address || 'Salatiga';
-
-                html += `
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 flex flex-col justify-between">
-                        <div class="p-5 space-y-3">
-                            <div class="w-full h-40 bg-slate-900 rounded-2xl border border-slate-800 flex flex-col items-center justify-center relative p-3 text-center overflow-hidden">
-                                <div class="absolute inset-0 bg-gradient-to-tr from-brand-900/40 via-brand-600/20 to-transparent"></div>
-                                <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-lg mb-1.5 relative z-10 font-black text-xs">
-                                    ${sizeStr.split(' ')[0]}
-                                </div>
-                                <span class="text-[9px] font-extrabold text-amber-400 uppercase tracking-widest relative z-10">${ledSpecStr}</span>
-                                <span class="text-xs text-white font-bold mt-0.5 relative z-10">${titleStr}</span>
-                            </div>
-
-                            <div class="space-y-1.5">
-                                <div class="flex items-center justify-between">
-                                    <span class="px-2.5 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[9px] rounded-md border border-brand-200 dark:border-slate-700">${badgeStr}</span>
-                                    <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400">${trafficStr} Kendaraan/Hari</span>
-                                </div>
-                                <h3 class="font-black text-slate-900 dark:text-white text-base pt-0.5">${titleStr}</h3>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">${addressStr}</p>
-                            </div>
+        html += `
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 flex flex-col justify-between">
+                <div class="p-5 space-y-3">
+                    <div class="w-full h-40 bg-slate-900 rounded-2xl border border-slate-800 flex flex-col items-center justify-center relative p-3 text-center overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-brand-900/40 via-brand-600/20 to-transparent"></div>
+                        <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-lg mb-1.5 relative z-10 font-black text-xs">
+                            ${sizeStr.split(' ')[0]}
                         </div>
-
-                        <div class="px-5 pb-5 pt-3 space-y-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-                            <div class="space-y-1 text-xs">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-slate-500 dark:text-slate-400 font-medium">Tarif Non-Rokok (Hari):</span>
-                                    <span class="font-extrabold text-amber-600 dark:text-amber-400 text-xs">Rp ${priceNonStr}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-slate-400">
-                                    <span>Tarif Rokok (+25%):</span>
-                                    <span class="font-semibold text-rose-600 dark:text-rose-400 text-xs">Rp ${priceRokokStr}</span>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button onclick="openDetailLokasi('${titleStr}', '${addressStr}', '${sizeStr}', '${priceNonStr}', '${priceRokokStr}', '${item.monthNon || ''}', '${item.monthRokok || ''}', '${item.hourNon || ''}', '${item.hourRokok || ''}', '${item.minuteNon || ''}', '${item.minuteRokok || ''}')" class="py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
-                                    Rincian Brosur
-                                </button>
-                                <button onclick="triggerBookingFlow('${titleStr}')" class="py-2.5 bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs rounded-xl shadow-md transition text-center">
-                                    Ajukan Sewa &rarr;
-                                </button>
-                            </div>
-                        </div>
+                        <span class="text-[9px] font-extrabold text-amber-400 uppercase tracking-widest relative z-10">${ledSpecStr}</span>
                     </div>
-                `;
-            });
-
-            gridContainer.innerHTML = html;
-        }
+                    <div>
+                        <span class="px-2.5 py-0.5 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[9px] rounded-md inline-block mb-1">${badgeStr}</span>
+                        <h3 class="font-black text-slate-800 dark:text-white text-lg leading-tight uppercase">${titleStr}</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium truncate mt-0.5">${addressStr}</p>
+                    </div>
+                    
+                    
+                </div>
+                <div class="p-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/50">
+                    <div class="flex flex-col">
+                        <span class="text-[9px] text-slate-400 uppercase font-bold tracking-widest">Traffic / Hari</span>
+                        <span class="text-xs font-black text-slate-700 dark:text-slate-300">${trafficStr}</span>
+                    </div>
+                    <button onclick="triggerBookingFlow('${titleStr}')" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs uppercase rounded-xl transition shadow-lg shadow-brand-500/30">SEWA</button>
+                </div>
+            </div>
+        `;
+    });
+    gridContainer.innerHTML = html;
+}
 
         // RENDER TESTIMONI SHOWCASE GALLERY GRID
         function renderPortfolioGrid(items) {
@@ -1279,6 +1257,7 @@
                 const coordsStr = item.coords || `${item.lat || -7.3305}, ${item.lng || 110.5084}`;
                 const mapCardId = `card-map-dynamic-${idx}`;
                 const gmapsLink = `https://maps.google.com/?q=${encodeURIComponent(coordsStr)}`;
+                const minuteRateStr = item.minuteNon || '3.800';
 
                 html += `
                     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-lg space-y-4">
@@ -1292,30 +1271,36 @@
                                 ${coordsStr}
                             </span>
                         </div>
-
+                        
                         <!-- CARD LEAFLET MAP CONTAINER -->
                         <div id="${mapCardId}" style="height: 180px; width: 100%; position: relative; overflow: hidden;" class="rounded-2xl border border-slate-200 dark:border-slate-700 shadow-inner z-0"></div>
-
-                        <div class="grid grid-cols-2 gap-3 text-xs">
-                            <div class="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-2xl border border-blue-200 dark:border-blue-800 space-y-1">
-                                
-
-                            <div class="bg-rose-50 dark:bg-rose-950/40 p-3 rounded-2xl border border-rose-200 dark:border-rose-800 space-y-1">
-                                <span class="font-extrabold text-rose-700 dark:text-rose-300 text-[11px] block uppercase">Tarif Rokok (+25%)</span>
-                                <ul class="space-y-0.5 font-medium text-[11px] text-slate-700 dark:text-slate-300">
-                                    <li><strong>Bulan:</strong> Rp ${item.monthRokok || '0'}</li>
-                                    <li><strong>Hari:</strong> Rp ${item.priceRokok || '0'}</li>
-                                    <li><strong>Jam:</strong> Rp ${item.hourRokok || '0'}</li>
-                                    <li><strong>Menit:</strong> Rp ${item.minuteRokok || '0'}</li>
-                                </ul>
+                        
+                        <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 space-y-2">
+                            <div class="space-y-1.5 text-[11px] mb-3">
+                                <div class="flex justify-between items-center text-slate-500">
+                                    <span>Paket Alfa:</span>
+                                    <span class="font-semibold text-slate-700 dark:text-slate-300">Min. 30 Menit</span>
+                                </div>
+                                <div class="flex justify-between items-center text-slate-500">
+                                    <span>Paket Beta:</span>
+                                    <span class="font-semibold text-slate-700 dark:text-slate-300">Min. 20 Menit</span>
+                                </div>
+                                <div class="flex justify-between items-center text-slate-500">
+                                    <span>Paket Event:</span>
+                                    <span class="font-semibold text-slate-700 dark:text-slate-300">Min. 30 Menit (Bebas Jam)</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center border-t border-slate-200 dark:border-slate-700 pt-3">
+                                <span class="text-xs font-bold text-slate-500">Tarif Dasar</span>
+                                <span class="font-black text-brand-600 text-sm">Rp ${minuteRateStr} / Menit</span>
                             </div>
                         </div>
-
+                        
                         <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
                             <a href="${gmapsLink}" target="_blank" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center flex items-center justify-center gap-1">
                                 📍 Google Maps GPS
                             </a>
-                            <button onclick="openDetailLokasi('${titleStr}', '${item.address}', '${item.size || '8 x 4 Meter'}', '${item.priceNon}', '${item.priceRokok}', '${item.monthNon}', '${item.monthRokok}', '${item.hourNon}', '${item.hourRokok}', '${item.minuteNon}', '${item.minuteRokok}')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
+                            <button onclick="openDetailLokasi('${titleStr}', '${item.address}', '${item.size || '8 x 4 Meter'}', '${item.priceNon || ''}', '${item.monthNon || ''}', '${item.hourNon || ''}', '${item.minuteNon || ''}')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-[11px] rounded-xl transition text-center border border-slate-200 dark:border-slate-700">
                                 🔍 Detail Brosur
                             </button>
                             <button onclick="triggerBookingFlow('${titleStr}')" class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-[11px] rounded-xl shadow transition text-center">
@@ -1325,116 +1310,7 @@
                     </div>
                 `;
             });
-
             container.innerHTML = html;
-        }
-
-        let masterSalatigaMapInstance = null;
-        const cardMapInstances = {};
-
-        function initPageLokasiMaps() {
-            renderUserLokasiPageCards();
-
-            setTimeout(() => {
-                if (typeof L === 'undefined') return;
-
-                const masterContainer = document.getElementById('master-salatiga-map');
-                const locs = getStoredUserLocations();
-
-                if (masterContainer) {
-                    if (masterSalatigaMapInstance) {
-                        masterSalatigaMapInstance.remove();
-                        masterSalatigaMapInstance = null;
-                    }
-
-                    try {
-                        masterSalatigaMapInstance = L.map('master-salatiga-map').setView([-7.3280, 110.5010], 14);
-
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '&copy; OpenStreetMap contributors',
-                            maxZoom: 19
-                        }).addTo(masterSalatigaMapInstance);
-
-                        locs.forEach(item => {
-                            const titleStr = item.title || item.name || 'Videotron';
-                            const coordsStr = item.coords || `${item.lat || -7.3305}, ${item.lng || 110.5084}`;
-                            const parts = coordsStr.split(',').map(s => parseFloat(s.trim()));
-                            if (parts.length < 2 || isNaN(parts[0]) || isNaN(parts[1])) return;
-
-                            const customIcon = L.divIcon({
-                                className: 'custom-leaflet-marker',
-                                html: `
-                                    <div class="relative flex items-center justify-center w-8 h-8">
-                                        <span class="absolute w-8 h-8 rounded-full bg-brand-500/40 animate-ping"></span>
-                                        <div class="w-8 h-8 rounded-full bg-brand-600 text-white font-black text-xs flex items-center justify-center shadow-xl border-2 border-white">
-                                            📍
-                                        </div>
-                                    </div>
-                                `,
-                                iconSize: [32, 32],
-                                iconAnchor: [16, 32],
-                                popupAnchor: [0, -32]
-                            });
-
-                            const marker = L.marker([parts[0], parts[1]], { icon: customIcon }).addTo(masterSalatigaMapInstance);
-                            marker.bindPopup(`
-                                <div class="p-1.5 space-y-1 text-xs font-sans">
-                                    <strong class="font-black text-slate-900 block text-xs">${titleStr}</strong>
-                                    <span class="text-[10px] text-slate-500 block font-medium">${item.address}</span>
-                                    <a href="https://maps.google.com/?q=${encodeURIComponent(coordsStr)}" target="_blank" class="px-2.5 py-1 bg-emerald-600 text-white font-extrabold text-[9px] rounded inline-block mt-1">
-                                        📍 Buka Google Maps GPS &rarr;
-                                    </a>
-                                </div>
-                            `);
-                        });
-
-                        setTimeout(() => { if (masterSalatigaMapInstance) masterSalatigaMapInstance.invalidateSize(); }, 300);
-                    } catch(e) {}
-                }
-
-                locs.forEach((item, idx) => {
-                    const mapCardId = `card-map-dynamic-${idx}`;
-                    const container = document.getElementById(mapCardId);
-                    if (!container) return;
-
-                    if (cardMapInstances[mapCardId]) {
-                        cardMapInstances[mapCardId].remove();
-                        delete cardMapInstances[mapCardId];
-                    }
-
-                    const coordsStr = item.coords || `${item.lat || -7.3305}, ${item.lng || 110.5084}`;
-                    const parts = coordsStr.split(',').map(s => parseFloat(s.trim()));
-                    if (parts.length < 2 || isNaN(parts[0]) || isNaN(parts[1])) return;
-
-                    try {
-                        const map = L.map(mapCardId, { zoomControl: false }).setView([parts[0], parts[1]], 15);
-                        cardMapInstances[mapCardId] = map;
-
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '&copy; OpenStreetMap contributors',
-                            maxZoom: 19
-                        }).addTo(map);
-
-                        const customIcon = L.divIcon({
-                            className: 'custom-leaflet-marker',
-                            html: `
-                                <div class="relative flex items-center justify-center w-7 h-7">
-                                    <span class="absolute w-7 h-7 rounded-full bg-sky-500/40 animate-ping"></span>
-                                    <div class="w-7 h-7 rounded-full bg-brand-600 text-white font-black text-xs flex items-center justify-center shadow-lg border-2 border-white">
-                                        📍
-                                    </div>
-                                </div>
-                            `,
-                            iconSize: [28, 28],
-                            iconAnchor: [14, 28]
-                        });
-
-                        L.marker([parts[0], parts[1]], { icon: customIcon }).addTo(map);
-                        setTimeout(() => { if (cardMapInstances[mapCardId]) cardMapInstances[mapCardId].invalidateSize(); }, 300);
-                    } catch(e) {}
-                });
-
-            }, 200);
         }
 
         window.addEventListener('storage', (e) => {
@@ -1924,19 +1800,19 @@
             'VDT-02': {
                 subheading: '1. Blotongan Gate Utara Salatiga',
                 p1: 'Pasang iklan videotron di titik Blotongan menyasar arus kendaraan antar-kota pada jalur utama Semarang - Surakarta di gerbang utara Kota Salatiga.',
-                p2: 'Tarif sewa resmi harian produk non-rokok sebesar Rp 1.268.000 / Hari (Rp 34.315.000 / Bulan).',
+                p2: 'Tarif sewa menggunakan skema hitungan per-menit yang transparan (terdapat Paket Alfa, Beta, Event).',
                 p3: 'Sangat cocok untuk branding produk ritel, otomotif, hingga sosialisasi program pemerintah.'
             },
             'VDT-03': {
                 subheading: '1. Selasar Kartini Pusat Kota',
                 p1: 'Videotron Selasar Kartini berada di pusat kawasan pendidikan, perkantoran, dan fasilitas umum Kota Salatiga.',
-                p2: 'Tarif sewa resmi harian produk non-rokok sebesar Rp 716.000 / Hari (Rp 19.367.000 / Bulan).',
+                p2: 'Tarif sewa menggunakan skema hitungan per-menit yang transparan (terdapat Paket Alfa, Beta, Event).',
                 p3: 'Media efektif untuk menjangkau audiens pelajar, mahasiswa, dan pejalan kaki di jantung kota.'
             },
             'VDT-04': {
                 subheading: '1. Alun-Alun Salatiga',
                 p1: 'Videotron Alun-Alun Salatiga terpasang di Lapangan Pancasila yang merupakan titik kumpul utama warga Salatiga.',
-                p2: 'Tarif sewa resmi harian produk non-rokok sebesar Rp 698.000 / Hari (Rp 18.881.000 / Bulan).',
+                p2: 'Tarif sewa menggunakan skema hitungan per-menit yang transparan (terdapat Paket Alfa, Beta, Event).',
                 p3: 'Menyediakan sudut pandang paparan luas bagi berbagai event publik dan promosi brand.'
             }
         };
@@ -2281,10 +2157,17 @@
 function toggleJabatanVisibility() {
     const cat = document.getElementById('prof-category').value;
     const pos = document.getElementById('prof-position');
+    const comp = document.getElementById('prof-company');
+    const container = document.getElementById('company-position-container');
+    
     if(cat === 'perorangan') {
-        if(pos) { pos.style.display = 'none'; pos.removeAttribute('required'); pos.value = ''; }
+        if(container) container.style.display = 'none';
+        if(pos) { pos.removeAttribute('required'); pos.value = ''; }
+        if(comp) { comp.removeAttribute('required'); comp.value = ''; }
     } else {
-        if(pos) { pos.style.display = 'block'; pos.setAttribute('required', 'true'); }
+        if(container) container.style.display = 'grid';
+        if(pos) pos.setAttribute('required', 'true');
+        if(comp) comp.setAttribute('required', 'true');
     }
 }
 

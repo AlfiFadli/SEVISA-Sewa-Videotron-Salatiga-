@@ -68,8 +68,8 @@ function loadAdminPortfolio() {
         if(p.status === 'menunggu') {
             statusBadge = '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-[10px] font-bold">Menunggu</span>';
             actBtns = `
-                <button onclick="updateTestiStatus(${idx}, 'disetujui')" class="px-2 py-1 bg-emerald-500 text-white rounded text-[10px] font-bold">Setujui</button>
-                <button onclick="updateTestiStatus(${idx}, 'ditolak')" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">Tolak</button>
+                <button onclick="updateTestiStatus(${idx}, 'disetujui')" class="px-2 py-1 bg-emerald-500 text-white rounded text-[10px] font-bold">? Setujui</button>
+                <button onclick="updateTestiStatus(${idx}, 'ditolak')" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">? Tolak</button>
             `;
         } else if (p.status === 'ditolak') {
             statusBadge = '<span class="px-2 py-1 bg-rose-100 text-rose-700 rounded text-[10px] font-bold">Ditolak</span>';
@@ -193,8 +193,8 @@ function loadAdminPortfolio() {
         if(p.status === 'menunggu') {
             statusBadge = '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-[10px] font-bold">Menunggu</span>';
             actBtns = `
-                <button onclick="updateTestiStatus(${idx}, 'disetujui')" class="px-2 py-1 bg-emerald-500 text-white rounded text-[10px] font-bold">Setujui</button>
-                <button onclick="updateTestiStatus(${idx}, 'ditolak')" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">Tolak</button>
+                <button onclick="updateTestiStatus(${idx}, 'disetujui')" class="px-2 py-1 bg-emerald-500 text-white rounded text-[10px] font-bold">? Setujui</button>
+                <button onclick="updateTestiStatus(${idx}, 'ditolak')" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">? Tolak</button>
             `;
         } else if (p.status === 'ditolak') {
             statusBadge = '<span class="px-2 py-1 bg-rose-100 text-rose-700 rounded text-[10px] font-bold">Ditolak</span>';
@@ -238,6 +238,7 @@ function deleteTesti(idx) {
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .glass-header { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
     </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
 <!-- ========================================================================= -->
@@ -284,35 +285,66 @@ function deleteTesti(idx) {
 <!-- ========================================================================= -->
 <!-- SCREEN 2: MAIN DASHBOARD CMS ADMIN (SHOWN ON LOGIN) -->
 <!-- ========================================================================= -->
-<div class="hidden flex-col min-h-screen" id="admin-main-wrapper">
-<!-- HEADER NAVBAR ADMIN -->
-<header class="sticky top-0 z-40 bg-slate-900/95 text-white border-b border-slate-800 glass-header shadow-xl">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-<div class="flex items-center gap-3">
-<img alt="SEVISA Admin Logo" class="h-10 w-10 rounded-xl object-contain border-2 border-brand-500 bg-slate-900 shadow-md" src="logo.png"/>
-<div>
-<div class="flex items-center gap-2">
-<span class="px-2 py-0.5 bg-red-600 text-white font-extrabold text-[9px] rounded uppercase tracking-widest" id="admin-role-badge">🛡️ SUPER ADMIN</span>
-<span class="text-xs font-mono font-bold text-sky-400" id="admin-role-name">Super Admin Diskominfo</span>
-</div>
-<h1 class="text-base sm:text-lg font-black text-white tracking-tight">
-                            Portal CMS Pengelolaan Web SEVISA
-                        </h1>
-</div>
-</div>
-<div class="flex items-center gap-3">
-<button class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition border border-slate-700" onclick="toggleDarkMode()">
-<svg class="w-4 h-4 hidden" fill="none" id="admin-moon-icon" stroke="currentColor" viewbox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-<svg class="w-4 h-4" fill="none" id="admin-sun-icon" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</button>
-<button class="px-3.5 py-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white font-extrabold text-xs rounded-xl border border-rose-500/40 transition" onclick="handleAdminLogout()">
-                        🚪 Keluar Admin
-                    </button>
-</div>
-</div>
-</header>
+<div class="hidden flex-row min-h-screen overflow-hidden" id="admin-main-wrapper">
+
 <!-- MAIN CONTENT AREA -->
-<main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- SIDEBAR -->
+    <aside class="w-72 bg-slate-900 text-white flex flex-col fixed inset-y-0 left-0 z-50 border-r border-slate-800 overflow-y-auto">
+        <div class="p-6 border-b border-slate-800 flex items-center gap-3">
+            <img alt="SEVISA Admin Logo" class="h-10 w-10 rounded-xl object-contain border-2 border-brand-500 bg-slate-900 shadow-md" src="logo.png"/>
+            <div>
+                <span class="text-xs font-mono font-bold text-sky-400 block" id="admin-role-name-sidebar">Super Admin Diskominfo</span>
+                <span class="px-2 py-0.5 bg-red-600 text-white font-extrabold text-[9px] rounded uppercase tracking-widest inline-block mt-1" id="admin-role-badge-sidebar">SUPER ADMIN</span>
+            </div>
+        </div>
+        <div class="p-4 flex-1 space-y-2 text-xs font-bold">
+            <div class="text-[10px] text-slate-500 font-extrabold uppercase tracking-widest mb-3 ml-2 mt-4">Main Menu</div>
+            <button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" id="tab-cms-dashboard" onclick="switchCMSModule('dashboard')">
+    📊 Dashboard & Statistik
+</button>
+            
+<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 bg-slate-900 text-white shadow-md font-black " id="tab-cms-transaksi" onclick="switchCMSModule('transaksi')">
+                        📥 Kelola Transaksi &amp; Cek Status
+                    </button>
+<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-lokasi" onclick="switchCMSModule('lokasi')">
+                        🗺️ Lokasi &amp; Peta Interactive
+                    </button>
+<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-portofolio" onclick="switchCMSModule('portofolio')">
+                        ⭐ Manajemen Testimoni Penyewa
+                    </button>
+<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-blog" onclick="switchCMSModule('blog')">
+                        📰 Full CRUD Blog &amp; Berita
+                    </button>
+<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-tentang" onclick="switchCMSModule('tentang')">
+                        📜 Edit Teks Tentang Kami
+                    </button>
+<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-users" onclick="switchCMSModule('users')">
+                        👥 Kelola User Terdaftar
+                    </button>
+<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-chat" onclick="switchCMSModule('chat')">
+                        💬 Inbox Live Chat Users
+                    </button>
+
+        </div>
+        <div class="p-6 border-t border-slate-800 space-y-3">
+            <button class="w-full p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition border border-slate-700 flex items-center justify-center gap-2 font-bold text-xs" onclick="toggleDarkMode()">
+                Theme Mode Toggle
+            </button>
+            <button class="w-full px-3.5 py-2.5 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white font-extrabold text-xs rounded-xl border border-rose-500/40 transition flex items-center justify-center gap-2" onclick="handleAdminLogout()">
+                Logout Admin
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="flex-1 ml-72 flex flex-col min-h-screen bg-slate-100 dark:bg-slate-950 overflow-y-auto w-full">
+        <header class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-6">
+            <div class="flex items-center justify-between">
+                <h1 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">Portal CMS Pengelolaan Web SEVISA</h1>
+            </div>
+        </header>
+<main class="p-6 sm:p-8 space-y-8 w-full max-w-[1600px] mx-auto">
 <!-- WELCOME STATS BAR -->
 <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
 <div class="space-y-1.5">
@@ -356,31 +388,43 @@ function deleteTesti(idx) {
 </div>
 <!-- NAVIGATION MODULE TABS SYSTEM -->
 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
-<div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 dark:border-slate-800 text-xs font-bold">
-<button class="px-4 py-2.5 rounded-xl bg-slate-900 text-white shadow-md font-black shrink-0" id="tab-cms-transaksi" onclick="switchCMSModule('transaksi')">
-                        📥 Kelola Transaksi &amp; Cek Status
-                    </button>
-<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-lokasi" onclick="switchCMSModule('lokasi')">
-                        🗺️ Lokasi &amp; Peta Interactive
-                    </button>
-<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-portofolio" onclick="switchCMSModule('portofolio')">
-                        ⭐ Manajemen Testimoni Penyewa
-                    </button>
-<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-blog" onclick="switchCMSModule('blog')">
-                        📰 Full CRUD Blog &amp; Berita
-                    </button>
-<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-tentang" onclick="switchCMSModule('tentang')">
-                        📜 Edit Teks Tentang Kami
-                    </button>
-<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-users" onclick="switchCMSModule('users')">
-                        👥 Kelola User Terdaftar
-                    </button>
-<button class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0" id="tab-cms-chat" onclick="switchCMSModule('chat')">
-                        💬 Inbox Live Chat Users
-                    </button>
-</div>
 <!-- ========================================================================= -->
-<!-- MODULE 1: KELOLA TRANSAKSI & CEK STATUS -->
+
+<!-- ========================================================================= -->
+<!-- MODULE 0: DASHBOARD & STATISTIK -->
+<!-- ========================================================================= -->
+<div class="space-y-6" id="sec-cms-dashboard">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+        <h3 class="text-base font-black text-slate-900 dark:text-white">Statistik Penyewaan Videotron</h3>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-brand-500/10 rounded-full blur-xl"></div>
+            <h4 class="text-slate-500 font-bold text-xs uppercase tracking-wider mb-2">Total Transaksi</h4>
+            <div class="text-3xl font-black text-brand-600 dark:text-sky-400" id="stat-total-tx">0</div>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl"></div>
+            <h4 class="text-slate-500 font-bold text-xs uppercase tracking-wider mb-2">Total Pendapatan</h4>
+            <div class="text-3xl font-black text-emerald-600 dark:text-emerald-400" id="stat-total-revenue">Rp 0</div>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/10 rounded-full blur-xl"></div>
+            <h4 class="text-slate-500 font-bold text-xs uppercase tracking-wider mb-2">Lokasi Terfavorit</h4>
+            <div class="text-lg font-black text-amber-500 dark:text-amber-400 truncate" id="stat-fav-loc">-</div>
+        </div>
+    </div>
+    
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl">
+        <h4 class="text-slate-800 dark:text-white font-bold mb-4">Grafik Frekuensi Penyewaan (Per Bulan)</h4>
+        <div class="w-full h-80 relative">
+            <canvas id="rentalChart"></canvas>
+        </div>
+    </div>
+</div>
+
+  <!-- MODULE 1: KELOLA TRANSAKSI & CEK STATUS -->
 <!-- ========================================================================= -->
 <div class="space-y-4" id="sec-cms-transaksi">
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
@@ -404,7 +448,7 @@ function deleteTesti(idx) {
 <th class="p-3.5">Lokasi</th>
 <th class="p-3.5">Durasi &amp; Biaya</th>
 <th class="p-3.5">File Materi</th>
-<th class="p-3.5">Status</th>
+<th class="p-3.5 text-center">Konten</th><th class="p-3.5">Status</th>
 <th class="p-3.5 text-center">Aksi Admin</th>
 </tr>
 </thead>
@@ -822,6 +866,7 @@ function deleteTesti(idx) {
 </div>
 </main>
 </div>
+</div>
 <!-- MODAL EDIT STATUS TRANSAKSI -->
 <div class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto" id="admin-manage-modal">
 <div class="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 my-auto relative text-slate-800 dark:text-slate-100">
@@ -909,6 +954,7 @@ function deleteTesti(idx) {
                 mainWrapper.classList.add('flex');
                 applyRolePermissions();
                 initAdminCMSData();
+                switchCMSModule('dashboard');
             } else {
                 loginScreen.classList.remove('hidden');
                 mainWrapper.classList.add('hidden');
@@ -1048,41 +1094,62 @@ function deleteTesti(idx) {
 
             let html = '';
             filtered.forEach(o => {
-                let selectClass = 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 border-amber-300';
-                if (o.status === 'diproses') {
-                    selectClass = 'bg-blue-100 dark:bg-blue-950/80 text-blue-800 border-blue-300';
-                } else if (o.status === 'pembayaran_diverifikasi') {
-                    selectClass = 'bg-amber-100 dark:bg-amber-950/80 text-amber-900 border-amber-400 font-extrabold';
-                } else if (o.status === 'terkonfirmasi') {
-                    selectClass = 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 border-emerald-300';
-                }
+                  let selectClass = 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 border-amber-300';
+                  if (o.status === 'diproses') {
+                      selectClass = 'bg-blue-100 dark:bg-blue-950/80 text-blue-800 border-blue-300';
+                  } else if (o.status === 'pembayaran_diverifikasi') {
+                      selectClass = 'bg-amber-100 dark:bg-amber-950/80 text-amber-900 border-amber-400 font-extrabold';
+                  } else if (o.status === 'terkonfirmasi') {
+                      selectClass = 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 border-emerald-300';
+                  }
+                  
+                  let kontenHtml = '';
+                  if(o.contentApproved) {
+                      kontenHtml = `<span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold flex items-center justify-center gap-1">✔ Disetujui</span>`;
+                  } else {
+                      kontenHtml = `<button onclick="approveContent('${o.code}')" class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded text-[10px] font-bold shadow transition">✔ Setujui</button>`;
+                  }
 
-                html += `
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/60 transition border-b border-slate-200 dark:border-slate-800">
-                        <td class="p-3.5"><strong class="font-mono text-brand-600 dark:text-sky-400 font-black">${o.code}</strong></td>
-                        <td class="p-3.5"><strong>${o.userName}</strong><br><span class="text-[10px] text-slate-400">${o.company}</span></td>
-                        <td class="p-3.5"><span class="px-2 py-0.5 bg-slate-200 dark:bg-slate-800 font-bold rounded text-[10px]">📍 ${o.location}</span></td>
-                        <td class="p-3.5 leading-relaxed text-[11px]">${o.dates}</td>
-                        <td class="p-3.5 font-mono text-[11px] font-bold text-emerald-600">📄 ${o.file}</td>
-                        <td class="p-3.5">
-                            <select onchange="changeOrderStatusDirect('${o.code}', this.value)" class="p-2 border rounded-xl font-black text-[11px] cursor-pointer shadow-sm ${selectClass}">
-                                <option value="menunggu" ${o.status === 'menunggu' ? 'selected' : ''}>🟡 1. MENUNGGU VERIFIKASI MATERI</option>
-                                <option value="diproses" ${o.status === 'diproses' ? 'selected' : ''}>🔵 2. DISETUJUI / MENUNGGU BAYAR</option>
-                                <option value="pembayaran_diverifikasi" ${o.status === 'pembayaran_diverifikasi' ? 'selected' : ''}>🟠 3. BUKTI BAYAR DIUNGGAH (VERIFIKASI ADMIN)</option>
-                                <option value="terkonfirmasi" ${o.status === 'terkonfirmasi' ? 'selected' : ''}>🟢 4. TERKONFIRMASI LUNAS & TAYANG</option>
-                            </select>
-                        </td>
-                        <td class="p-3.5 text-center flex items-center justify-center gap-1.5 pt-4">
-                            <button onclick="openAdminManageModal('${o.code}')" class="px-2.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-[10px] rounded-lg shadow">⚙️ Catatan & Foto</button>
-                            <button onclick="printAdminOrderInvoice('${o.code}')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-[10px] rounded-lg border border-slate-700 shadow">📄 Cetak Invoice</button>
-                        </td>
-                    </tr>
-                `;
-            });
+                  let selectHtml = `
+                              <select onchange="changeOrderStatusDirect('${o.code}', this.value)" class="p-2 border rounded-xl font-black text-[11px] cursor-pointer shadow-sm ${selectClass}">
+                                  <option value="menunggu" ${o.status === 'menunggu' ? 'selected' : ''}>⏳ 1. MENUNGGU VERIFIKASI MATERI</option>
+                                  <option value="diproses" ${o.status === 'diproses' ? 'selected' : ''}>🔄 2. DISETUJUI / MENUNGGU BAYAR</option>
+                                  <option value="pembayaran_diverifikasi" ${o.status === 'pembayaran_diverifikasi' ? 'selected' : ''}>💸 3. BUKTI BAYAR DIUNGGAH (VERIFIKASI ADMIN)</option>
+                                  <option value="terkonfirmasi" ${o.status === 'terkonfirmasi' ? 'selected' : ''}>✅ 4. DISETUJUI FINAL (SIAP TAYANG)</option>
+                              </select>
+                  `;
+
+                  html += `
+                      <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/60 transition border-b border-slate-200 dark:border-slate-800">
+                          <td class="p-3.5"><strong class="font-mono text-brand-600 dark:text-sky-400 font-black">${o.code}</strong></td>
+                          <td class="p-3.5"><strong>${o.userName}</strong><br><span class="text-[10px] text-slate-400">${o.company}</span></td>
+                          <td class="p-3.5"><span class="px-2 py-0.5 bg-slate-200 dark:bg-slate-800 font-bold rounded text-[10px]">📍 ${o.location}</span></td>
+                          <td class="p-3.5 leading-relaxed text-[11px]">${o.dates}</td>
+                          <td class="p-3.5 font-mono text-[11px] font-bold text-emerald-600">📁 ${o.file}</td>
+                          <td class="p-3.5 text-center">${kontenHtml}</td>
+                          <td class="p-3.5">${selectHtml}</td>
+                          <td class="p-3.5 text-center flex items-center justify-center gap-1.5 pt-4">
+                              <button onclick="openAdminManageModal('${o.code}')" class="px-2.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-[10px] rounded-lg shadow">📝 Catatan & Foto</button>
+                              <button onclick="printAdminOrderInvoice('${o.code}')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-[10px] rounded-lg border border-slate-700 shadow">🖨️ Cetak Invoice</button>
+                          </td>
+                      </tr>
+                  `;
+              });
             tbody.innerHTML = html;
         }
 
-        function changeOrderStatusDirect(code, newStatus) {
+        
+          function approveContent(code) {
+              const orders = getStoredOrders();
+              const idx = orders.findIndex(o => o.code === code);
+              if (idx !== -1) {
+                  orders[idx].contentApproved = true;
+                  saveStoredOrders(orders);
+                  renderAdminTable();
+              }
+          }
+
+          function changeOrderStatusDirect(code, newStatus) {
             let orders = getStoredOrders();
             const idx = orders.findIndex(o => o.code === code);
             if (idx !== -1) {
@@ -1833,20 +1900,21 @@ function deleteTesti(idx) {
                 return;
             }
 
-            const modules = ['transaksi', 'lokasi', 'portofolio', 'blog', 'tentang', 'users', 'chat'];
+            const modules = ['dashboard', 'transaksi', 'lokasi', 'portofolio', 'blog', 'tentang', 'users', 'chat'];
             modules.forEach(m => {
                 const sec = document.getElementById('sec-cms-' + m);
                 const tab = document.getElementById('tab-cms-' + m);
                 if (sec) sec.classList.add('hidden');
-                if (tab) tab.className = "px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0";
+                if (tab) tab.className = "w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800";
             });
 
             const activeSec = document.getElementById('sec-cms-' + modName);
             const activeTab = document.getElementById('tab-cms-' + modName);
 
             if (activeSec) activeSec.classList.remove('hidden');
-            if (activeTab) activeTab.className = "px-4 py-2.5 rounded-xl bg-slate-900 text-white shadow-md font-black shrink-0";
+            if (activeTab) activeTab.className = "w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 bg-brand-600 text-white shadow-md font-black";
             if (modName === 'chat') renderAdminChatBox();
+            if (modName === 'dashboard') renderDashboardStats();
             if (modName === 'users') {
                 renderCMSUsers();
                 renderCMSOperators();
@@ -1945,6 +2013,93 @@ function deleteTesti(idx) {
                 updateAdminChatBadge();
                 showAdminToast('🗑️ PESAN DIHAPUS', 'Pesan obrolan telah dihapus dari sistem.');
             }
+        }
+
+        
+        function renderDashboardStats() {
+            let orders = JSON.parse(localStorage.getItem('sevisa_orders') || '[]');
+            
+            document.getElementById('stat-total-tx').innerText = orders.length;
+            
+            let totalRev = orders.reduce((sum, order) => {
+                let p = parseInt((order.totalPrice || '0').replace(/\./g, ''));
+                return sum + (isNaN(p) ? 0 : p);
+            }, 0);
+            document.getElementById('stat-total-revenue').innerText = 'Rp ' + totalRev.toLocaleString('id-ID');
+            
+            let locCounts = {};
+            orders.forEach(o => { 
+                let locs = Array.isArray(o.location) ? o.location : [o.location];
+                locs.forEach(l => { locCounts[l] = (locCounts[l] || 0) + 1; });
+            });
+            let fav = Object.keys(locCounts).sort((a,b) => locCounts[b] - locCounts[a])[0] || '-';
+            document.getElementById('stat-fav-loc').innerText = fav;
+            
+            let monthlyCounts = new Array(12).fill(0);
+            orders.forEach(o => {
+                if(o.createdAt) {
+                    let d = new Date(o.createdAt);
+                    monthlyCounts[d.getMonth()] += 1;
+                } else {
+                    monthlyCounts[new Date().getMonth()] += 1;
+                }
+            });
+            
+            // Dummy trending data if no orders yet, to make it look like a dashboard
+            if(orders.length === 0) {
+                monthlyCounts = [2, 5, 8, 12, 10, 15, 22, 18, 14, 25, 30, 28];
+            }
+            
+            if(window.rentalChartInstance) {
+                window.rentalChartInstance.destroy();
+            }
+            
+            const ctx = document.getElementById('rentalChart').getContext('2d');
+            
+            // Adjust colors for dark mode
+            const isDark = document.documentElement.classList.contains('dark');
+            const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+
+            window.rentalChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                    datasets: [{
+                        label: 'Jumlah Penyewaan',
+                        data: monthlyCounts,
+                        borderColor: '#0ea5e9',
+                        backgroundColor: 'rgba(14, 165, 233, 0.15)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#0ea5e9',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#0ea5e9',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            ticks: { stepSize: 5, color: textColor },
+                            grid: { color: gridColor }
+                        },
+                        x: {
+                            ticks: { color: textColor },
+                            grid: { color: gridColor, display: false }
+                        }
+                    }
+                }
+            });
         }
 
         function renderAdminChatBox() {
@@ -2096,6 +2251,7 @@ function deleteTesti(idx) {
 
         function syncAllCMSData() {
             initAdminCMSData();
+                switchCMSModule('dashboard');
             showAdminToast('🔄 CMS SYNCHRONIZED', 'Seluruh data CMS & transaksi berhasil diperbarui.');
         }
 
@@ -2200,8 +2356,8 @@ function loadAdminPortfolio() {
         if(p.status === 'menunggu') {
             statusBadge = '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-[10px] font-bold">Menunggu</span>';
             actBtns = `
-                <button onclick="updateTestiStatus(${idx}, 'disetujui')" class="px-2 py-1 bg-emerald-500 text-white rounded text-[10px] font-bold">Setujui</button>
-                <button onclick="updateTestiStatus(${idx}, 'ditolak')" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">Tolak</button>
+                <button onclick="updateTestiStatus(${idx}, 'disetujui')" class="px-2 py-1 bg-emerald-500 text-white rounded text-[10px] font-bold">? Setujui</button>
+                <button onclick="updateTestiStatus(${idx}, 'ditolak')" class="px-2 py-1 bg-rose-500 text-white rounded text-[10px] font-bold">? Tolak</button>
             `;
         } else if (p.status === 'ditolak') {
             statusBadge = '<span class="px-2 py-1 bg-rose-100 text-rose-700 rounded text-[10px] font-bold">Ditolak</span>';
