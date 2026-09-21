@@ -1074,24 +1074,10 @@
         }
 
         function applyVideotronFilters() {
-            const kategoriVal = document.getElementById('filter-kategori').value;
-            const lokasiVal = document.getElementById('filter-lokasi').value;
-            const layoutVal = document.getElementById('filter-layout').value;
-
-            const filtered = VIDEOTRON_DATA.filter(item => {
-                const matchKategori = (kategoriVal === 'all' || item.kategori === kategoriVal);
-                const matchLokasi = (lokasiVal === 'all' || item.lokasiCode === lokasiVal);
-                const matchLayout = (layoutVal === 'all' || item.layoutCode === layoutVal);
-                return matchKategori && matchLokasi && matchLayout;
-            });
-
-            renderVideotronCards(filtered);
+            renderVideotronCards(VIDEOTRON_DATA);
         }
 
         function resetVideotronFilters() {
-            document.getElementById('filter-kategori').value = 'all';
-            document.getElementById('filter-lokasi').value = 'all';
-            document.getElementById('filter-layout').value = 'all';
             applyVideotronFilters();
         }
 

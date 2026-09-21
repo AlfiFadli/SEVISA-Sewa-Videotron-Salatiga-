@@ -6,6 +6,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Portal CMS Admin Diskominfo - SEVISA (Sewa Videotron Salatiga)</title>
 <!-- TAILWIND CSS CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.tailwindcss.com">
 // ---------------- FAQ LOGIC ----------------
 function loadAdminFAQ() {
@@ -307,6 +308,9 @@ function deleteTesti(idx) {
 <button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 bg-slate-900 text-white shadow-md font-black " id="tab-cms-transaksi" onclick="switchCMSModule('transaksi')">
                         📥 Kelola Transaksi &amp; Cek Status
                     </button>
+<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" id="tab-cms-laporan" onclick="switchCMSModule('laporan')">
+                        📑 Laporan Keuangan
+                    </button>
 <button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-lokasi" onclick="switchCMSModule('lokasi')">
                         🗺️ Lokasi &amp; Peta Interactive
                     </button>
@@ -322,9 +326,7 @@ function deleteTesti(idx) {
 <button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-users" onclick="switchCMSModule('users')">
                         👥 Kelola User Terdaftar
                     </button>
-<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-chat" onclick="switchCMSModule('chat')">
-                        💬 Inbox Live Chat Users
-                    </button>
+
 
         </div>
         <div class="p-6 border-t border-slate-800 space-y-3">
@@ -354,17 +356,9 @@ function deleteTesti(idx) {
 <h2 class="text-2xl sm:text-3xl font-black text-white">Panel Pusat Pengelolaan Web SEVISA</h2>
 <p class="text-xs text-slate-300">Edit Halaman Tentang Kami, Lokasi &amp; Peta Maps, Portofolio Video/PPT, Blog, serta Status Permohonan Sewa.</p>
 </div>
-<div class="flex items-center gap-2">
-<button class="px-3.5 py-2.5 bg-rose-600/30 hover:bg-rose-600 text-rose-300 hover:text-white font-extrabold text-xs rounded-xl border border-rose-500/40 transition shadow-md" onclick="resetAllTestOrders()">
-                        ⚡ Reset Status Demo
-                    </button>
-<button class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-xs rounded-xl border border-slate-700 transition flex items-center gap-2 shadow-md" onclick="syncAllCMSData()">
-<span>🔄</span> Sync Data Real-Time
-                    </button>
-</div>
 </div>
 <!-- SUMMARY METRICS -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 text-xs">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 text-xs">
 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-md space-y-1">
 <span class="text-slate-400 font-bold text-[10px] uppercase">Permohonan Sewa</span>
 <div class="text-xl font-black text-slate-900 dark:text-white" id="stat-total-orders">0</div>
@@ -381,9 +375,13 @@ function deleteTesti(idx) {
 <span class="text-emerald-500 font-bold text-[10px] uppercase">Terkonfirmasi Tayang</span>
 <div class="text-xl font-black text-emerald-600 dark:text-emerald-400" id="stat-approved-orders">0</div>
 </div>
+<div class="bg-gradient-to-tr from-emerald-900 to-emerald-950 text-white rounded-2xl p-4 shadow-md space-y-1 border border-emerald-500/40">
+<span class="text-emerald-300 font-bold text-[10px] uppercase">PAD Sudah Dibayar</span>
+<div class="text-lg font-black text-emerald-400" id="stat-pad-lunas">Rp 0</div>
+</div>
 <div class="bg-gradient-to-tr from-slate-900 to-blue-950 text-white rounded-2xl p-4 shadow-md space-y-1 border border-sky-500/40">
-<span class="text-sky-300 font-bold text-[10px] uppercase">Estimasi PAD</span>
-<div class="text-lg font-black text-amber-400" id="stat-total-revenue">Rp 0</div>
+<span class="text-amber-300 font-bold text-[10px] uppercase">PAD Belum Dibayar</span>
+<div class="text-lg font-black text-amber-400" id="stat-pad-belum">Rp 0</div>
 </div>
 </div>
 <!-- NAVIGATION MODULE TABS SYSTEM -->
@@ -432,7 +430,7 @@ function deleteTesti(idx) {
 <div class="flex gap-2 w-full md:w-auto">
 <select class="p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" id="admin-status-filter" onchange="renderAdminTable()">
 <option value="all">Semua Status</option>
-<option value="menunggu">🟡 Menunggu Verifikasi</option>
+<option value="menunggu">🟡 Proses Verifikasi</option>
 <option value="diproses">🔵 Uji Tayang</option>
 <option value="terkonfirmasi">🟢 Terkonfirmasi</option>
 </select>
@@ -455,6 +453,99 @@ function deleteTesti(idx) {
 <tbody class="divide-y divide-slate-200 dark:divide-slate-800 font-medium" id="admin-order-table-body"></tbody>
 </table>
 </div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODULE LAPORAN KHUSUS -->
+<!-- ========================================================================= -->
+<div class="hidden space-y-6" id="sec-cms-laporan">
+    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div>
+            <h3 class="text-base font-black text-slate-900 dark:text-white">Laporan Keuangan &amp; Pemesanan</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Ringkasan nominal pemesanan yang sudah dan belum dibayar berdasarkan tanggal.</p>
+        </div>
+        <button onclick="cetakLaporanPDF()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-xs rounded-xl border border-slate-700 shadow flex items-center gap-2 transition">
+            <span>📄</span> Cetak PDF
+        </button>
+    </div>
+    <div class="bg-slate-50 dark:bg-slate-800/60 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row items-center gap-4">
+        <div class="flex flex-col space-y-1 w-full md:w-auto">
+            <label class="text-[10px] font-bold uppercase text-slate-500">Tanggal Awal</label>
+            <input type="date" id="laporan-start-date" class="p-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl text-xs font-medium dark:text-white outline-none">
+        </div>
+        <div class="flex flex-col space-y-1 w-full md:w-auto">
+            <label class="text-[10px] font-bold uppercase text-slate-500">Tanggal Akhir</label>
+            <input type="date" id="laporan-end-date" class="p-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl text-xs font-medium dark:text-white outline-none">
+        </div>
+        <div class="flex flex-col justify-end h-full mt-4 md:mt-0">
+            <button onclick="renderLaporanKhusus()" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold rounded-xl text-xs shadow-md transition">Terapkan Filter</button>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="bg-emerald-50 dark:bg-emerald-950/40 p-6 rounded-2xl border border-emerald-200 dark:border-emerald-800/50 relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 opacity-10"><span class="text-9xl">💰</span></div>
+            <h4 class="text-emerald-700 dark:text-emerald-400 font-extrabold text-xs uppercase tracking-wider mb-2 relative z-10">Total Sudah Dibayar (Lunas)</h4>
+            <div class="text-3xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-500 relative z-10" id="laporan-total-dibayar">Rp 0</div>
+            <p class="text-[10px] text-emerald-600/70 dark:text-emerald-400/60 mt-2 font-bold relative z-10">Total dari pesanan berstatus Terkonfirmasi</p>
+        </div>
+        <div class="bg-rose-50 dark:bg-rose-950/40 p-6 rounded-2xl border border-rose-200 dark:border-rose-800/50 relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 opacity-10"><span class="text-9xl">⏳</span></div>
+            <h4 class="text-rose-700 dark:text-rose-400 font-extrabold text-xs uppercase tracking-wider mb-2 relative z-10">Total Belum Dibayar</h4>
+            <div class="text-3xl sm:text-4xl font-black text-rose-600 dark:text-rose-500 relative z-10" id="laporan-total-belum-dibayar">Rp 0</div>
+            <p class="text-[10px] text-rose-600/70 dark:text-rose-400/60 mt-2 font-bold relative z-10">Total dari pesanan Menunggu &amp; Diproses</p>
+        </div>
+    </div>
+    
+    <!-- HIDDEN PRINT TEMPLATE -->
+    <div id="print-report-container" class="hidden bg-white p-10 text-slate-900 w-[1000px]">
+        <div class="flex items-center gap-6 border-b-4 border-slate-900 pb-6 mb-6">
+            <img src="logo.png" class="w-24 h-24 object-contain" onerror="this.src='https://via.placeholder.com/100?text=Logo'">
+            <div>
+                <h1 class="text-2xl font-black uppercase tracking-wider">PEMERINTAH KOTA SALATIGA</h1>
+                <h2 class="text-lg font-bold text-slate-700">DINAS KOMUNIKASI DAN INFORMATIKA (DISKOMINFO)</h2>
+                <p class="text-xs mt-2 font-medium">Jl. Letjen Sukowati No.51, Kalicacing, Kec. Sidomukti, Kota Salatiga, Jawa Tengah 50724</p>
+            </div>
+        </div>
+        
+        <div class="text-center mb-8">
+            <h3 class="text-xl font-black underline decoration-4 underline-offset-4">LAPORAN KEUANGAN PENYEWAAN VIDEOTRON</h3>
+            <p class="text-sm font-bold mt-2" id="print-periode">Periode: Keseluruhan</p>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-6 mb-8">
+            <div class="p-4 border-2 border-slate-200 rounded-xl bg-slate-50">
+                <p class="text-xs font-bold uppercase text-slate-500 mb-1">Total Sudah Dibayar (Lunas)</p>
+                <p class="text-2xl font-black text-emerald-600" id="print-total-lunas">Rp 0</p>
+            </div>
+            <div class="p-4 border-2 border-slate-200 rounded-xl bg-slate-50">
+                <p class="text-xs font-bold uppercase text-slate-500 mb-1">Total Belum Dibayar</p>
+                <p class="text-2xl font-black text-rose-600" id="print-total-belum">Rp 0</p>
+            </div>
+        </div>
+        
+        <table class="w-full text-left text-sm border-collapse mb-12">
+            <thead>
+                <tr class="bg-slate-200 text-slate-900 border-y-2 border-slate-400">
+                    <th class="p-3 font-black">Kode</th>
+                    <th class="p-3 font-black">Tanggal</th>
+                    <th class="p-3 font-black">Instansi / Penyewa</th>
+                    <th class="p-3 font-black">Nominal</th>
+                    <th class="p-3 font-black">Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-300" id="print-table-body">
+                <!-- Rows injected via JS -->
+            </tbody>
+        </table>
+        
+        <div class="flex justify-end mt-12 text-center">
+            <div>
+                <p class="mb-20 text-sm font-medium" id="print-date-today">Salatiga, ...</p>
+                <p class="font-bold underline">Admin SEVISA Diskominfo</p>
+                <p class="text-xs">NIP. .........................</p>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- ========================================================================= -->
 <!-- MODULE 2: FULL CRUD KELOLA LOKASI VIDEOTRON & TARIF RETRIBUSI -->
@@ -1103,16 +1194,20 @@ function deleteTesti(idx) {
                       selectClass = 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 border-emerald-300';
                   }
                   
-                  let kontenHtml = '';
-                  if(o.contentApproved) {
-                      kontenHtml = `<span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold flex items-center justify-center gap-1">✔ Disetujui</span>`;
-                  } else {
-                      kontenHtml = `<button onclick="approveContent('${o.code}')" class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded text-[10px] font-bold shadow transition">✔ Setujui</button>`;
-                  }
+                  let kontenClass = o.contentApproved 
+                      ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border-emerald-300' 
+                      : 'bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-400 border-amber-300';
+                      
+                  let kontenHtml = `
+                      <select onchange="changeContentStatus('${o.code}', this.value)" class="p-1.5 border rounded-lg font-bold text-[10px] cursor-pointer shadow-sm ${kontenClass}">
+                          <option value="false" ${!o.contentApproved ? 'selected' : ''}>⏳ Menunggu</option>
+                          <option value="true" ${o.contentApproved ? 'selected' : ''}>✔ Disetujui</option>
+                      </select>
+                  `;
 
                   let selectHtml = `
                               <select onchange="changeOrderStatusDirect('${o.code}', this.value)" class="p-2 border rounded-xl font-black text-[11px] cursor-pointer shadow-sm ${selectClass}">
-                                  <option value="menunggu" ${o.status === 'menunggu' ? 'selected' : ''}>⏳ 1. MENUNGGU VERIFIKASI MATERI</option>
+                                  <option value="menunggu" ${o.status === 'menunggu' ? 'selected' : ''}>⏳ 1. proses verifikasi</option>
                                   <option value="diproses" ${o.status === 'diproses' ? 'selected' : ''}>🔄 2. DISETUJUI / MENUNGGU BAYAR</option>
                                   <option value="pembayaran_diverifikasi" ${o.status === 'pembayaran_diverifikasi' ? 'selected' : ''}>💸 3. BUKTI BAYAR DIUNGGAH (VERIFIKASI ADMIN)</option>
                                   <option value="terkonfirmasi" ${o.status === 'terkonfirmasi' ? 'selected' : ''}>✅ 4. DISETUJUI FINAL (SIAP TAYANG)</option>
@@ -1139,11 +1234,21 @@ function deleteTesti(idx) {
         }
 
         
-          function approveContent(code) {
+          function changeContentStatus(code, value) {
               const orders = getStoredOrders();
               const idx = orders.findIndex(o => o.code === code);
               if (idx !== -1) {
-                  orders[idx].contentApproved = true;
+                  const isApproved = value === 'true';
+                  orders[idx].contentApproved = isApproved;
+                  
+                  // Auto update status dropdown based on content approval
+                  if (isApproved) {
+                      orders[idx].status = 'diproses';
+                  } else {
+                      orders[idx].status = 'menunggu';
+                      orders[idx].statusLabel = '1. proses verifikasi';
+                  }
+                  
                   saveStoredOrders(orders);
                   renderAdminTable();
               }
@@ -1155,7 +1260,7 @@ function deleteTesti(idx) {
             if (idx !== -1) {
                 orders[idx].status = newStatus;
                 if (newStatus === 'menunggu') {
-                    orders[idx].statusLabel = 'MENUNGGU VERIFIKASI DISKOMINFO';
+                    orders[idx].statusLabel = '1. proses verifikasi';
                     orders[idx].statusDesc = '📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa Anda sedang berada dalam antrean peninjauan oleh tim admin Diskominfo Kota Salatiga. Estimasi proses verifikasi berkisar 1x24 jam kerja.';
                 } else if (newStatus === 'diproses') {
                     orders[idx].statusLabel = 'DISETUJUI / MENUNGGU PEMBAYARAN USER';
@@ -1217,7 +1322,7 @@ function deleteTesti(idx) {
             if (index !== -1) {
                 orders[index].status = newStatus;
                 if (newStatus === 'menunggu') {
-                    orders[index].statusLabel = 'MENUNGGU VERIFIKASI DISKOMINFO';
+                    orders[index].statusLabel = '1. proses verifikasi';
                     orders[index].statusDesc = `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>${newNotes}`;
                 } else if (newStatus === 'diproses') {
                     orders[index].statusLabel = 'SEDANG DIPROSES / UJI TAYANG';
@@ -1900,7 +2005,7 @@ function deleteTesti(idx) {
                 return;
             }
 
-            const modules = ['dashboard', 'transaksi', 'lokasi', 'portofolio', 'blog', 'tentang', 'users', 'chat'];
+            const modules = ['dashboard', 'transaksi', 'laporan', 'lokasi', 'portofolio', 'blog', 'tentang', 'users', 'chat'];
             modules.forEach(m => {
                 const sec = document.getElementById('sec-cms-' + m);
                 const tab = document.getElementById('tab-cms-' + m);
@@ -1915,6 +2020,7 @@ function deleteTesti(idx) {
             if (activeTab) activeTab.className = "w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 bg-brand-600 text-white shadow-md font-black";
             if (modName === 'chat') renderAdminChatBox();
             if (modName === 'dashboard') renderDashboardStats();
+            if (modName === 'laporan') renderLaporanKhusus();
             if (modName === 'users') {
                 renderCMSUsers();
                 renderCMSOperators();
@@ -2016,16 +2122,169 @@ function deleteTesti(idx) {
         }
 
         
+        function renderLaporanKhusus() {
+            const startDate = document.getElementById('laporan-start-date').value;
+            const endDate = document.getElementById('laporan-end-date').value;
+            
+            let orders = getStoredOrders();
+            
+            let totalDibayar = 0;
+            let totalBelumDibayar = 0;
+            
+            orders.forEach(o => {
+                let orderDate = o.createdAt;
+                if (!orderDate && o.dates) {
+                    const m = o.dates.match(/^(\d{4}-\d{2}-\d{2})/);
+                    if (m) orderDate = m[1];
+                }
+                
+                if (startDate && orderDate && orderDate < startDate) return;
+                if (endDate && orderDate && orderDate > endDate) return;
+                
+                let p = parseInt((o.totalPrice || '0').toString().replace(/\./g, ''));
+                if (p === 0 && o.dates) {
+                    const pm = o.dates.match(/Rp\s*([\d.]+)/);
+                    if (pm) {
+                        p = parseInt(pm[1].replace(/\./g, ''));
+                    }
+                }
+                if (isNaN(p)) p = 0;
+                
+                if (o.status === 'terkonfirmasi') {
+                    totalDibayar += p;
+                } else {
+                    totalBelumDibayar += p;
+                }
+            });
+            
+            document.getElementById('laporan-total-dibayar').innerText = 'Rp ' + totalDibayar.toLocaleString('id-ID');
+            document.getElementById('laporan-total-belum-dibayar').innerText = 'Rp ' + totalBelumDibayar.toLocaleString('id-ID');
+        }
+        
+        function cetakLaporanPDF() {
+            const startDate = document.getElementById('laporan-start-date').value;
+            const endDate = document.getElementById('laporan-end-date').value;
+            let orders = getStoredOrders();
+            let totalDibayar = 0;
+            let totalBelumDibayar = 0;
+            
+            let tbody = '';
+            orders.forEach(o => {
+                let orderDate = o.createdAt;
+                if (!orderDate && o.dates) {
+                    const m = o.dates.match(/^(\d{4}-\d{2}-\d{2})/);
+                    if (m) orderDate = m[1];
+                }
+                if (startDate && orderDate && orderDate < startDate) return;
+                if (endDate && orderDate && orderDate > endDate) return;
+                
+                let p = parseInt((o.totalPrice || '0').toString().replace(/\./g, ''));
+                if (p === 0 && o.dates) {
+                    const pm = o.dates.match(/Rp\s*([\d.]+)/);
+                    if (pm) p = parseInt(pm[1].replace(/\./g, ''));
+                }
+                if (isNaN(p)) p = 0;
+                
+                let statusText = 'Menunggu';
+                if (o.status === 'terkonfirmasi') {
+                    totalDibayar += p;
+                    statusText = 'Lunas / Terkonfirmasi';
+                } else {
+                    totalBelumDibayar += p;
+                    if(o.status === 'diproses') statusText = 'Diproses / Uji Tayang';
+                }
+                
+                tbody += `<tr>
+                    <td class="p-3 border-b border-slate-200">${o.code}</td>
+                    <td class="p-3 border-b border-slate-200">${orderDate || '-'}</td>
+                    <td class="p-3 border-b border-slate-200">${o.company} <br><span class="text-xs text-slate-500">${o.userName}</span></td>
+                    <td class="p-3 border-b border-slate-200 font-bold">Rp ${p.toLocaleString('id-ID')}</td>
+                    <td class="p-3 border-b border-slate-200">${statusText}</td>
+                </tr>`;
+            });
+            
+            document.getElementById('print-table-body').innerHTML = tbody;
+            document.getElementById('print-total-lunas').innerText = 'Rp ' + totalDibayar.toLocaleString('id-ID');
+            document.getElementById('print-total-belum').innerText = 'Rp ' + totalBelumDibayar.toLocaleString('id-ID');
+            
+            let periodeText = 'Keseluruhan';
+            if(startDate && endDate) periodeText = `${startDate} s.d ${endDate}`;
+            else if(startDate) periodeText = `Mulai ${startDate}`;
+            else if(endDate) periodeText = `Sampai ${endDate}`;
+            document.getElementById('print-periode').innerText = 'Periode: ' + periodeText;
+            
+            const today = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('print-date-today').innerText = 'Salatiga, ' + today.toLocaleDateString('id-ID', options);
+            
+            try {
+                if (typeof html2pdf === 'undefined') {
+                    alert('Library html2pdf belum termuat sempurna. Silakan muat ulang (refresh) halaman.');
+                    return;
+                }
+
+                // Buat overlay loading
+                const overlay = document.createElement('div');
+                overlay.className = 'fixed inset-0 bg-white/90 z-[9999] flex flex-col items-center justify-center backdrop-blur-sm';
+                overlay.innerHTML = '<div class="text-3xl font-black text-brand-600 mb-4 animate-pulse">Mempersiapkan Laporan PDF...</div><p class="text-slate-600 font-bold">Mohon tunggu sebentar, sedang merender dokumen.</p>';
+                document.body.appendChild(overlay);
+
+                // Tampilkan elemen sementara untuk rendering
+                const element = document.getElementById('print-report-container');
+                element.classList.remove('hidden');
+                element.style.display = 'block';
+
+                const opt = {
+                    margin:       0.5,
+                    filename:     'Laporan_Keuangan_SEVISA.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, useCORS: true },
+                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+                };
+
+                // Beri waktu sejenak agar browser benar-benar merender HTML sebelum di-capture
+                setTimeout(() => {
+                    html2pdf().set(opt).from(element).save().then(() => {
+                        element.style.display = 'none';
+                        element.classList.add('hidden');
+                        document.body.removeChild(overlay);
+                    }).catch(err => {
+                        alert('Terjadi kesalahan saat memproses PDF: ' + err.message);
+                        element.style.display = 'none';
+                        element.classList.add('hidden');
+                        document.body.removeChild(overlay);
+                    });
+                }, 800);
+
+            } catch (e) {
+                alert('Terjadi kesalahan sistem: ' + e.message);
+                console.error(e);
+            }
+        }
+        
         function renderDashboardStats() {
             let orders = JSON.parse(localStorage.getItem('sevisa_orders') || '[]');
             
             document.getElementById('stat-total-tx').innerText = orders.length;
             
-            let totalRev = orders.reduce((sum, order) => {
-                let p = parseInt((order.totalPrice || '0').replace(/\./g, ''));
-                return sum + (isNaN(p) ? 0 : p);
-            }, 0);
-            document.getElementById('stat-total-revenue').innerText = 'Rp ' + totalRev.toLocaleString('id-ID');
+            let totalLunas = 0;
+            let totalBelum = 0;
+            orders.forEach(o => {
+                let p = parseInt((o.totalPrice || '0').toString().replace(/\./g, ''));
+                if (p === 0 && o.dates) {
+                    const pm = o.dates.match(/Rp\s*([\d.]+)/);
+                    if (pm) p = parseInt(pm[1].replace(/\./g, ''));
+                }
+                if (isNaN(p)) p = 0;
+                
+                if (o.status === 'terkonfirmasi') {
+                    totalLunas += p;
+                } else {
+                    totalBelum += p;
+                }
+            });
+            document.getElementById('stat-pad-lunas').innerText = 'Rp ' + totalLunas.toLocaleString('id-ID');
+            document.getElementById('stat-pad-belum').innerText = 'Rp ' + totalBelum.toLocaleString('id-ID');
             
             let locCounts = {};
             orders.forEach(o => { 
