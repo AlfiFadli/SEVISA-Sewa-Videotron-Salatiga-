@@ -685,6 +685,45 @@
 </div>
 </div>
 </div>
+<div class="mt-16 max-w-4xl mx-auto">
+    <div class="bg-gradient-to-r from-brand-900 via-brand-800 to-sky-900 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden border border-brand-700/50">
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-sky-500/20 blur-3xl rounded-full"></div>
+        <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-brand-500/20 blur-3xl rounded-full"></div>
+        
+        <div class="relative z-10 text-center space-y-3 mb-8">
+            <span class="px-3 py-1 bg-sky-500/20 text-sky-300 font-extrabold text-[10px] rounded-full uppercase tracking-widest border border-sky-400/30">Cek Ketersediaan Real-Time</span>
+            <h3 class="text-2xl sm:text-3xl font-black text-white">Kalender Ketersediaan Lokasi</h3>
+            <p class="text-xs text-brand-200">Pastikan jadwal kampanye Anda kosong dan siap dipesan.</p>
+        </div>
+        
+        <div class="relative z-10 bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-inner border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-6">
+            <div class="flex-1 space-y-4">
+                <div>
+                    <label class="block font-bold text-[10px] uppercase text-slate-500 mb-2">Pilih Titik Lokasi</label>
+                    <select id="sim-location" onchange="renderAvailabilityCal()" class="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 p-3 rounded-xl focus:border-brand-500 focus:outline-none font-bold text-slate-800 dark:text-slate-100 text-xs transition">
+                        <option value="Pasar Rejosari">Pasar Rejosari (Jl. Hasanudin)</option>
+                        <option value="Selasar Kartini">Selasar Kartini (Pusat Edukasi)</option>
+                        <option value="Blotongan">Blotongan (Gate Utara)</option>
+                        <option value="Alun-Alun Salatiga">Alun-Alun Salatiga (Pancasila)</option>
+                    </select>
+                </div>
+                <button onclick="triggerBookingFlow(document.getElementById('sim-location').value)" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition hover:-translate-y-0.5">
+                    Pesan Jadwal Ini Sekarang →
+                </button>
+            </div>
+            <div class="flex-1 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                <h4 class="font-bold text-[10px] uppercase text-slate-500 mb-3 flex items-center justify-between">
+                    <span>Jadwal Terisi:</span>
+                    <span class="text-brand-600 dark:text-sky-400 font-black" id="sim-loc-title">Pasar Rejosari</span>
+                </h4>
+                <div id="sim-booked-dates" class="space-y-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="mt-12 text-center">
 <a class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-lime-600 hover:bg-lime-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg hover:shadow-lime-600/30 transition hover:-translate-y-1" href="https://wa.me/6285173372262" target="_blank">
 <span>Tanya Admin &amp; Pesan Sekarang</span>
@@ -4457,6 +4496,49 @@ function searchOrderStatus() {
             } catch(e) { console.error(e); }
         }
 
+        // ---------------- RENDER AVAILABILITY CALENDAR ----------------
+        window.renderAvailabilityCal = function() {
+            const locSelect = document.getElementById('sim-location');
+            const titleEl = document.getElementById('sim-loc-title');
+            const container = document.getElementById('sim-booked-dates');
+            if(!locSelect || !container) return;
+            
+            const loc = locSelect.value;
+            titleEl.innerText = loc;
+            
+            let orders = [];
+            try { orders = JSON.parse(localStorage.getItem('sevisa_orders') || '[]'); } catch(e){}
+            
+            // Filter orders for this location that are not rejected or cancelled
+            const bookedOrders = orders.filter(o => 
+                o.location === loc && 
+                !['ditolak', 'dibatalkan', 'selesai'].includes(o.status) &&
+                o.dates
+            );
+            
+            if(bookedOrders.length === 0) {
+                container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-4 opacity-70">
+                    <span class="text-2xl mb-1">✨</span>
+                    <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold text-center">Belum ada pemesanan.<br>Jadwal sangat tersedia!</p>
+                </div>`;
+                return;
+            }
+            
+            let html = '';
+            bookedOrders.forEach(o => {
+                html += `
+                <div class="p-2.5 bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/30 rounded-lg flex items-center justify-between shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-rose-500 shrink-0"></span>
+                        <span class="text-[11px] font-bold text-slate-700 dark:text-slate-300">${o.dates}</span>
+                    </div>
+                    <span class="text-[9px] font-extrabold text-rose-600 bg-rose-100 px-1.5 py-0.5 rounded uppercase">Terisi</span>
+                </div>`;
+            });
+            container.innerHTML = html;
+        };
+
         // ---------------- RENDER FAQ ----------------
         function renderUserFAQ() {
             const container = document.getElementById('faq-accordion-container');
@@ -4506,6 +4588,7 @@ function searchOrderStatus() {
             updateProfileStatusUI();
             showPage('home');
             
+            renderAvailabilityCal();
             renderUserFAQ();
             applyCMSContent();
             // Apply text replacement last so it catches everything rendered by JS
