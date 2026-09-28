@@ -4406,6 +4406,95 @@ function searchOrderStatus() {
             show3DToast('TERIMA KASIH', 'Testimoni Anda berhasil dikirim dan akan direview oleh tim Diskominfo.', 'success');
         }
 
+        // ---------------- CMS DYNAMIC IMAGE REPLACER ----------------
+        function applyCMSContent() {
+            try {
+                const cms = JSON.parse(localStorage.getItem('sevisa_cms_images') || '{}');
+                if (Object.keys(cms).length !== 0) {
+                    document.querySelectorAll('img').forEach(img => {
+                        const src = img.getAttribute('src');
+                        if (src && cms[src]) {
+                            img.src = cms[src];
+                            img.setAttribute('data-original-src', src);
+                        }
+                    });
+                    document.querySelectorAll('[style*="background-image"]').forEach(el => {
+                        let styleStr = el.getAttribute('style');
+                        for (let key in cms) {
+                            if (styleStr.includes(key)) {
+                                el.style.backgroundImage = `url('${cms[key]}')`;
+                                break;
+                            }
+                        }
+                    });
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        // ---------------- CMS UNIVERSAL TEXT REPLACER ----------------
+        function applyGlobalText() {
+            try {
+                const textCMS = JSON.parse(localStorage.getItem('sevisa_text_cms') || '[]');
+                if (textCMS.length === 0) return;
+                
+                const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+                let node;
+                while(node = walker.nextNode()) {
+                    let val = node.nodeValue;
+                    if(val.trim() !== '') {
+                        let modified = false;
+                        textCMS.forEach(item => {
+                            if (item.original && item.newText && val.includes(item.original)) {
+                                val = val.split(item.original).join(item.newText); // replace all occurrences
+                                modified = true;
+                            }
+                        });
+                        if (modified) {
+                            node.nodeValue = val;
+                        }
+                    }
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        // ---------------- RENDER FAQ ----------------
+        function renderUserFAQ() {
+            const container = document.getElementById('faq-accordion-container');
+            if(!container) return;
+            const faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+            if(faqs.length === 0) {
+                container.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">Belum ada FAQ yang ditambahkan.</p>';
+                return;
+            }
+            
+            let html = '';
+            faqs.forEach((f, i) => {
+                html += `
+                <div class="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden transition-all duration-300">
+                    <button class="w-full flex items-center justify-between p-5 text-left focus:outline-none" onclick="toggleFaq(${i})">
+                        <span class="font-extrabold text-slate-900 dark:text-white text-sm sm:text-base">${f.q}</span>
+                        <svg id="faq-icon-${i}" class="w-5 h-5 text-brand-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="faq-content-${i}" class="max-h-0 overflow-hidden transition-all duration-300 px-5">
+                        <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed pb-5 border-t border-slate-200 dark:border-slate-700 pt-4">${f.a}</p>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        window.toggleFaq = function(idx) {
+            const content = document.getElementById(`faq-content-${idx}`);
+            const icon = document.getElementById(`faq-icon-${idx}`);
+            if(content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.style.transform = 'rotate(180deg)';
+            }
+        };
+
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
             toggleCategoryFields();
@@ -4416,6 +4505,11 @@ function searchOrderStatus() {
             updateUserNavArea();
             updateProfileStatusUI();
             showPage('home');
+            
+            renderUserFAQ();
+            applyCMSContent();
+            // Apply text replacement last so it catches everything rendered by JS
+            setTimeout(applyGlobalText, 100); 
         });
     </script>
 </body>

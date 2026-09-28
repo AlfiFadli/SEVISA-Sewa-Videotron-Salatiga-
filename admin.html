@@ -7,7 +7,8 @@
 <title>Portal CMS Admin Diskominfo - SEVISA (Sewa Videotron Salatiga)</title>
 <!-- TAILWIND CSS CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdn.tailwindcss.com">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
 // ---------------- FAQ LOGIC ----------------
 function loadAdminFAQ() {
     let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
@@ -718,6 +719,12 @@ function deleteTesti(idx) {
 <button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-lokasi" onclick="switchCMSModule('lokasi')">
                         🗺️ Lokasi &amp; Peta Interactive
                     </button>
+<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-gambar" onclick="switchCMSModule('gambar')">
+    🖼️ Manajemen Tampilan (CMS)
+</button>
+<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-text" onclick="switchCMSModule('text')">
+    📝 Manajemen Teks Universal & FAQ
+</button>
 <button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 " id="tab-cms-portofolio" onclick="switchCMSModule('portofolio')">
                         ⭐ Manajemen Testimoni Penyewa
                     </button>
@@ -1118,6 +1125,57 @@ function deleteTesti(idx) {
 <!-- ========================================================================= -->
 <!-- MODULE 3: FULL CRUD PORTOFOLIO -->
 <!-- ========================================================================= -->
+<!-- ========================================================================= -->
+<!-- MODULE CMS GAMBAR (MANAJEMEN TAMPILAN) -->
+<!-- ========================================================================= -->
+<div class="hidden space-y-6" id="sec-cms-gambar">
+    <div class="flex items-center justify-between">
+        <h3 class="text-base font-black text-slate-900 dark:text-white uppercase">Manajemen Tampilan Web (CMS Gambar)</h3>
+        <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-lg border border-emerald-300">Sinkronisasi Real-Time</span>
+    </div>
+    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2 text-xs text-slate-600 dark:text-slate-300">
+        <p>Unggah file gambar (maks 1MB disarankan) untuk mengganti gambar pada halaman publik (User Panel). Jika Anda mereset, gambar akan kembali ke versi asli bawaan aplikasi.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="cms-gambar-container">
+        <!-- JS will populate this -->
+    </div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODULE CMS TEKS UNIVERSAL & FAQ -->
+<!-- ========================================================================= -->
+<div class="hidden space-y-6" id="sec-cms-text">
+    <div class="flex flex-col gap-4">
+        <h3 class="text-base font-black text-slate-900 dark:text-white uppercase">Manajemen Teks Universal & FAQ</h3>
+        
+        <!-- FAQ CMS -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+            <h4 class="font-extrabold text-sm text-brand-600">❓ Editor Pertanyaan Umum (FAQ)</h4>
+            <form onsubmit="addFAQ(event)" class="flex gap-2">
+                <input type="text" id="faq-q-input" placeholder="Pertanyaan..." required class="flex-1 p-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-white" />
+                <input type="text" id="faq-a-input" placeholder="Jawaban..." required class="flex-[2] p-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-white" />
+                <button type="submit" class="px-4 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg transition">Tambah</button>
+            </form>
+            <div class="space-y-2 mt-4" id="admin-faq-list">
+                <!-- FAQs injected by JS -->
+            </div>
+        </div>
+
+        <!-- UNIVERSAL TEXT REPLACER -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+            <h4 class="font-extrabold text-sm text-emerald-600">📝 Editor Teks Universal (Ganti Teks Apa Saja)</h4>
+            <p class="text-xs text-slate-500">Ketik teks asli yang ingin diganti (contoh: "Alamat Kantor", "(0298) 326 767", atau "Pusatkan Iklan Anda"), lalu ketik teks penggantinya.</p>
+            <form onsubmit="addGlobalText(event)" class="flex gap-2">
+                <input type="text" id="text-ori-input" placeholder="Teks Asli di Web..." required class="flex-1 p-2 text-xs bg-slate-50 dark:bg-slate-800 border border-rose-200 dark:border-rose-900/50 rounded-lg text-slate-800 dark:text-white" />
+                <span class="pt-2">➡️</span>
+                <input type="text" id="text-new-input" placeholder="Teks Pengganti Baru..." required class="flex-1 p-2 text-xs bg-slate-50 dark:bg-slate-800 border border-emerald-200 dark:border-emerald-900/50 rounded-lg text-slate-800 dark:text-white" />
+                <button type="submit" class="px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg transition">Ganti Teks</button>
+            </form>
+            <div class="space-y-2 mt-4" id="admin-text-list">
+                <!-- Text configs injected by JS -->
+            </div>
+        </div>
+    </div>
+</div>
 <div class="hidden space-y-6" id="sec-cms-portofolio">
 <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
 <div>
@@ -1617,6 +1675,183 @@ function deleteTesti(idx) {
             if(elFavLoc) elFavLoc.innerText = favLoc;
         }
 
+        // ---------------- CMS GAMBAR (MANAJEMEN TAMPILAN) ----------------
+        const CMS_GAMBAR_KEYS = [
+            { key: 'logo.png', label: 'Logo Website' },
+            { key: 'header_banner.jpg', label: 'Banner Utama (Hero Background)' },
+            { key: 'brosur.jpg', label: 'Brosur Spesifikasi (PDF/Image)' },
+            { key: 'pasar_sapi.jpg', label: 'Foto Lokasi Pasar Sapi' },
+            { key: 'selasar_kartini.jpg', label: 'Foto Lokasi Selasar Kartini' },
+            { key: 'blotongan.jpg', label: 'Foto Lokasi Blotongan Gate' }
+        ];
+
+        function renderCMSGambar() {
+            const container = document.getElementById('cms-gambar-container');
+            if (!container) return;
+            let cms = JSON.parse(localStorage.getItem('sevisa_cms_images') || '{}');
+            
+            let html = '';
+            CMS_GAMBAR_KEYS.forEach(item => {
+                const currentImg = cms[item.key] || item.key;
+                const isCustom = !!cms[item.key];
+                html += `
+                    <div class="bg-white dark:bg-slate-900 border ${isCustom ? 'border-brand-500 shadow-brand-500/20' : 'border-slate-200 dark:border-slate-800'} rounded-2xl p-4 flex flex-col gap-3">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-extrabold text-slate-900 dark:text-white text-xs">${item.label}</h4>
+                                <span class="text-[10px] text-slate-500 font-mono">${item.key}</span>
+                            </div>
+                            ${isCustom ? '<span class="px-2 py-0.5 bg-brand-100 text-brand-700 font-bold text-[9px] rounded uppercase">Custom (Diedit)</span>' : '<span class="px-2 py-0.5 bg-slate-100 text-slate-500 font-bold text-[9px] rounded uppercase">Bawaan</span>'}
+                        </div>
+                        <div class="w-full h-32 bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden flex items-center justify-center border border-slate-200 dark:border-slate-700 relative">
+                            <img src="${currentImg}" class="max-h-full max-w-full object-contain" alt="${item.label}" />
+                        </div>
+                        <div class="pt-2 flex items-center gap-2">
+                            <label class="flex-1 text-center py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-[10px] uppercase rounded-lg cursor-pointer transition">
+                                📤 Ubah Gambar
+                                <input type="file" accept="image/*" class="hidden" onchange="handleCMSGambarUpload(event, '${item.key}')" />
+                            </label>
+                            ${isCustom ? `<button onclick="resetCMSGambar('${item.key}')" class="px-3 py-2 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-[10px] uppercase rounded-lg transition" title="Kembalikan ke gambar asli bawaan">Reset</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function handleCMSGambarUpload(event, key) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Maksimal 1.5MB agar localStorage tidak penuh
+            if (file.size > 1.5 * 1024 * 1024) {
+                showAdminToast('⚠️ UKURAN FILE TERLALU BESAR', 'Pilih gambar dengan ukuran di bawah 1.5 MB untuk mencegah error browser memory.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                let cms = JSON.parse(localStorage.getItem('sevisa_cms_images') || '{}');
+                cms[key] = e.target.result;
+                localStorage.setItem('sevisa_cms_images', JSON.stringify(cms));
+                window.dispatchEvent(new Event('storage'));
+                renderCMSGambar();
+                showAdminToast('🖼️ GAMBAR DIPERBARUI', `Gambar untuk <strong>${key}</strong> berhasil diubah secara real-time.`);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetCMSGambar(key) {
+            if (!confirm(`Hapus kustomisasi gambar untuk ${key}? Tampilan akan kembali ke versi asli.`)) return;
+            let cms = JSON.parse(localStorage.getItem('sevisa_cms_images') || '{}');
+            delete cms[key];
+            localStorage.setItem('sevisa_cms_images', JSON.stringify(cms));
+            window.dispatchEvent(new Event('storage'));
+            renderCMSGambar();
+            showAdminToast('♻️ GAMBAR DIRESET', `Kustomisasi <strong>${key}</strong> telah dihapus.`);
+        }
+
+        // ---------------- CMS TEKS UNIVERSAL & FAQ ----------------
+        function renderCMSText() {
+            // Render Global Text
+            const textContainer = document.getElementById('admin-text-list');
+            if (textContainer) {
+                let textCMS = JSON.parse(localStorage.getItem('sevisa_text_cms') || '[]');
+                if (textCMS.length === 0) {
+                    textContainer.innerHTML = '<p class="text-[10px] text-slate-500 italic">Belum ada teks yang diganti.</p>';
+                } else {
+                    let html = '';
+                    textCMS.forEach((item, idx) => {
+                        html += `
+                        <div class="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg">
+                            <div class="flex-1 text-xs">
+                                <span class="text-rose-500 line-through mr-2">"${item.original}"</span>
+                                <span>➡️</span>
+                                <span class="text-emerald-500 font-bold ml-2">"${item.newText}"</span>
+                            </div>
+                            <button onclick="deleteGlobalText(${idx})" class="px-2 py-1 bg-rose-100 hover:bg-rose-200 text-rose-600 font-bold text-[10px] rounded">Hapus</button>
+                        </div>`;
+                    });
+                    textContainer.innerHTML = html;
+                }
+            }
+
+            // Render FAQ
+            const faqContainer = document.getElementById('admin-faq-list');
+            if (faqContainer) {
+                let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+                if (faqs.length === 0) {
+                    faqContainer.innerHTML = '<p class="text-[10px] text-slate-500 italic">Belum ada FAQ.</p>';
+                } else {
+                    let html = '';
+                    faqs.forEach((f, idx) => {
+                        html += `
+                        <div class="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg flex justify-between gap-3 items-start">
+                            <div class="space-y-1">
+                                <p class="text-xs font-bold text-brand-600">Q: ${f.q}</p>
+                                <p class="text-[11px] text-slate-600 dark:text-slate-400">A: ${f.a}</p>
+                            </div>
+                            <button onclick="deleteAdminFAQ(${idx})" class="px-2 py-1 bg-rose-100 hover:bg-rose-200 text-rose-600 font-bold text-[10px] rounded shrink-0">Hapus</button>
+                        </div>`;
+                    });
+                    faqContainer.innerHTML = html;
+                }
+            }
+        }
+
+        function addGlobalText(e) {
+            e.preventDefault();
+            const ori = document.getElementById('text-ori-input').value.trim();
+            const newT = document.getElementById('text-new-input').value.trim();
+            if (!ori || !newT) return;
+
+            let textCMS = JSON.parse(localStorage.getItem('sevisa_text_cms') || '[]');
+            textCMS.push({ original: ori, newText: newT });
+            localStorage.setItem('sevisa_text_cms', JSON.stringify(textCMS));
+            window.dispatchEvent(new Event('storage'));
+            
+            document.getElementById('text-ori-input').value = '';
+            document.getElementById('text-new-input').value = '';
+            renderCMSText();
+            showAdminToast('📝 TEKS DITAMBAHKAN', `Penggantian teks berhasil disimpan.`);
+        }
+
+        function deleteGlobalText(idx) {
+            if (!confirm('Hapus pengaturan teks ini?')) return;
+            let textCMS = JSON.parse(localStorage.getItem('sevisa_text_cms') || '[]');
+            textCMS.splice(idx, 1);
+            localStorage.setItem('sevisa_text_cms', JSON.stringify(textCMS));
+            window.dispatchEvent(new Event('storage'));
+            renderCMSText();
+        }
+
+        // We override the original addFAQ to use the new UI form
+        window.addFAQ = function(e) {
+            e.preventDefault();
+            const q = document.getElementById('faq-q-input').value.trim();
+            const a = document.getElementById('faq-a-input').value.trim();
+            if (!q || !a) return;
+
+            let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+            faqs.push({ q, a });
+            localStorage.setItem('sevisa_faqs', JSON.stringify(faqs));
+            window.dispatchEvent(new Event('storage'));
+            
+            document.getElementById('faq-q-input').value = '';
+            document.getElementById('faq-a-input').value = '';
+            renderCMSText();
+            showAdminToast('❓ FAQ DITAMBAHKAN', `Pertanyaan baru berhasil disimpan.`);
+        };
+
+        window.deleteAdminFAQ = function(idx) {
+            if (!confirm('Hapus FAQ ini?')) return;
+            let faqs = JSON.parse(localStorage.getItem('sevisa_faqs') || '[]');
+            faqs.splice(idx, 1);
+            localStorage.setItem('sevisa_faqs', JSON.stringify(faqs));
+            window.dispatchEvent(new Event('storage'));
+            renderCMSText();
+        };
+
         function initAdminCMSData() {
             initDaftarTransaksiDates();
             updateDashboardStats();
@@ -1624,6 +1859,8 @@ function deleteTesti(idx) {
             renderAdminTable();
             renderDaftarTransaksiTable();
             renderLaporanKhusus();
+            renderCMSGambar();
+            renderCMSText();
             renderCMSLocations();
             renderCMSPortfolio();
             renderCMSBlog();
@@ -2477,7 +2714,7 @@ function deleteTesti(idx) {
                 return;
             }
 
-            const modules = ['dashboard', 'transaksi', 'daftar-transaksi', 'laporan', 'lokasi', 'portofolio', 'blog', 'tentang', 'users', 'chat'];
+            const modules = ['dashboard', 'transaksi', 'daftar-transaksi', 'laporan', 'lokasi', 'gambar', 'text', 'portofolio', 'blog', 'tentang', 'users', 'chat'];
             modules.forEach(m => {
                 const sec = document.getElementById('sec-cms-' + m);
                 const tab = document.getElementById('tab-cms-' + m);
@@ -2494,6 +2731,8 @@ function deleteTesti(idx) {
             if (modName === 'dashboard') renderDashboardStats();
             if (modName === 'laporan') renderLaporanKhusus();
             if (modName === 'daftar-transaksi') renderDaftarTransaksiTable();
+            if (modName === 'gambar') renderCMSGambar();
+            if (modName === 'text') renderCMSText();
             if (modName === 'portofolio') loadAdminPortfolio();
             if (modName === 'users') {
                 renderCMSUsers();
