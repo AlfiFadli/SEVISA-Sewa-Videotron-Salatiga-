@@ -399,7 +399,6 @@
     </div>
 
     <!-- ========================================================================= -->
-        <!-- ========================================================================= -->
     <!-- MAIN APPLICATION WRAPPER -->
     <!-- ========================================================================= -->
     <div id="main-app-wrapper" class="flex flex-col min-h-screen">
@@ -432,11 +431,9 @@
                         Testimoni
                     </button>
 
-<button class="hidden px-2.5 py-1.5 rounded-lg hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition font-bold" id="nav-transaksi" onclick="showPage('transaksi')">
-    Daftar Transaksi
-</button>
-<button class="px-3 py-1.5 rounded-lg text-brand-700 dark:text-sky-300 bg-brand-50 dark:bg-slate-800 hover:bg-brand-100 transition border border-brand-200 dark:border-slate-700 font-bold" id="nav-cek-status" onclick="showPage('cek-status')">
-                        Cek Status
+
+<button class="hidden px-3 py-1.5 rounded-lg text-brand-700 dark:text-sky-300 bg-brand-50 dark:bg-slate-800 hover:bg-brand-100 transition border border-brand-200 dark:border-slate-700 font-bold" id="nav-cek-status" onclick="showPage('cek-status')">
+                        Cek Status & Riwayat
                     </button>
                     <button onclick="showPage('profil')" id="nav-profil" class="px-2.5 py-1.5 rounded-lg hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition flex items-center gap-1">
                         <span>Data Diri</span>
@@ -1070,6 +1067,9 @@
 <button class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 shrink-0 transition" id="port-filter-umkm" onclick="filterPortfolio('UMKM / Personal')">
                                 🛒 UMKM / Personal
                             </button>
+<button onclick="goToTulisTestimoniPage()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold shadow-md shrink-0 transition flex items-center gap-2">
+                                <span>➕</span> Tulis Ulasan Anda
+                            </button>
 </div>
 <div class="flex items-center gap-2 w-full sm:w-auto">
 <select class="w-full sm:w-auto bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-brand-600 focus:outline-none" id="port-location-select" onchange="applyPortfolioLocationFilter()">
@@ -1101,35 +1101,63 @@
 </section>
 <!-- 7. HALAMAN CEK STATUS -->
 
-<!-- PAGE: DAFTAR TRANSAKSI -->
-<section class="hidden" id="page-transaksi">
-    <div class="relative py-12 sm:py-20 overflow-hidden min-h-[60vh]">
-        <div class="absolute inset-0 bg-slate-50 dark:bg-slate-900"></div>
-        <div class="container mx-auto px-4 relative z-10 max-w-4xl">
-            <div class="text-center space-y-4 mb-10">
-                <span class="px-4 py-1.5 bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-sky-300 font-black text-xs rounded-full uppercase tracking-widest border border-brand-200 dark:border-brand-800">
-                    Riwayat Anda
-                </span>
-                <h2 class="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-                    Daftar <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-sky-500">Transaksi</span>
-                </h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
-                    Berikut adalah rekam jejak pengajuan penyewaan videotron yang pernah Anda lakukan menggunakan akun ini.
-                </p>
-            </div>
-            
-            <div id="transaksi-list-container" class="space-y-4">
-                <!-- Transactions will be injected here -->
-            </div>
-            <div id="transaksi-empty-prompt" class="hidden text-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-10 shadow-lg mt-8">
-                <span class="text-5xl block mb-4">📭</span>
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Belum Ada Transaksi</h3>
-                <p class="text-xs text-slate-500 mt-2">Anda belum pernah melakukan pengajuan penyewaan menggunakan akun ini.</p>
-            </div>
-        </div>
-    </div>
-</section>
+<!-- ========================================================================= -->
+        <!-- PAGE: TULIS TESTIMONI -->
+        <section class="hidden" id="page-tulis-testimoni">
+            <div class="max-w-3xl mx-auto py-8 px-4 sm:px-6">
+                <div class="mb-8 text-center">
+                    <h1 class="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-wider">TULIS ULASAN ANDA</h1>
+                    <p class="text-slate-500 dark:text-slate-400 mt-2 font-medium">Bantu kami meningkatkan kualitas layanan publik Diskominfo Salatiga</p>
+                </div>
 
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-xl border border-slate-200 dark:border-slate-800">
+                    <form onsubmit="submitUserTestimoni(event)" class="space-y-5">
+                        <input type="hidden" id="testimoni-order-code">
+                        
+                        <div id="testimoni-public-fields" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Nama Instansi / Personal *</label>
+                                <input type="text" id="testimoni-client-name" required placeholder="Contoh: PT ABC / Nama Anda" class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Lokasi Videotron *</label>
+                                <select id="testimoni-client-location" required class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-700 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500">
+                                    <option value="Pasar Rejosari">Pasar Rejosari</option>
+                                    <option value="Selasar Kartini">Selasar Kartini</option>
+                                    <option value="Blotongan">Blotongan</option>
+                                    <option value="Alun-Alun Salatiga">Alun-Alun Salatiga</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Rating Penilaian *</label>
+                            <select id="testimoni-rating" required class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-amber-500 outline-none focus:ring-2 focus:ring-emerald-500">
+                                <option value="5">⭐⭐⭐⭐⭐ (Sangat Puas)</option>
+                                <option value="4">⭐⭐⭐⭐ (Puas)</option>
+                                <option value="3">⭐⭐⭐ (Cukup)</option>
+                                <option value="2">⭐⭐ (Kurang)</option>
+                                <option value="1">⭐ (Kecewa)</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Ulasan / Testimoni *</label>
+                            <textarea id="testimoni-desc" required rows="5" placeholder="Tuliskan pengalaman Anda menggunakan layanan videotron..." class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"></textarea>
+                        </div>
+                        
+                        <div class="pt-4 flex items-center justify-between gap-4">
+                            <button type="button" onclick="showPage('proyek')" class="px-6 py-3.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-black text-xs uppercase tracking-wider rounded-xl transition">
+                                Kembali
+                            </button>
+                            <button type="submit" class="flex-1 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
+                                KIRIM TESTIMONI SEKARANG
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
 <section class="hidden" id="page-cek-status">
 <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white py-10 sm:py-12 relative overflow-hidden">
 <div class="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none mix-blend-screen" style="background-image: url('header_banner.jpg');"></div>
@@ -1235,6 +1263,13 @@
 <span class="text-slate-400 font-bold block text-[10px] uppercase">File Materi Iklan</span>
 <strong class="text-slate-900 dark:text-white font-extrabold text-xs truncate block" id="track-file">Video_Promosi_Produk.mp4</strong>
 </div>
+<div class="sm:col-span-2 mt-2 pt-2 border-t border-slate-200 dark:border-slate-700">
+<span class="text-slate-400 font-bold block text-[10px] uppercase mb-1">Status Materi (Konten)</span>
+<div id="track-content-status-box" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs">
+<strong class="text-slate-900 dark:text-white font-extrabold" id="track-content-status">Menunggu Review</strong>
+<div id="track-content-rejection" class="hidden mt-2 p-2 bg-rose-100 text-rose-800 border border-rose-300 rounded text-[10px]"></div>
+</div>
+</div>
 </div>
 </div>
 <div class="p-3.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl text-xs text-amber-900 dark:text-amber-200 leading-relaxed font-medium" id="track-status-message-box">
@@ -1260,6 +1295,24 @@
 <!-- DYNAMICALLY POPULATED VIA renderOrderStatusCard -->
 </div>
 </div>
+
+<!-- DYNAMIC TRANSACTION HISTORY (ONLY LOGGED IN) -->
+<div id="cek-status-riwayat" class="hidden space-y-6 pt-10 border-t border-slate-200 dark:border-slate-800 mt-10">
+    <div class="text-center space-y-2">
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Riwayat <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-sky-500">Transaksi</span> Anda</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Daftar pengajuan penyewaan videotron menggunakan akun ini.</p>
+    </div>
+    
+    <div id="transaksi-list-container" class="space-y-4">
+        <!-- Transactions will be injected here -->
+    </div>
+    <div id="transaksi-empty-prompt" class="hidden text-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-md mt-6">
+        <span class="text-4xl block mb-3">📭</span>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Belum Ada Transaksi</h3>
+        <p class="text-[11px] text-slate-500 mt-1">Anda belum pernah melakukan pengajuan penyewaan.</p>
+    </div>
+</div>
+
 </div>
 </section>
 <!-- 8. HALAMAN PROFIL DATA DIRI -->
@@ -1309,18 +1362,17 @@
                                 </div>
                                 <div>
                                     <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Kategori / Tipe Akun Pemesan *</label>
-                                    <select id="prof-category" required onchange="togglePositionField()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
-                                        <option value="personal">Personal / Perorangan</option>
-                                        <option value="perusahaan">Perusahaan Swasta / PT / CV</option>
+                                    <select id="prof-category" required onchange="toggleCategoryFields()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none font-medium">
+                                        <option value="perorangan">Personal / Perorangan</option>
+                                        <option value="badan_usaha">Badan Usaha (PT/CV/Firma)</option>
                                         <option value="pemerintah">Instansi Pemerintah / Dinas</option>
-                                        <option value="umkm">UMKM / Usaha Mandiri / Event</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 gap-4">
-                                <div>
-                                    <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Nama Perusahaan / Instansi / Brand *</label>
+                                <div id="prof-company-container">
+                                    <label id="prof-company-label" class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Nama Perusahaan / Instansi / Brand *</label>
                                     <input type="text" id="prof-company" value="" required placeholder="Contoh: PT Salatiga Digital Indo / Dinas Pariwisata" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
                                 </div>
                                 <div id="prof-position-container" class="hidden">
@@ -1345,14 +1397,44 @@
                             </div>
 
                             <div>
-                                <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Nomor NIK KTP / NPWP Resmi</label>
-                                <input type="text" id="prof-nik" value="" placeholder="Masukkan 16 Digit NIK KTP atau NPWP Perusahaan" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
+                                <label id="prof-nik-label" class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Nomor NIK KTP Resmi *</label>
+                                <input type="text" id="prof-nik" required value="" placeholder="Masukkan 16 Digit NIK KTP" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
                             </div>
 
                             <div>
-                                <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Alamat Lengkap Domisili / Kantor *</label>
-                                <textarea id="prof-address" rows="3" required placeholder="Masukkan alamat lengkap RT/RW, Kelurahan, Kecamatan, Kota" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none"></textarea>
-                            </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+    <div>
+        <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Provinsi *</label>
+        <select id="prof-provinsi" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none" onchange="loadKota()">
+            <option value="">Memuat Provinsi...</option>
+        </select>
+    </div>
+    <div>
+        <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Kota / Kabupaten *</label>
+        <select id="prof-kota" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none" onchange="loadKecamatan()" disabled>
+            <option value="">Pilih Provinsi Dahulu</option>
+        </select>
+    </div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+    <div>
+        <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Kecamatan *</label>
+        <select id="prof-kecamatan" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none" onchange="loadDesa()" disabled>
+            <option value="">Pilih Kota Dahulu</option>
+        </select>
+    </div>
+    <div>
+        <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Desa / Kelurahan *</label>
+        <select id="prof-desa" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none" disabled>
+            <option value="">Pilih Kecamatan Dahulu</option>
+        </select>
+    </div>
+</div>
+<div>
+    <label class="block font-bold mb-1 text-slate-800 dark:text-slate-200">Dukuh / Jalan / RT / RW *</label>
+    <input type="text" id="prof-dukuh" required placeholder="Contoh: Dukuh Krajan RT 01 RW 02" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 p-3 rounded-xl focus:border-brand-600 focus:outline-none">
+</div>
+</div>
 
                             <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-brand-700 to-blue-600 hover:from-brand-600 hover:to-blue-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition">
                                 Simpan Data Diri Lengkap & Aktifkan Izin Penyewaan &rarr;
@@ -1372,14 +1454,7 @@
 </div>
 </div>
 </section>
-<section class="hidden py-10 min-h-screen" id="page-daftar-transaksi">
-<div class="max-w-4xl mx-auto px-5 sm:px-10">
-<h2 class="text-3xl font-black text-slate-900 dark:text-white uppercase mb-6">Daftar Transaksi</h2>
-<div class="space-y-4" id="transaksi-list-container">
-<!-- Transaksi cards injected here -->
-</div>
-</div>
-</section>
+
 <!-- Testimoni Modal -->
 <div class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-5" id="testimoni-modal">
 <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal('testimoni-modal')"></div>
@@ -1660,7 +1735,7 @@
         function getStoredUsers() {
             const saved = localStorage.getItem('sevisa_users');
             if (saved) {
-                try { return JSON.parse(saved); } catch(e) {}
+                 return JSON.parse(saved); }
             }
             localStorage.setItem('sevisa_users', JSON.stringify(DEFAULT_INITIAL_USERS));
             return DEFAULT_INITIAL_USERS;
@@ -1750,78 +1825,84 @@
                 title: 'Promo Spesial Kuliner & Ritel Ramadhan',
                 client: 'PT Salatiga Food & Beverages',
                 location: 'Pasar Rejosari',
+                rating: '5',
                 type: 'video',
                 mediaLabel: '🎥 Video Motion 1080p',
                 category: 'komersial',
                 dates: '1 - 15 Juli 2026',
                 freq: '60x / Hari (30 Detik)',
                 imgUrl: 'header_banner.jpg',
-                description: 'Penayangan video komersial resolusi Full HD berdurasi 30 detik untuk mempromosikan promo produk makanan lokal Salatiga di persimpangan Pasar Rejosari selama 15 hari.'
+                description: 'Layanan sewa videotron melalui SEVISA sangat memudahkan kami. Proses booking online cepat, dan tayangan iklan resolusi Full HD di Pasar Rejosari terbukti sangat efektif menaikkan penjualan produk kuliner kami selama bulan Ramadhan. Sangat direkomendasikan!'
             },
             {
                 id: 'PORT-02',
                 title: 'Campaign Mudik Minim Sampah 2026',
                 client: 'Dinas Komunikasi dan Informatika Salatiga',
                 location: 'Blotongan',
+                rating: '5',
                 type: 'layanan',
                 mediaLabel: '🏛️ Iklan Layanan Publik',
                 category: 'pemkot',
                 dates: '10 - 25 April 2026',
                 freq: '90x / Hari (15 Detik)',
                 imgUrl: 'header_banner.jpg',
-                description: 'Sosialisasi video motion gerakan peduli lingkungan dan kebersihan jalur mudik nasional yang disiarkan di videotron Blotongan pintu masuk kota.'
+                description: 'Platform SEVISA memberikan kemudahan transparansi jadwal bagi kami. Sosialisasi program mudik minim sampah di titik Blotongan berjalan sangat optimal berkat penayangan yang tepat waktu dan dukungan sistem yang transparan.'
             },
             {
                 id: 'PORT-03',
                 title: 'Informasi Layanan Administrasi Kependudukan',
                 client: 'Dinas Kependudukan & Pencatatan Sipil',
                 location: 'Selasar Kartini',
+                rating: '5',
                 type: 'image',
                 mediaLabel: '🖼️ Poster Digital HD',
                 category: 'pemkot',
                 dates: '1 - 30 Mei 2026',
                 freq: '45x / Hari (30 Detik)',
                 imgUrl: 'header_banner.jpg',
-                description: 'Poster digital infografis layanan KTP digital & pencatatan sipil di Selasar Kartini kawasan pusat pendidikan & perkantoran Salatiga.'
+                description: 'Kami sangat puas dengan layanan videotron di Selasar Kartini. Kualitas poster digital infografis yang ditayangkan sangat tajam. Sangat membantu warga Salatiga dalam memahami prosedur KTP digital.'
             },
             {
                 id: 'PORT-04',
                 title: 'Festival Budaya & UMKM Salatiga 2026',
                 client: 'Dinas Kebudayaan & Pariwisata Salatiga',
                 location: 'Alun-Alun Salatiga',
+                rating: '5',
                 type: 'video',
                 mediaLabel: '🎥 Video Teaser Event',
                 category: 'event',
                 dates: '1 - 7 Juni 2026',
                 freq: '120x / Hari (30 Detik)',
                 imgUrl: 'header_banner.jpg',
-                description: 'Video motion teaser pengumuman pagelaran festival budaya tahunan di Alun-Alun Pancasila Salatiga dengan jangkauan pengunjung harian yang masif.'
+                description: 'Sangat luar biasa! Teaser event Festival Budaya yang ditayangkan di Alun-Alun Salatiga berhasil menarik ribuan pengunjung. Sistem monitoring SEVISA sangat informatif bagi instansi kami.'
             },
             {
                 id: 'PORT-05',
                 title: 'Peluncuran Produk Digital & Perbankan',
                 client: 'Bank Jateng Cabang Salatiga',
                 location: 'Pasar Rejosari',
+                rating: '5',
                 type: 'video',
                 mediaLabel: '🎥 Video Motion 1080p',
                 category: 'komersial',
                 dates: '1 - 30 Agustus 2026',
                 freq: '60x / Hari (30 Detik)',
                 imgUrl: 'header_banner.jpg',
-                description: 'Penayangan video promosi aplikasi mobile banking dan kredit modal usaha untuk para pedagang & pengusaha ritel Salatiga.'
+                description: 'Pengalaman pasang iklan di videotron Pasar Rejosari sangat memuaskan. Target audiens pedagang dan pengusaha tercapai secara optimal. Terima kasih SEVISA atas layanan yang semakin modern!'
             },
             {
                 id: 'PORT-06',
                 title: 'Edukasi Regulasi Pengamanan Kesehatan',
                 client: 'Dinas Kesehatan Kota Salatiga',
                 location: 'Selasar Kartini',
+                rating: '5',
                 type: 'layanan',
                 mediaLabel: '🏛️ Iklan Layanan Publik',
                 category: 'pemkot',
                 dates: '1 - 15 September 2026',
                 freq: '60x / Hari (15 Detik)',
                 imgUrl: 'header_banner.jpg',
-                description: 'Video sosialisasi gerakan hidup sehat dan panduan pencegahan penyakit menular bagi warga masyarakat di titik Selasar Kartini.'
+                description: 'Sistem SEVISA sangat mudah digunakan. Kami berhasil menayangkan video sosialisasi gerakan hidup sehat di Selasar Kartini sesuai dengan timeline darurat kami tanpa kendala administratif.'
             }
         ];
 
@@ -1880,9 +1961,9 @@
         function getStoredOrders() {
             const saved = localStorage.getItem('sevisa_orders');
             if (saved) {
-                try {
+                
                     return JSON.parse(saved);
-                } catch(e) {}
+                }
             }
             localStorage.setItem('sevisa_orders', JSON.stringify(DEFAULT_INITIAL_ORDERS));
             return DEFAULT_INITIAL_ORDERS;
@@ -2193,6 +2274,8 @@ function triggerBookingFlow(locationTitle = null) {
         }
 
         function submitBookingSewa(event) {
+    
+
     event.preventDefault();
     
     const locEls = Array.from(document.querySelectorAll('input[name="book-location"]:checked'));
@@ -2259,45 +2342,85 @@ function triggerBookingFlow(locationTitle = null) {
         }
     }
 
-    const calcResult = calculateBookingPrice();
     const fileName = fileInput.files[0].name;
-    const randomSuffix = Math.floor(100000 + Math.random() * 900000);
-    const bookingCode = 'SVS-' + randomSuffix;
-
-    
     const userPhone = currentUser ? currentUser.phone : '';
-    const newOrder = {
-        phone: userPhone,
-        code: bookingCode,
-        userName: currentUser ? currentUser.name : 'Pengguna',
-        company: currentUser ? (currentUser.company || 'Personal') : 'Personal',
-        location: locationStr,
-        locationArray: locations,
-        rawStartDate: startDate,
-        rawEndDate: endDate,
-        rawStartTime: startTime,
-        rawEndTime: endTime,
-        dates: `${startDate} s.d. ${endDate}${eventNotes} (${calcResult.totalDays} Hari • ${calcResult.paketLabel} • Rp ${calcResult.totalPrice.toLocaleString('id-ID')})`,
-        file: fileName,
-        status: 'menunggu',
-        statusLabel: 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO',
-        statusDesc: `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa lokasi <strong>${locationStr}</strong> (Kategori: ${calcResult.categoryLabel} • Paket: ${calcResult.paketLabel} • Total: Rp ${calcResult.totalPrice.toLocaleString('id-ID')}) sedang dalam antrean verifikasi.`
-    };
+    let generatedCodes = [];
 
-    orderDatabase.unshift(newOrder);
+    // Simulate price for each location separately by using the same logic as calculateBookingPrice
+    const catElValue = typeof currentUser !== 'undefined' && currentUser ? currentUser.category : 'personal';
+    const rotasiDetik = parseInt(document.getElementById('book-rotasi-detik').value) || 15;
+    const kaliTayang = parseInt(document.getElementById('book-qty').value) || 1;
+    const paketEl = document.getElementById('book-paket');
+    const paketLabel = paketEl.options[paketEl.selectedIndex].text;
+    
+    let catText = "Personal";
+    if(catElValue === 'perusahaan') catText = "Perusahaan";
+    if(catElValue === 'pemerintah') catText = "Pemerintah";
+    if(catElValue === 'umkm') catText = "UMKM";
+
+    let totalDays = 1;
+    if (startDate && endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const diffTime = end - start;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        if (diffDays > 0) totalDays = diffDays;
+    }
+
+    locations.forEach(loc => {
+        const randomSuffix = Math.floor(100000 + Math.random() * 900000);
+        const bookingCode = 'SVS-' + randomSuffix;
+        generatedCodes.push(bookingCode);
+
+        // Price calc for this specific loc
+        const item = typeof VIDEOTRON_DATA !== 'undefined' ? VIDEOTRON_DATA.find(v => v.title.toLowerCase().includes(loc.toLowerCase())) || VIDEOTRON_DATA[0] : {minuteNon: 0};
+        const minuteRate = getRawPriceNumber(item.minuteNon);
+        const totalTayangMenit = (rotasiDetik / 60) * kaliTayang * totalDays;
+        let subtotal = minuteRate * totalTayangMenit;
+        if (catElValue === 'pemerintah') subtotal = subtotal * 0.25;
+        if (catElValue === 'umkm') subtotal = subtotal * 0.50;
+        let tax = subtotal * 0.11;
+        let totalPrice = subtotal + tax;
+
+        const newOrder = {
+            phone: userPhone,
+            code: bookingCode,
+            userName: currentUser ? currentUser.name : 'Pengguna',
+            company: currentUser ? (currentUser.company || 'Personal') : 'Personal',
+            location: loc,
+            locationArray: [loc],
+            createdAt: new Date().toISOString(),
+            rawStartDate: startDate,
+            rawEndDate: endDate,
+            rawStartTime: startTime,
+            rawEndTime: endTime,
+            dates: `${startDate} s.d. ${endDate}${eventNotes} (${totalDays} Hari • ${paketLabel} • Rp ${totalPrice.toLocaleString('id-ID')})`,
+            file: fileName,
+            status: 'menunggu',
+            statusLabel: 'MENUNGGU VERIFIKASI ADMIN DISKOMINFO',
+            statusDesc: `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>Permohonan sewa lokasi <strong>${loc}</strong> (Kategori: ${catText} • Paket: ${paketLabel} • Total: Rp ${totalPrice.toLocaleString('id-ID')}) sedang dalam antrean verifikasi.`
+        };
+        orderDatabase.unshift(newOrder);
+    });
+
     saveStoredOrders(orderDatabase);
 
     closeModal('booking-modal');
 
+    // Show toast for multiple generated codes
     show3DToast(
         '🎉 PENGAJUAN BERHASIL DISIMPAN!',
-        `Kode Transaksi Pemesanan Anda:<br><strong class="text-xl font-black font-mono text-amber-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-amber-500/40 inline-block my-2 shadow-inner tracking-wider">${bookingCode}</strong><br>Silakan <strong>salin / catat Kode Transaksi</strong> di atas. Anda harus memasukkannya terlebih dahulu ke dalam kolom <strong>"Masukkan Kode Transaksi Pemesanan"</strong> pada Halaman Cek Status untuk menampilkan status & tahapan pengajuan.`,
+        `Kode Transaksi Anda:<br><strong class="text-xl font-black font-mono text-amber-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-amber-500/40 inline-block my-2 shadow-inner tracking-wider">${generatedCodes.join('<br>')}</strong><br>Silakan salin Kode Transaksi di atas. Karena Anda memilih ${locations.length} lokasi, sistem telah memisahkan invoice (nomor pesanan) untuk masing-masing lokasi secara terpisah.`,
         'success',
         'MENUJU HALAMAN CEK STATUS &rarr;',
-        `navigateToStatusPage('${bookingCode}')`
+        `navigateToStatusPage('${generatedCodes[0]}')`
     );
-}
 
+    
+        
+        
+    }
+}
 
 function navigateToStatusPage(code) {
             close3DToast();
@@ -2320,8 +2443,14 @@ function navigateToStatusPage(code) {
         }
 
         
-        function loadUserTransactions() {
-            if (!isLoggedIn || !currentUser) return;
+                function loadUserTransactions() {
+            const riwayatSection = document.getElementById('cek-status-riwayat');
+            if (!isLoggedIn || !currentUser) {
+                if (riwayatSection) riwayatSection.classList.add('hidden');
+                return;
+            }
+            if (riwayatSection) riwayatSection.classList.remove('hidden');
+            
             const container = document.getElementById('transaksi-list-container');
             const emptyPrompt = document.getElementById('transaksi-empty-prompt');
             
@@ -2335,6 +2464,7 @@ function navigateToStatusPage(code) {
             }
             
             emptyPrompt.classList.add('hidden');
+
             
             userOrders.forEach(order => {
                 let statusColor = 'text-amber-500';
@@ -2454,7 +2584,7 @@ function searchOrderStatus() {
                     if (s2i) s2i.className = 'w-7 h-7 rounded-full bg-blue-600 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md';
                     if (s3) s3.className = 'bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 text-center space-y-1 opacity-50 transition duration-300';
                     if (s3i) s3i.className = 'w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center';
-                } else if (order.status === 'selesai' || order.status === 'terkonfirmasi') {
+                } else if (order.status === 'selesai' || order.status === 'terkonfirmasi' || order.status === 'lunas') {
                     badgeHtml = `<span class="px-3.5 py-1.5 bg-green-100 dark:bg-green-950 text-green-800 dark:text-green-300 font-black text-xs uppercase tracking-wider rounded-xl border border-green-300 dark:border-green-800 flex items-center gap-1.5"><svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>${order.statusLabel || 'SELESAI'}</span></span>`;
                     if (s1) s1.className = 'bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-2xl p-3 text-center space-y-1 transition duration-300';
                     if (s1i) s1i.className = 'w-7 h-7 rounded-full bg-green-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center';
@@ -2462,6 +2592,14 @@ function searchOrderStatus() {
                     if (s2i) s2i.className = 'w-7 h-7 rounded-full bg-green-500 text-white font-extrabold text-xs mx-auto flex items-center justify-center';
                     if (s3) s3.className = 'bg-green-50 dark:bg-green-950/40 border-2 border-green-500 rounded-2xl p-3 text-center space-y-1 transition duration-300 shadow-sm scale-105';
                     if (s3i) s3i.className = 'w-7 h-7 rounded-full bg-green-600 text-white font-extrabold text-xs mx-auto flex items-center justify-center shadow-md';
+                } else if (order.status === 'batal') {
+                    badgeHtml = `<span class="px-3.5 py-1.5 bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 font-black text-xs uppercase tracking-wider rounded-xl border border-rose-300 dark:border-rose-800 flex items-center gap-1.5"><span>❌ ${order.statusLabel || 'DIBATALKAN'}</span></span>`;
+                    if (s1) s1.className = 'bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 text-center space-y-1 opacity-50 transition duration-300';
+                    if (s1i) s1i.className = 'w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center';
+                    if (s2) s2.className = 'bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 text-center space-y-1 opacity-50 transition duration-300';
+                    if (s2i) s2i.className = 'w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center';
+                    if (s3) s3.className = 'bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 text-center space-y-1 opacity-50 transition duration-300';
+                    if (s3i) s3i.className = 'w-7 h-7 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-extrabold text-xs mx-auto flex items-center justify-center';
                 } else if (order.status === 'ditolak') {
                     badgeHtml = `<span class="px-3.5 py-1.5 bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-300 font-black text-xs uppercase tracking-wider rounded-xl border border-red-300 dark:border-red-800 flex items-center gap-1.5"><svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span>${order.statusLabel || 'DITOLAK'}</span></span>`;
                 }
@@ -2485,6 +2623,12 @@ function searchOrderStatus() {
                 } else if (order.status === 'terkonfirmasi' || order.status === 'selesai') {
                     boxHeader = '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong>';
                     boxClass = 'p-3.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs text-emerald-900 dark:text-emerald-200 leading-relaxed font-medium';
+                } else if (order.status === 'lunas') {
+                    boxHeader = '🟢 <strong>Status: Lunas</strong>';
+                    boxClass = 'p-3.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 rounded-xl text-xs text-emerald-900 dark:text-emerald-200 leading-relaxed font-bold';
+                } else if (order.status === 'batal') {
+                    boxHeader = '❌ <strong>Status: Dibatalkan</strong>';
+                    boxClass = 'p-3.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 rounded-xl text-xs text-rose-900 dark:text-rose-200 leading-relaxed font-bold';
                 }
 
                 const messageBoxEl = cardClone.querySelector('#track-status-message-box');
@@ -2495,7 +2639,7 @@ function searchOrderStatus() {
 
                 const proofBox = cardClone.querySelector('#track-proof-box');
                 const proofImg = cardClone.querySelector('#track-proof-img');
-                if (order.proofImg && (order.status === 'diproses' || order.status === 'terkonfirmasi' || order.status === 'selesai')) {
+                if (order.proofImg && (order.status === 'diproses' || order.status === 'terkonfirmasi' || order.status === 'selesai' || order.status === 'lunas')) {
                     if (proofImg) proofImg.src = order.proofImg;
                     if (proofBox) proofBox.classList.remove('hidden');
                 } else {
@@ -2518,6 +2662,56 @@ function searchOrderStatus() {
             document.getElementById('track-user').innerText = `${order.userName} (${order.company})`;
             document.getElementById('track-file').innerText = order.file;
 
+            let kontenStatusStr = '⏳ Menunggu';
+            let kontenBoxClass = 'p-3 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs';
+            let kontenTextClass = 'text-slate-900 dark:text-white font-extrabold';
+            
+            let kStatus = order.contentStatus || (order.contentApproved ? 'disetujui' : 'menunggu');
+            
+            if (kStatus === 'menunggu') {
+                kontenStatusStr = '⏳ Menunggu Review';
+                kontenBoxClass = 'p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs';
+                kontenTextClass = 'text-amber-800 font-extrabold';
+            } else if (kStatus === 'disetujui') {
+                kontenStatusStr = '✔️ Disetujui';
+                kontenBoxClass = 'p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs';
+                kontenTextClass = 'text-blue-800 font-extrabold';
+            } else if (kStatus === 'sudah_upload') {
+                kontenStatusStr = '📂 Sudah Upload';
+                kontenBoxClass = 'p-3 bg-indigo-50 border border-indigo-200 rounded-lg text-xs';
+                kontenTextClass = 'text-indigo-800 font-extrabold';
+            } else if (kStatus === 'terjadwal') {
+                kontenStatusStr = '📅 Terjadwal';
+                kontenBoxClass = 'p-3 bg-purple-50 border border-purple-200 rounded-lg text-xs';
+                kontenTextClass = 'text-purple-800 font-extrabold';
+            } else if (kStatus === 'tayang') {
+                kontenStatusStr = '📺 Tayang';
+                kontenBoxClass = 'p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-xs';
+                kontenTextClass = 'text-emerald-800 font-extrabold';
+            } else if (kStatus === 'ditolak') {
+                kontenStatusStr = '❌ Ditolak';
+                kontenBoxClass = 'p-3 bg-rose-50 border border-rose-300 rounded-lg text-xs shadow-sm';
+                kontenTextClass = 'text-rose-800 font-extrabold';
+            }
+            
+            const kStatusBox = document.getElementById('track-content-status-box');
+            const kStatusText = document.getElementById('track-content-status');
+            const kRejBox = document.getElementById('track-content-rejection');
+            
+            if (kStatusBox) kStatusBox.className = kontenBoxClass;
+            if (kStatusText) {
+                kStatusText.className = kontenTextClass;
+                kStatusText.innerText = kontenStatusStr;
+            }
+            if (kRejBox) {
+                if (kStatus === 'ditolak' && order.contentRejectionNote) {
+                    kRejBox.classList.remove('hidden');
+                    kRejBox.innerHTML = `<strong>Catatan Admin:</strong> ${order.contentRejectionNote}`;
+                } else {
+                    kRejBox.classList.add('hidden');
+                }
+            }
+
             // CLEAN MESSAGE BOX FORMATTING
             let noteContent = order.statusDesc || '';
             if (noteContent.includes('<br>')) {
@@ -2535,6 +2729,12 @@ function searchOrderStatus() {
             } else if (order.status === 'terkonfirmasi') {
                 boxHeader = '✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong>';
                 boxClass = 'p-3.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs text-emerald-900 dark:text-emerald-200 leading-relaxed font-medium';
+            } else if (order.status === 'lunas') {
+                boxHeader = '🟢 <strong>Status: Lunas</strong>';
+                boxClass = 'p-3.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 rounded-xl text-xs text-emerald-900 dark:text-emerald-200 leading-relaxed font-bold';
+            } else if (order.status === 'batal') {
+                boxHeader = '❌ <strong>Status: Dibatalkan</strong>';
+                boxClass = 'p-3.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 rounded-xl text-xs text-rose-900 dark:text-rose-200 leading-relaxed font-bold';
             }
 
             const messageBoxEl = document.getElementById('track-status-message-box');
@@ -2546,7 +2746,7 @@ function searchOrderStatus() {
             // RENDER PROOF OF BROADCAST PHOTO FROM ADMIN IF AVAILABLE
             const proofBox = document.getElementById('track-proof-box');
             const proofImg = document.getElementById('track-proof-img');
-            if (order.proofImg && (order.status === 'diproses' || order.status === 'terkonfirmasi')) {
+            if (order.proofImg && (order.status === 'diproses' || order.status === 'terkonfirmasi' || order.status === 'selesai' || order.status === 'lunas')) {
                 if (proofImg) proofImg.src = order.proofImg;
                 if (proofBox) proofBox.classList.remove('hidden');
             } else {
@@ -2637,11 +2837,25 @@ function searchOrderStatus() {
                             ⏳ Bukti Pembayaran Telah Dikirim! Menunggu Verifikasi Lunas Admin Diskominfo.
                         </div>
                     `;
-                } else if (order.status === 'terkonfirmasi') {
-                    payBtnContainer.innerHTML = `
-                        <button onclick="openOfficialInvoiceModal()" class="w-full py-3.5 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 hover:from-slate-800 hover:to-blue-900 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl border border-sky-400/40 shadow-lg transition flex items-center justify-center gap-2">
-                            <span>📄</span> CETAK KUITANSI / INVOICE LUNAS RESMI (PDF) &rarr;
+                } else if (order.status === 'terkonfirmasi' || order.status === 'lunas') {
+                    let testimoniBtn = order.status === 'lunas' ? `
+                        <button onclick="goToTulisTestimoniPage('${order.code}')" class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl border border-emerald-400/40 shadow-lg transition flex items-center justify-center gap-2">
+                            <span>⭐</span> BERI TESTIMONI LAYANAN
                         </button>
+                    ` : '';
+                    payBtnContainer.innerHTML = `
+                        <div class="grid grid-cols-1 ${order.status === 'lunas' ? 'sm:grid-cols-2' : ''} gap-3">
+                            <button onclick="openOfficialInvoiceModal()" class="w-full py-3.5 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 hover:from-slate-800 hover:to-blue-900 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl border border-sky-400/40 shadow-lg transition flex items-center justify-center gap-2">
+                                <span>📜</span> CETAK KUITANSI LUNAS
+                            </button>
+                            ${testimoniBtn}
+                        </div>
+                    `;
+                } else if (order.status === 'batal') {
+                    payBtnContainer.innerHTML = `
+                        <div class="p-3 bg-rose-50 border border-rose-300 rounded-xl text-xs text-rose-900 font-bold text-center">
+                            ❌ Transaksi ini telah dibatalkan.
+                        </div>
                     `;
                 } else {
                     payBtnContainer.innerHTML = `
@@ -2891,7 +3105,7 @@ function searchOrderStatus() {
         function getStoredLocations() {
             const saved = localStorage.getItem('sevisa_locations_v2');
             if (saved) {
-                try { return JSON.parse(saved); } catch(e) {}
+                 return JSON.parse(saved); }
             }
             return [
                 { id: 'VDT-01', name: 'Pasar Rejosari', address: 'Jl. Hasanudin, Salatiga', mapsUrl: 'https://maps.google.com/?q=Pasar+Rejosari+Salatiga', priceDay: '2.200.000' },
@@ -2931,7 +3145,7 @@ function searchOrderStatus() {
                     detailLeafletMapInstance = null;
                 }
 
-                try {
+                
                     detailLeafletMapInstance = L.map('detail-leaflet-map').setView([locInfo.lat, locInfo.lng], 16);
 
                     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
@@ -2967,7 +3181,7 @@ function searchOrderStatus() {
                     `).openPopup();
 
                     detailLeafletMapInstance.invalidateSize();
-                } catch(e) {
+                
                     console.error('Leaflet Map Init Error:', e);
                 }
             }, 150);
@@ -2975,7 +3189,7 @@ function searchOrderStatus() {
 
         
         // MIGRATION SCRIPT: Clear old localstorage schema
-        try {
+        
             const saved = localStorage.getItem('sevisa_locations_v2');
             if (saved) {
                 const parsed = JSON.parse(saved);
@@ -2984,12 +3198,12 @@ function searchOrderStatus() {
                     console.log('Old schema detected. Flushed sevisa_locations from localStorage.');
                 }
             }
-        } catch(e) {}
+        }
 
         function getStoredUserLocations() {
             const saved = localStorage.getItem('sevisa_locations_v2');
             if (saved) {
-                try { return JSON.parse(saved); } catch(e) {}
+                 return JSON.parse(saved); }
             }
             return VIDEOTRON_DATA;
         }
@@ -3088,7 +3302,7 @@ function searchOrderStatus() {
                         masterSalatigaMapInstance = null;
                     }
 
-                    try {
+                    
                         masterSalatigaMapInstance = L.map('master-salatiga-map').setView([-7.3280, 110.5010], 14);
 
                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -3130,7 +3344,7 @@ function searchOrderStatus() {
                         });
 
                         setTimeout(() => { if (masterSalatigaMapInstance) masterSalatigaMapInstance.invalidateSize(); }, 300);
-                    } catch(e) {}
+                    }
                 }
 
                 locs.forEach((item, idx) => {
@@ -3147,7 +3361,7 @@ function searchOrderStatus() {
                     const parts = coordsStr.split(',').map(s => parseFloat(s.trim()));
                     if (parts.length < 2 || isNaN(parts[0]) || isNaN(parts[1])) return;
 
-                    try {
+                    
                         const map = L.map(mapCardId, { zoomControl: false }).setView([parts[0], parts[1]], 15);
                         cardMapInstances[mapCardId] = map;
 
@@ -3172,7 +3386,7 @@ function searchOrderStatus() {
 
                         L.marker([parts[0], parts[1]], { icon: customIcon }).addTo(map);
                         setTimeout(() => { if (cardMapInstances[mapCardId]) cardMapInstances[mapCardId].invalidateSize(); }, 300);
-                    } catch(e) {}
+                    }
                 });
 
             }, 200);
@@ -3520,91 +3734,166 @@ function searchOrderStatus() {
             }
         }
 
-        function togglePositionField() {
-            const category = document.getElementById('prof-category').value;
-            const container = document.getElementById('prof-position-container');
-            if (category === 'personal') {
-                container.classList.add('hidden');
-            } else {
-                container.classList.remove('hidden');
+        
+        
+        const API_WILAYAH = 'https://www.emsifa.com/api-wilayah-indonesia/api';
+
+        async function initProvinsi() {
+            
+                const res = await fetch(`${API_WILAYAH}/provinces.json`);
+                const data = await res.json();
+                const provSelect = document.getElementById('prof-provinsi');
+                provSelect.innerHTML = '<option value="">Pilih Provinsi...</option>';
+                data.forEach(prov => {
+                    const opt = document.createElement('option');
+                    opt.value = prov.id;
+                    opt.innerText = prov.name;
+                    // Simpan nama di dataset
+                    opt.dataset.name = prov.name;
+                    provSelect.appendChild(opt);
+                });
+            } catch (err) {
+                console.error("Gagal memuat provinsi:", err);
+                document.getElementById('prof-provinsi').innerHTML = '<option value="">Gagal Memuat. Coba Lagi.</option>';
             }
         }
 
-        function populateProfileFormData(user) {
-            if (!user) return;
-            document.getElementById('prof-name').value = user.name || '';
-            document.getElementById('prof-email').value = user.email || '';
-            document.getElementById('prof-phone').value = user.phone || '';
-            document.getElementById('prof-company').value = user.company || '';
-            document.getElementById('prof-position').value = user.position || '';
-            document.getElementById('prof-nik').value = user.nik || '';
-            document.getElementById('prof-address').value = user.address || '';
-            document.getElementById('prof-category').value = user.category || 'personal';
-            togglePositionField();
+        async function loadKota() {
+            const provId = document.getElementById('prof-provinsi').value;
+            const kotaSelect = document.getElementById('prof-kota');
+            const kecSelect = document.getElementById('prof-kecamatan');
+            const desaSelect = document.getElementById('prof-desa');
+            
+            kotaSelect.innerHTML = '<option value="">Memuat...</option>';
+            kotaSelect.disabled = true;
+            kecSelect.innerHTML = '<option value="">Pilih Kota Dahulu</option>';
+            kecSelect.disabled = true;
+            desaSelect.innerHTML = '<option value="">Pilih Kecamatan Dahulu</option>';
+            desaSelect.disabled = true;
 
-            document.getElementById('prof-display-name').innerText = user.name || 'Pengguna SEVISA';
-            document.getElementById('prof-display-email').innerText = user.email || '';
-        }
+            if (!provId) {
+                kotaSelect.innerHTML = '<option value="">Pilih Provinsi Dahulu</option>';
+                return;
+            }
 
-        function previewUserAvatar(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('profile-avatar-img').src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-                show3DToast('📸 FOTO PROFIL DIPERBARUI', 'Foto profil berhasil diunggah!', 'info');
+            
+                const res = await fetch(`${API_WILAYAH}/regencies/${provId}.json`);
+                const data = await res.json();
+                kotaSelect.innerHTML = '<option value="">Pilih Kota / Kabupaten...</option>';
+                data.forEach(kota => {
+                    const opt = document.createElement('option');
+                    opt.value = kota.id;
+                    opt.innerText = kota.name;
+                    opt.dataset.name = kota.name;
+                    kotaSelect.appendChild(opt);
+                });
+                kotaSelect.disabled = false;
+            } catch (err) {
+                console.error(err);
+                kotaSelect.innerHTML = '<option value="">Gagal Memuat.</option>';
             }
         }
 
-        function updateUserNavArea() {
-            const navArea = document.getElementById('nav-user-area');
-            if (!navArea) return;
+        async function loadKecamatan() {
+            const kotaId = document.getElementById('prof-kota').value;
+            const kecSelect = document.getElementById('prof-kecamatan');
+            const desaSelect = document.getElementById('prof-desa');
+            
+            kecSelect.innerHTML = '<option value="">Memuat...</option>';
+            kecSelect.disabled = true;
+            desaSelect.innerHTML = '<option value="">Pilih Kecamatan Dahulu</option>';
+            desaSelect.disabled = true;
 
-            const navTransaksi = document.getElementById('nav-transaksi');
-            if (isLoggedIn && currentUser) {
-                if (navTransaksi) navTransaksi.classList.remove('hidden');
-                navArea.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <button onclick="showPage('profil')" class="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition" title="Kelola Profil">
-                            <div class="w-5 h-5 rounded-full bg-brand-600 text-white font-bold text-[10px] flex items-center justify-center">
-                                ${currentUser.name.charAt(0)}
-                            </div>
-                            <span class="text-xs font-bold text-slate-800 dark:text-slate-100 max-w-[90px] truncate hidden sm:inline">${currentUser.name.split(' ')[0]}</span>
-                        </button>
-                        <button onclick="handleLogout()" class="p-1.5 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition border border-slate-200 dark:border-slate-800" title="Keluar Akun">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                        </button>
-                    </div>
-                `;
-            } else {
-                if (navTransaksi) navTransaksi.classList.add('hidden');
-                navArea.innerHTML = `
-                    <button onclick="openAuthGateModal('login')" class="px-3 py-1.5 text-xs font-bold text-brand-600 dark:text-sky-400 bg-brand-50 dark:bg-slate-800 hover:bg-brand-100 border border-brand-200 dark:border-slate-700 rounded-lg transition">
-                        Masuk / Daftar
-                    </button>
-                `;
+            if (!kotaId) {
+                kecSelect.innerHTML = '<option value="">Pilih Kota Dahulu</option>';
+                return;
+            }
+
+            
+                const res = await fetch(`${API_WILAYAH}/districts/${kotaId}.json`);
+                const data = await res.json();
+                kecSelect.innerHTML = '<option value="">Pilih Kecamatan...</option>';
+                data.forEach(kec => {
+                    const opt = document.createElement('option');
+                    opt.value = kec.id;
+                    opt.innerText = kec.name;
+                    opt.dataset.name = kec.name;
+                    kecSelect.appendChild(opt);
+                });
+                kecSelect.disabled = false;
+            } catch (err) {
+                console.error(err);
+                kecSelect.innerHTML = '<option value="">Gagal Memuat.</option>';
             }
         }
 
-        function updateProfileStatusUI() {
-            // Profile banner and dot removed
+        async function loadDesa() {
+            const kecId = document.getElementById('prof-kecamatan').value;
+            const desaSelect = document.getElementById('prof-desa');
+            
+            desaSelect.innerHTML = '<option value="">Memuat...</option>';
+            desaSelect.disabled = true;
+
+            if (!kecId) {
+                desaSelect.innerHTML = '<option value="">Pilih Kecamatan Dahulu</option>';
+                return;
+            }
+
+            
+                const res = await fetch(`${API_WILAYAH}/villages/${kecId}.json`);
+                const data = await res.json();
+                desaSelect.innerHTML = '<option value="">Pilih Desa / Kelurahan...</option>';
+                data.forEach(desa => {
+                    const opt = document.createElement('option');
+                    opt.value = desa.id;
+                    opt.innerText = desa.name;
+                    opt.dataset.name = desa.name;
+                    desaSelect.appendChild(opt);
+                });
+                desaSelect.disabled = false;
+            } catch (err) {
+                console.error(err);
+                desaSelect.innerHTML = '<option value="">Gagal Memuat.</option>';
+            }
         }
 
-        function saveUserProfile(event) {
-            event.preventDefault();
-            const profName = document.getElementById('prof-name').value.trim() || 'Pengguna';
-            const company = document.getElementById('prof-company').value.trim();
-            const position = document.getElementById('prof-position').value.trim();
-            const phone = document.getElementById('prof-phone').value.trim();
-            const email = document.getElementById('prof-email').value.trim();
-            const address = document.getElementById('prof-address').value.trim();
+        window.addEventListener('DOMContentLoaded', () => {
+            initProvinsi();
+        });
+
+        function updateDesa() {
+            
+            const provSel = document.getElementById('prof-provinsi');
+            const provinsi = provSel.options[provSel.selectedIndex]?.dataset.name || provSel.value;
+            
+            const kotaSel = document.getElementById('prof-kota');
+            const kota = kotaSel.options[kotaSel.selectedIndex]?.dataset.name || kotaSel.value;
+            
+            const kecSel = document.getElementById('prof-kecamatan');
+            const kecamatan = kecSel.options[kecSel.selectedIndex]?.dataset.name || kecSel.value;
+            
+            const desaSel = document.getElementById('prof-desa');
+            const desa = desaSel.options[desaSel.selectedIndex]?.dataset.name || desaSel.value;
+            
+            const provId = provSel.value;
+            const kotaId = kotaSel.value;
+            const kecId = kecSel.value;
+            const desaId = desaSel.value;
+            
+            const dukuh = document.getElementById('prof-dukuh').value.trim();
+            const address = dukuh + ', ' + desa + ', ' + kecamatan + ', ' + kota + ', ' + provinsi;
+
+
             const nik = document.getElementById('prof-nik').value.trim();
             const category = document.getElementById('prof-category').value;
 
-            if (!phone || !address || !company) {
+            if (!phone || !dukuh || !desa || !kecamatan || !kota) {
                 show3DToast('⚠️ KOLOM KOSONG', 'Harap lengkapi semua kolom data diri secara mendalam!', 'error');
+                return;
+            }
+
+            if (category !== 'perorangan' && !company) {
+                show3DToast('⚠️ NAMA INSTANSI/PERUSAHAAN KOSONG', 'Harap lengkapi nama Perusahaan / Instansi Anda!', 'error');
                 return;
             }
 
@@ -3615,6 +3904,16 @@ function searchOrderStatus() {
                 currentUser.phone = phone;
                 currentUser.email = email;
                 currentUser.address = address;
+                currentUser.provinsi = provinsi;
+                currentUser.kota = kota;
+                currentUser.kecamatan = kecamatan;
+                currentUser.desa = desa;
+                currentUser.dukuh = dukuh;
+                
+                currentUser.provId = provId;
+                currentUser.kotaId = kotaId;
+                currentUser.kecId = kecId;
+                currentUser.desaId = desaId;
                 currentUser.nik = nik;
                 currentUser.category = category;
 
@@ -3669,7 +3968,8 @@ function searchOrderStatus() {
         function getMergedPortfolioData() {
             let customSaved = localStorage.getItem('sevisa_portfolio');
             let customItems = customSaved ? JSON.parse(customSaved) : [];
-            return [...customItems, ...PORTFOLIO_DATABASE];
+            let approvedCustomItems = customItems.filter(item => !item.status || item.status === 'disetujui');
+            return [...approvedCustomItems, ...PORTFOLIO_DATABASE];
         }
 
         function openBlogArticleDetail(articleKey) {
@@ -3697,25 +3997,45 @@ function searchOrderStatus() {
             window.scrollTo({ top: document.getElementById('page-blog').offsetTop, behavior: 'smooth' });
         }
 
-        function showPage(pageId) {
-            const pages = ['home', 'tentang', 'lokasi', 'detail-lokasi', 'proyek', 'cek-status', 'profil', 'transaksi'];
+                function showPage(pageId) {
+            if ((pageId === 'cek-status' || pageId === 'tulis-testimoni') && !isLoggedIn) {
+                openAuthGateModal('login');
+                const msg = pageId === 'cek-status' 
+                    ? 'Silakan masuk terlebih dahulu untuk melihat daftar status & riwayat transaksi Anda.'
+                    : 'Silakan masuk terlebih dahulu untuk menulis testimoni.';
+                show3DToast('AKSES DIBATASI', msg, 'error');
+                return;
+            }
+
+            const pages = ['home', 'tentang', 'lokasi', 'detail-lokasi', 'proyek', 'cek-status', 'profil', 'tulis-testimoni'];
             pages.forEach(p => {
                 const el = document.getElementById('page-' + p);
                 if (el) el.classList.add('hidden');
 
                 const navBtn = document.getElementById('nav-' + p);
                 if (navBtn) {
-                    navBtn.className = "px-2.5 py-1.5 rounded-lg hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300 font-bold";
+                    if (p === 'cek-status') {
+                        // Preserve custom styles for cek-status button, just reset active state if any
+                        navBtn.classList.remove('ring-2', 'ring-brand-400');
+                    } else {
+                        const isHidden = navBtn.classList.contains('hidden');
+                        navBtn.className = "px-2.5 py-1.5 rounded-lg hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300 font-bold" + (isHidden ? " hidden" : "");
+                    }
                 }
             });
 
             const target = document.getElementById('page-' + pageId);
-            if (pageId === 'transaksi') loadUserTransactions();
+            if (pageId === 'cek-status') loadUserTransactions();
             if (target) target.classList.remove('hidden');
 
             const activeNav = document.getElementById('nav-' + pageId);
             if (activeNav) {
-                activeNav.className = "px-2.5 py-1.5 rounded-lg text-brand-600 dark:text-sky-400 bg-brand-50 dark:bg-slate-800 font-black transition";
+                if (pageId === 'cek-status') {
+                    activeNav.classList.add('ring-2', 'ring-brand-400');
+                } else {
+                    const isHidden = activeNav.classList.contains('hidden');
+                    activeNav.className = "px-2.5 py-1.5 rounded-lg text-brand-600 dark:text-sky-400 bg-brand-50 dark:bg-slate-800 font-black transition" + (isHidden ? " hidden" : "");
+                }
             }
 
             if (pageId === 'home') {
@@ -3800,7 +4120,7 @@ function searchOrderStatus() {
         function renderAboutPageCMS() {
             let saved = localStorage.getItem('sevisa_about');
             if (saved) {
-                try {
+                
                     let about = JSON.parse(saved);
                     const titleEl = document.getElementById('about-page-title');
                     const descEl = document.getElementById('about-page-desc');
@@ -3808,7 +4128,7 @@ function searchOrderStatus() {
                     if (titleEl && about.title) titleEl.innerText = about.title;
                     if (descEl && about.desc) descEl.innerText = about.desc;
                     if (taxEl && about.tax) taxEl.innerText = about.tax;
-                } catch(e) {}
+                }
             }
         }
 
@@ -3828,14 +4148,274 @@ function searchOrderStatus() {
             openModal('official-invoice-modal');
         }
 
+        function goToTulisTestimoniPage(code) {
+            document.getElementById('testimoni-order-code').value = typeof code === 'string' ? code : '';
+            document.getElementById('testimoni-desc').value = '';
+            document.getElementById('testimoni-rating').value = '5';
+            
+            const publicFields = document.getElementById('testimoni-public-fields');
+            if(typeof code === 'string' && code) {
+                publicFields.classList.add('hidden');
+                document.getElementById('testimoni-client-name').removeAttribute('required');
+                document.getElementById('testimoni-client-location').removeAttribute('required');
+            } else {
+                publicFields.classList.remove('hidden');
+                document.getElementById('testimoni-client-name').setAttribute('required', 'true');
+                document.getElementById('testimoni-client-location').setAttribute('required', 'true');
+                document.getElementById('testimoni-client-name').value = '';
+            }
+            showPage('tulis-testimoni');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        
+        function toggleCategoryFields() {
+            const category = document.getElementById('prof-category').value;
+            const companyContainer = document.getElementById('prof-company-container');
+            const companyInput = document.getElementById('prof-company');
+            const companyLabel = document.getElementById('prof-company-label');
+            
+            const positionContainer = document.getElementById('prof-position-container');
+            
+            const nikLabel = document.getElementById('prof-nik-label');
+            const nikInput = document.getElementById('prof-nik');
+
+            if (category === 'perorangan') {
+                if (companyContainer) companyContainer.classList.add('hidden');
+                if (companyInput) companyInput.removeAttribute('required');
+                
+                if (positionContainer) positionContainer.classList.add('hidden');
+                
+                if (nikLabel) nikLabel.innerText = 'Nomor NIK KTP Resmi *';
+                if (nikInput) {
+                    nikInput.placeholder = 'Masukkan 16 Digit NIK KTP';
+                    nikInput.setAttribute('required', 'true');
+                }
+            } else if (category === 'badan_usaha') {
+                if (companyContainer) companyContainer.classList.remove('hidden');
+                if (companyLabel) companyLabel.innerText = 'Nama Perusahaan / Badan Usaha *';
+                if (companyInput) {
+                    companyInput.setAttribute('required', 'true');
+                    companyInput.placeholder = 'Contoh: PT Maju Jaya / CV Makmur';
+                }
+                
+                if (positionContainer) positionContainer.classList.add('hidden');
+                
+                if (nikLabel) nikLabel.innerText = 'Nomor Induk Berusaha (NIB) / NPWP *';
+                if (nikInput) {
+                    nikInput.placeholder = 'Masukkan Nomor NIB / NPWP Perusahaan';
+                    nikInput.setAttribute('required', 'true');
+                }
+            } else if (category === 'pemerintah') {
+                if (companyContainer) companyContainer.classList.remove('hidden');
+                if (companyLabel) companyLabel.innerText = 'Nama Instansi Pemerintah / Dinas *';
+                if (companyInput) {
+                    companyInput.setAttribute('required', 'true');
+                    companyInput.placeholder = 'Contoh: Dinas Kesehatan Kota Salatiga';
+                }
+                
+                if (positionContainer) positionContainer.classList.remove('hidden');
+                
+                if (nikLabel) nikLabel.innerText = 'Kode Instansi / NIP Penanggung Jawab (Opsional)';
+                if (nikInput) {
+                    nikInput.placeholder = 'Masukkan Kode Instansi / NIP (Jika ada)';
+                    nikInput.removeAttribute('required');
+                }
+            }
+        }
+
+        function populateProfileFormData(user) {
+            if (!user) return;
+            document.getElementById('prof-name').value = user.name || '';
+            document.getElementById('prof-email').value = user.email || '';
+            document.getElementById('prof-phone').value = user.phone || '';
+            document.getElementById('prof-company').value = user.company || '';
+            document.getElementById('prof-position').value = user.position || '';
+            document.getElementById('prof-nik').value = user.nik || '';
+            document.getElementById('prof-category').value = user.category || 'personal';
+            toggleCategoryFields();
+
+            document.getElementById('prof-display-name').innerText = user.name || 'Pengguna SEVISA';
+            document.getElementById('prof-display-email').innerText = user.email || '';
+
+            if (user.provId) {
+                // Must be async to await the fetch requests before setting value
+                (async () => {
+                    document.getElementById('prof-provinsi').value = user.provId;
+                    await loadKota();
+                    document.getElementById('prof-kota').value = user.kotaId;
+                    await loadKecamatan();
+                    document.getElementById('prof-kecamatan').value = user.kecId;
+                    await loadDesa();
+                    document.getElementById('prof-desa').value = user.desaId;
+                    document.getElementById('prof-dukuh').value = user.dukuh || '';
+                })();
+            } else {
+                document.getElementById('prof-dukuh').value = user.address || '';
+            }
+        }
+
+        function saveUserProfile(event) {
+            event.preventDefault();
+            const profName = document.getElementById('prof-name').value.trim() || 'Pengguna';
+            const company = document.getElementById('prof-company').value.trim();
+            const position = document.getElementById('prof-position').value.trim();
+            const phone = document.getElementById('prof-phone').value.trim();
+            const email = document.getElementById('prof-email').value.trim();
+            const nik = document.getElementById('prof-nik').value.trim();
+            const category = document.getElementById('prof-category').value;
+
+            const provSel = document.getElementById('prof-provinsi');
+            const provinsi = provSel.options[provSel.selectedIndex]?.dataset.name || provSel.value;
+            
+            const kotaSel = document.getElementById('prof-kota');
+            const kota = kotaSel.options[kotaSel.selectedIndex]?.dataset.name || kotaSel.value;
+            
+            const kecSel = document.getElementById('prof-kecamatan');
+            const kecamatan = kecSel.options[kecSel.selectedIndex]?.dataset.name || kecSel.value;
+            
+            const desaSel = document.getElementById('prof-desa');
+            const desa = desaSel.options[desaSel.selectedIndex]?.dataset.name || desaSel.value;
+            
+            const provId = provSel.value;
+            const kotaId = kotaSel.value;
+            const kecId = kecSel.value;
+            const desaId = desaSel.value;
+            
+            const dukuh = document.getElementById('prof-dukuh').value.trim();
+            const address = dukuh + ', ' + desa + ', ' + kecamatan + ', ' + kota + ', ' + provinsi;
+
+            if (!phone || !dukuh || !desa || !kecamatan || !kota || !company) {
+                show3DToast('⚠️ KOLOM KOSONG', 'Harap lengkapi semua kolom data diri secara mendalam!', 'error');
+                return;
+            }
+
+            if (currentUser) {
+                currentUser.name = profName;
+                currentUser.company = company;
+                currentUser.position = position;
+                currentUser.phone = phone;
+                currentUser.email = email;
+                currentUser.nik = nik;
+                currentUser.category = category;
+                
+                currentUser.address = address;
+                currentUser.provinsi = provinsi;
+                currentUser.kota = kota;
+                currentUser.kecamatan = kecamatan;
+                currentUser.desa = desa;
+                currentUser.dukuh = dukuh;
+                
+                currentUser.provId = provId;
+                currentUser.kotaId = kotaId;
+                currentUser.kecId = kecId;
+                currentUser.desaId = desaId;
+
+                const idx = registeredUsers.findIndex(u => u.email === currentUser.email);
+                if (idx !== -1) {
+                    registeredUsers[idx] = currentUser;
+                }
+                saveStoredUsers(registeredUsers);
+            }
+
+            isProfileComplete = true;
+            updateProfileStatusUI();
+            updateUserNavArea();
+            
+            show3DToast('✅ TERSIMPAN', 'Data profil Anda berhasil diperbarui.', 'success');
+        }
+
+        
+        function updateUserNavArea() {
+            const navArea = document.getElementById('nav-user-area');
+            if (!navArea) return;
+
+            const navTransaksi = document.getElementById('nav-cek-status');
+            
+            if (isLoggedIn && currentUser) {
+                if (navTransaksi) navTransaksi.classList.remove('hidden');
+                navArea.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <button onclick="showPage('profil')" class="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition" title="Kelola Profil">
+                            <div class="w-5 h-5 rounded-full bg-brand-600 text-white font-bold text-[10px] flex items-center justify-center">
+                                ${currentUser.name.charAt(0)}
+                            </div>
+                            <span class="text-xs font-bold text-slate-800 dark:text-slate-100 max-w-[90px] truncate hidden sm:inline">${currentUser.name.split(' ')[0]}</span>
+                        </button>
+                        <button onclick="handleLogout()" class="p-1.5 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition border border-slate-200 dark:border-slate-800" title="Keluar Akun">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                        </button>
+                    </div>
+                `;
+            } else {
+                if (navTransaksi) navTransaksi.classList.add('hidden');
+                navArea.innerHTML = `
+                    <button onclick="openAuthGateModal('login')" class="px-3 py-1.5 text-xs font-bold text-brand-600 dark:text-sky-400 bg-brand-50 dark:bg-slate-800 hover:bg-brand-100 border border-brand-200 dark:border-slate-700 rounded-lg transition">
+                        Masuk / Daftar
+                    </button>
+                `;
+            }
+        }
+
+
+        function updateProfileStatusUI() {
+            // Placeholder for original function
+        }
+
+
+        function submitUserTestimoni(e) {
+            e.preventDefault();
+            const code = document.getElementById('testimoni-order-code').value;
+            const desc = document.getElementById('testimoni-desc').value.trim();
+            const rating = document.getElementById('testimoni-rating').value;
+            
+            let clientName = document.getElementById('testimoni-client-name').value.trim();
+            let location = document.getElementById('testimoni-client-location').value;
+            let category = 'Personal';
+            
+            if(code) {
+                const orderDatabase = getStoredOrders();
+                const found = orderDatabase.find(o => o.code === code);
+                if(found) {
+                    clientName = found.company && found.company.toLowerCase() !== 'personal' ? found.company : found.userName;
+                    location = found.location;
+                    category = found.company && found.company.toLowerCase() !== 'personal' ? 'Perusahaan' : 'Personal';
+                }
+            }
+            
+            if(!clientName) return;
+
+            let saved = localStorage.getItem('sevisa_portfolio');
+            let items = saved ? JSON.parse(saved) : [];
+            
+            const newTesti = {
+                id: 'TESTI-' + Math.floor(1000 + Math.random() * 9000),
+                client: clientName,
+                rating: rating,
+                location: location,
+                category: category,
+                description: desc,
+                status: 'menunggu',
+                imgUrl: 'https://ui-avatars.com/api/?name='+encodeURIComponent(clientName)+'&background=random'
+            };
+            
+            items.unshift(newTesti);
+            localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
+            
+            showPage('proyek');
+            show3DToast('TERIMA KASIH', 'Testimoni Anda berhasil dikirim dan akan direview oleh tim Diskominfo.', 'success');
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
+            toggleCategoryFields();
             renderVideotronCards(getStoredUserLocations());
             renderUserLokasiPageCards();
             renderPortfolioGrid(getMergedPortfolioData());
             renderAboutPageCMS();
             updateUserNavArea();
             updateProfileStatusUI();
+            showPage('home');
         });
     </script>
 </body>

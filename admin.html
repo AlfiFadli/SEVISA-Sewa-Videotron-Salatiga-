@@ -284,7 +284,408 @@ function deleteTesti(idx) {
 </div>
 </div>
 <!-- ========================================================================= -->
-<!-- SCREEN 2: MAIN DASHBOARD CMS ADMIN (SHOWN ON LOGIN) -->
+<!DOCTYPE html>
+
+<html class="light" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SEVISA - Sewa Videotron Salatiga (Portal Resmi Diskominfo)</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<!-- LEAFLET MAPS ENGINE -->
+<link crossorigin="" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" rel="stylesheet"/>
+<script crossorigin="" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- HTML2PDF BUNDLE ENGINE -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style> 
+        body { font-family: 'Plus Jakarta Sans', sans-serif; } 
+        @keyframes float3d {
+            0%, 100% { transform: translateY(0px) rotate(-3deg); }
+            50% { transform: translateY(-6px) rotate(3deg); }
+        }
+        .animate-3d-float {
+            animation: float3d 3s ease-in-out infinite;
+        }
+        .leaflet-container {
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col min-h-screen transition-colors duration-300">
+<!-- ========================================================================= -->
+<!-- CUSTOM 3D NOTIFICATION TOAST MODAL -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 z-50 bg-slate-900/85 hidden items-center justify-center p-4 transition-opacity duration-300" id="custom-3d-toast-modal">
+<div class="w-full max-w-sm bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 rounded-3xl p-6 sm:p-7 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5)] text-center space-y-4 relative transform transition-all duration-300 scale-95 opacity-0" id="toast-modal-card">
+<div class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center shadow-[0_10px_25px_rgba(37,99,235,0.4)] border-2 border-white dark:border-slate-700 animate-3d-float bg-gradient-to-tr from-brand-800 via-brand-600 to-sky-400 text-white ring-4 ring-brand-100 dark:ring-brand-900/50 p-3.5" id="toast-3d-icon-badge">
+<svg class="w-9 h-9 fill-current drop-shadow-md" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path></svg>
+</div>
+<div class="space-y-1.5">
+<h3 class="text-lg font-black text-slate-900 dark:text-white leading-snug" id="toast-3d-title">
+                    Selamat Datang di SEVISA
+                </h3>
+<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium" id="toast-3d-message">
+                    Portal Resmi Penyewaan Videotron Kota Salatiga.
+                </p>
+</div>
+<div class="pt-2" id="toast-3d-btn-container">
+<button class="w-full py-3.5 bg-gradient-to-r from-brand-800 via-brand-600 to-blue-600 hover:from-brand-700 hover:to-brand-500 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-[0_5px_0_#1e3a8a] hover:shadow-[0_3px_0_#1e3a8a] hover:translate-y-[2px] active:translate-y-[5px] active:shadow-none transition-all duration-150" id="toast-3d-btn" onclick="close3DToast()">
+                    SAYA MENGERTI →
+                </button>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- CUSTOM 3D CONFIRMATION MODAL -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 z-50 bg-slate-900/85 hidden items-center justify-center p-4 transition-opacity duration-300" id="custom-3d-confirm-modal">
+<div class="w-full max-w-sm bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 rounded-3xl p-6 sm:p-7 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5)] text-center space-y-4 relative transform transition-all duration-300 scale-95 opacity-0" id="confirm-modal-card">
+<div class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center shadow-[0_10px_25px_rgba(37,99,235,0.4)] border-2 border-white dark:border-slate-700 animate-3d-float bg-gradient-to-tr from-brand-900 via-brand-700 to-sky-500 text-white ring-4 ring-brand-100 dark:ring-brand-900/50 p-3.5">
+<svg class="w-8 h-8 fill-none stroke-current" stroke-width="2.5" viewbox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<div class="space-y-1.5">
+<h3 class="text-lg font-black text-slate-900 dark:text-white leading-snug" id="confirm-3d-title">
+                    KELUAR DARI AKUN?
+                </h3>
+<p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium" id="confirm-3d-message">
+                    Apakah Anda yakin ingin keluar dari akun Anda saat ini?
+                </p>
+</div>
+<div class="pt-2 grid grid-cols-2 gap-3">
+<button class="py-3 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-[0_4px_0_#94a3b8] dark:shadow-[0_4px_0_#334155] active:translate-y-[4px] active:shadow-none transition-all duration-150" onclick="close3DConfirm()">
+                    Batal
+                </button>
+<button class="py-3 bg-gradient-to-r from-brand-800 to-blue-700 hover:from-brand-700 hover:to-blue-600 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-[0_4px_0_#1e3a8a] active:translate-y-[4px] active:shadow-none transition-all duration-150" onclick="executeLogoutAction()">
+                    Ya, Keluar
+                </button>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- PORTFOLIO DETAIL VIEWER MODAL -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 z-50 bg-slate-900/85 hidden items-center justify-center p-4 overflow-y-auto" id="portfolio-modal-viewer">
+<div class="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 my-auto relative text-slate-800 dark:text-slate-100">
+<button class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-xl font-bold p-1 z-20" onclick="closeModal('portfolio-modal-viewer')">×</button>
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<span class="px-3 py-1 bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 font-extrabold text-[10px] rounded-full uppercase tracking-wider border border-red-200 dark:border-red-800" id="port-modal-badge">
+                        Pasar Rejosari
+                    </span>
+<span class="px-3 py-1 bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-sky-300 font-extrabold text-[10px] rounded-full uppercase tracking-wider border border-brand-200 dark:border-slate-700" id="port-modal-media-type">
+                        🎥 Video MP4
+                    </span>
+</div>
+<h3 class="text-xl font-black text-slate-900 dark:text-white leading-tight" id="port-modal-title">
+                    Kampanye Ritel Ramadhan Brand Nasional
+                </h3>
+<!-- MEDIA PLAYER CONTAINER -->
+<div class="w-full bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 shadow-inner relative group">
+<div class="w-full h-64 sm:h-80 relative flex items-center justify-center" id="port-modal-media-wrapper">
+<img alt="Portfolio Preview" class="w-full h-full object-cover" id="port-modal-img" src="header_banner.jpg"/>
+<div class="absolute inset-0 bg-slate-950/40 flex items-center justify-center">
+<div class="w-16 h-16 rounded-full bg-red-600/90 text-white flex items-center justify-center shadow-2xl backdrop-blur-md border border-white/40 cursor-pointer hover:scale-110 transition">
+<svg class="w-8 h-8 fill-current ml-1" viewbox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+</div>
+</div>
+</div>
+</div>
+<!-- METADATA GRID -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+<div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+<span class="text-slate-400 font-bold block text-[9px] uppercase">KLIEN / PEMESAN</span>
+<strong class="text-slate-900 dark:text-white text-xs block font-bold truncate" id="port-modal-client">PT Salatiga Food Indo</strong>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+<span class="text-slate-400 font-bold block text-[9px] uppercase">LOKASI VIDEOTRON</span>
+<strong class="text-slate-900 dark:text-white text-xs block font-bold truncate" id="port-modal-location">Pasar Rejosari</strong>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+<span class="text-slate-400 font-bold block text-[9px] uppercase">PERIODE TAYANG</span>
+<strong class="text-slate-900 dark:text-white text-xs block font-bold truncate" id="port-modal-dates">1 - 15 Juli 2026</strong>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+<span class="text-slate-400 font-bold block text-[9px] uppercase">FREKUENSI LOOP</span>
+<strong class="text-slate-900 dark:text-white text-xs block font-bold truncate" id="port-modal-freq">60x / Hari (30 Detik)</strong>
+</div>
+</div>
+<!-- DESKRIPSI LENGKAP -->
+<div class="space-y-2 text-xs text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+<h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider">Deskripsi Penayangan Materi:</h4>
+<p id="port-modal-desc">
+                        Penayangan video promosi ritel komersial berdurasi 30 detik yang disiarkan pada layar LED Videotron Pasar Rejosari selama 15 hari nonstop. Materi iklan berhasil menjangkau paparan kendaraan padat di persimpangan utama Kota Salatiga.
+                    </p>
+</div>
+<div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+<span>Terverifikasi Ditayangkan oleh Diskominfo Salatiga</span>
+</div>
+<button class="w-full sm:w-auto px-5 py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs rounded-xl shadow-md transition" id="port-modal-action-btn" onclick="triggerBookingFlowFromPort()">
+                        Ajukan Penyewaan Iklan Serupa →
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- AUTH GATE MODAL POPUP -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 z-50 bg-slate-900/85 hidden items-center justify-center p-4 overflow-y-auto" id="auth-gate-screen">
+<div class="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 my-auto relative">
+<button class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-xl font-bold p-1" onclick="closeAuthGateModal()">×</button>
+<div class="text-center space-y-2">
+<div class="inline-block p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-md">
+<img alt="SEVISA Logo" class="w-14 h-14 rounded-xl object-cover" src="logo.png"/>
+</div>
+<h1 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Akun Pengguna SEVISA</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto">Silakan <strong>Masuk</strong> atau <strong>Daftar Akun</strong> untuk melanjutkan transaksi penyewaan videotron.</p>
+</div>
+<div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700">
+<button class="flex-1 py-2 rounded-lg bg-white dark:bg-slate-900 text-brand-600 dark:text-sky-400 shadow-sm transition" id="gate-tab-login" onclick="switchAuthGateTab('login')">
+                    Masuk Akun
+                </button>
+<button class="flex-1 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition" id="gate-tab-register" onclick="switchAuthGateTab('register')">
+                    Daftar Akun Baru
+                </button>
+</div>
+<!-- FORM LOGIN -->
+<form class="space-y-3 text-xs" id="gate-form-login" onsubmit="handleGateAuth(event, 'login')">
+<div>
+<label class="block text-slate-700 dark:text-slate-300 font-bold mb-1 uppercase tracking-wider">Alamat Email</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-slate-800 dark:text-slate-100 font-medium focus:border-brand-600 focus:outline-none" id="login-email" placeholder="Masukkan Email Anda" required="" type="email" value=""/>
+</div>
+<div>
+<label class="block text-slate-700 dark:text-slate-300 font-bold mb-1 uppercase tracking-wider">Kata Sandi</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-slate-800 dark:text-slate-100 font-medium focus:border-brand-600 focus:outline-none" id="login-password" placeholder="Masukkan Kata Sandi" required="" type="password" value=""/>
+</div>
+<button class="w-full py-3.5 bg-gradient-to-r from-brand-700 to-blue-600 hover:from-brand-600 hover:to-blue-500 text-white font-extrabold text-xs rounded-xl shadow-lg transition" type="submit">
+                    Masuk Akun Pengguna →
+                </button>
+</form>
+<!-- FORM REGISTER -->
+<form class="hidden space-y-3 text-xs" id="gate-form-register" onsubmit="handleGateAuth(event, 'register')">
+<div>
+<label class="block text-slate-700 dark:text-slate-300 font-bold mb-1 uppercase tracking-wider">Nama Lengkap Penanggung Jawab</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-slate-800 dark:text-slate-100 font-medium focus:border-brand-600 focus:outline-none" id="reg-name" placeholder="Masukkan Nama Lengkap" required="" type="text" value=""/>
+</div>
+<div>
+<label class="block text-slate-700 dark:text-slate-300 font-bold mb-1 uppercase tracking-wider">Alamat Email</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-slate-800 dark:text-slate-100 font-medium focus:border-brand-600 focus:outline-none" id="reg-email" placeholder="Masukkan Alamat Email" required="" type="email" value=""/>
+</div>
+<div>
+<label class="block text-slate-700 dark:text-slate-300 font-bold mb-1 uppercase tracking-wider">Kata Sandi</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-slate-800 dark:text-slate-100 font-medium focus:border-brand-600 focus:outline-none" id="reg-password" placeholder="Buat Kata Sandi (Minimal 8 Karakter)" required="" type="password" value=""/>
+</div>
+<button class="w-full py-3.5 bg-gradient-to-r from-brand-700 to-blue-600 hover:from-brand-600 hover:to-blue-500 text-white font-extrabold text-xs rounded-xl shadow-lg transition" type="submit">
+                    Daftar Akun Baru →
+                </button>
+</form>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- MODAL GERBANG PEMBAYARAN RETRIBUSI & UPLOAD BUKTI BAYAR -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 z-50 bg-slate-900/85 hidden items-center justify-center p-4 overflow-y-auto" id="payment-gateway-modal">
+<div class="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 my-auto relative">
+<button class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-xl font-bold p-1" onclick="closeModal('payment-gateway-modal')">×</button>
+<div class="text-center space-y-1">
+<span class="px-3 py-1 bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-extrabold text-[10px] rounded-full uppercase tracking-wider border border-emerald-300 dark:border-emerald-800">
+                    PEMBAYARAN RESMI RETRIBUSI PAD SALATIGA
+                </span>
+<h3 class="text-xl font-black text-slate-900 dark:text-white">Pilih Metode Pembayaran</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Kode Transaksi: <strong class="font-mono text-brand-600 dark:text-sky-400 font-black" id="pay-modal-code">SVS-148972</strong></p>
+</div>
+<!-- TOTAL AMOUNT BADGE -->
+<div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white p-4 rounded-2xl border border-slate-800 text-center space-y-1 shadow-lg">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">TOTAL RETRIBUSI WAJIB DIBAYAR:</span>
+<div class="text-2xl font-black text-amber-400 font-mono" id="pay-modal-amount">Rp 121.043.750</div>
+<span class="text-[9px] text-slate-300 italic block">Sudah Termasuk Pajak &amp; Biaya Garansi Penyiaran Official</span>
+</div>
+<form class="space-y-4 text-xs" onsubmit="submitUserPaymentReceipt(event)">
+<div class="space-y-2">
+<label class="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">1. Pilih Metode Pembayaran *</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+<label class="p-3 bg-slate-50 dark:bg-slate-800/60 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-brand-500 transition flex items-start gap-2.5">
+<input checked="" class="mt-1" name="pay_method" type="radio" value="bank_kasda"/>
+<div>
+<strong class="block text-slate-900 dark:text-white font-extrabold">🏦 Bank Kasda (Bank Jateng)</strong>
+<span class="text-[10px] text-slate-500 block font-mono">No. 1-003-01234-5</span>
+<span class="text-[9px] text-emerald-600 font-bold block">a.n. Kasda Pemkot Salatiga</span>
+</div>
+</label>
+<label class="p-3 bg-slate-50 dark:bg-slate-800/60 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-brand-500 transition flex items-start gap-2.5">
+<input class="mt-1" name="pay_method" type="radio" value="qris"/>
+<div>
+<strong class="block text-slate-900 dark:text-white font-extrabold">📲 QRIS Pemkot Salatiga</strong>
+<span class="text-[10px] text-slate-500 block">Scan via GoPay/OVO/DANA/MBanking</span>
+</div>
+</label>
+<label class="p-3 bg-slate-50 dark:bg-slate-800/60 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-brand-500 transition flex items-start gap-2.5">
+<input class="mt-1" name="pay_method" type="radio" value="va_bank"/>
+<div>
+<strong class="block text-slate-900 dark:text-white font-extrabold">💳 Virtual Account (VA)</strong>
+<span class="text-[10px] text-slate-500 block font-mono">VA: 88733-148972</span>
+<span class="text-[9px] text-slate-400 block">Mandiri / BNI / BRI / BCA</span>
+</div>
+</label>
+<label class="p-3 bg-slate-50 dark:bg-slate-800/60 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-brand-500 transition flex items-start gap-2.5">
+<input class="mt-1" name="pay_method" type="radio" value="loket_kas"/>
+<div>
+<strong class="block text-slate-900 dark:text-white font-extrabold">🏢 Loket BPKPD Salatiga</strong>
+<span class="text-[10px] text-slate-500 block">Bayar Tunai di Balai Kota</span>
+</div>
+</label>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">2. Upload Bukti Transfer / Resi Pembayaran *</label>
+<input accept="image/*,.pdf" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl font-medium focus:outline-none" id="pay-receipt-file" required="" type="file"/>
+<p class="text-[10px] text-slate-500 italic">Lampirkan foto struk ATM, bukti transfer M-Banking, atau resi QRIS Anda.</p>
+</div>
+<button class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition" type="submit">
+                    📤 KIRIM BUKTI PEMBAYARAN UNTUK VERIFIKASI ADMIN →
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    \n<!-- MODAL CETAK INVOICE & KUITANSI RESMI DISKOMINFO -->
+    <!-- ========================================================================= -->
+    <div id="official-invoice-modal" class="fixed inset-0 z-50 bg-slate-900/85 hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-2xl bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 my-auto relative border-4 border-slate-200" id="invoice-print-area">
+            
+            <button onclick="closeAdminModal('official-invoice-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold p-1 print:hidden">&times;</button>
+
+            <!-- INVOICE KOP SURAT RESMI PEMKOT SALATIGA -->
+            <div class="flex items-center justify-between border-b-2 border-slate-900 pb-4 gap-4">
+                <div class="flex items-center gap-3">
+                    <img src="logo.png" alt="Logo Pemkot Salatiga" class="w-14 h-14 object-contain">
+                    <div>
+                        <span class="text-[10px] font-black tracking-widest text-slate-500 uppercase block">PEMERINTAH KOTA SALATIGA</span>
+                        <h2 class="text-lg font-black text-slate-900 leading-tight uppercase">DINAS KOMUNIKASI DAN INFORMATIKA</h2>
+                        <p class="text-[10px] text-slate-600">Jl. Sukowati No. 51 Salatiga • Telp: (0298) 326 767 • Web: salatiga.go.id</p>
+                    </div>
+                </div>
+                <div class="text-right shrink-0">
+                    <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold text-[9px] rounded uppercase tracking-wider block mb-1">TERBAYAR / DISERAHKAN</span>
+                    <strong id="inv-no" class="font-mono text-xs font-black text-blue-700 block">INV/SVS/2026/08/148972</strong>
+                    <span id="inv-date" class="text-[10px] text-slate-500 block font-medium">Tgl: 11 Agustus 2026</span>
+                </div>
+            </div>
+
+            <!-- INVOICE TITLE -->
+            <div class="text-center py-2 bg-slate-100 rounded-xl border border-slate-200 space-y-0.5">
+                <h3 class="text-base font-black uppercase text-slate-900 tracking-wider">KUITANSI & NOTA RESMI PENYEWAAN VIDEOTRON</h3>
+                <p class="text-[10px] text-slate-600 font-medium">Berdasarkan SK Wali Kota Salatiga No. 974/148/2022 & Perwali No. 49 Tahun 2018</p>
+            </div>
+
+            <!-- INVOICE DETAILS GRID -->
+            <div class="grid grid-cols-2 gap-4 text-xs">
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                    <span class="text-[9px] font-extrabold text-slate-400 uppercase block">DATA PEMESAN / KLIEN:</span>
+                    <strong id="inv-client-name" class="font-black text-slate-900 block">Alfi Fadli</strong>
+                    <span id="inv-client-company" class="text-slate-600 block text-[11px]">Pt Mencari Cinta sejati</span>
+                    <span id="inv-client-nik" class="text-slate-500 block font-mono text-[10px]">NIK: 3373012345670001</span>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                    <span class="text-[9px] font-extrabold text-slate-400 uppercase block">RINCIAN OBJEK SEWA:</span>
+                    <strong id="inv-location" class="font-black text-slate-900 block">Videotron Selasar Kartini</strong>
+                    <span id="inv-dates" class="text-slate-600 block text-[11px]">2026-08-11 s.d. 2026-09-11 (5 Bulan)</span>
+                    <span id="inv-file" class="text-emerald-700 block font-mono text-[10px] font-bold">Materi: logo savisa.jpeg</span>
+                </div>
+            </div>
+
+            <!-- PAYMENT BREAKDOWN TABLE -->
+            <div class="overflow-hidden rounded-xl border border-slate-200 text-xs">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900 text-white font-extrabold uppercase text-[10px]">
+                            <th class="p-2.5">Deskripsi Layanan DOOH</th>
+                            <th class="p-2.5 text-center">Kategori</th>
+                            <th class="p-2.5 text-right">Jumlah PAD (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 font-medium">
+                        <tr>
+                            <td class="p-2.5" id="inv-table-desc">Sewa Layanan Penyiaran Videotron Selasar Kartini (5 Bulan)</td>
+                            <td class="p-2.5 text-center font-bold text-rose-600" id="inv-table-cat">Instansi</td>
+                            <td class="p-2.5 text-right font-black font-mono text-slate-900" id="inv-table-price">Rp 121.043.750</td>
+                        </tr>
+                        <tr class="bg-slate-50 font-bold">
+                            <td colspan="2" class="p-2.5 text-right uppercase text-[10px]">Total Retribusi PAD Salatiga:</td>
+                            <td class="p-2.5 text-right font-black font-mono text-blue-700 text-sm" id="inv-total-final">Rp 121.043.750</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- VERIFICATION STAMP & SIGNATURE -->
+            <div class="flex items-center justify-between pt-2 border-t border-slate-200 text-xs">
+                <div class="space-y-1">
+                    <div class="w-20 h-20 bg-slate-900 text-white p-2 rounded-xl border border-slate-800 flex flex-col items-center justify-center text-center">
+                        <svg class="w-10 h-10 fill-current text-sky-400" viewBox="0 0 24 24"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm13-2h3v2h-3zm-3 0h2v3h-2zm3 3h3v5h-3zm-3 2h2v3h-2zm-3-2h2v2h-2z"/></svg>
+                        <span class="text-[7px] font-mono tracking-widest text-slate-400 mt-1 uppercase">QR AUTENTIK</span>
+                    </div>
+                </div>
+                <div class="text-center space-y-8">
+                    <div>
+                        <span class="text-[10px] text-slate-500 block">Salatiga, 11 Agustus 2026</span>
+                        <strong class="text-xs font-black text-slate-900 uppercase block">An. Kepala Diskominfo Kota Salatiga</strong>
+                        <span class="text-[10px] text-slate-500 block">Bendahara Penerimaan PAD</span>
+                    </div>
+                    <div class="font-bold border-b border-slate-900 inline-block px-4">
+                        ( DISKOMINFO SALATIGA RESMI )
+                    </div>
+</div>
+</div>
+<!-- PRINT ACTIONS BUTTONS -->
+<div class="pt-4 flex gap-3 print:hidden border-t border-slate-200">
+<button class="flex-1 py-3 bg-gradient-to-r from-blue-700 to-indigo-800 hover:from-blue-800 hover:to-indigo-900 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition" onclick="window.print()">
+                    🖨️ CETAK / SIMPAN KE PDF →
+                </button>
+                <button class="px-5 py-3 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl" onclick="closeAdminModal('official-invoice-modal')">
+                    Tutup
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    \n<!-- SCREEN 2: MAIN DASHBOARD CMS ADMIN (SHOWN ON LOGIN) -->
 <!-- ========================================================================= -->
 <div class="hidden flex-row min-h-screen overflow-hidden" id="admin-main-wrapper">
 
@@ -306,7 +707,10 @@ function deleteTesti(idx) {
 </button>
             
 <button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 bg-slate-900 text-white shadow-md font-black " id="tab-cms-transaksi" onclick="switchCMSModule('transaksi')">
-                        📥 Kelola Transaksi &amp; Cek Status
+                        🛒 Kelola Transaksi &amp; Cek Status
+                    </button>
+<button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" id="tab-cms-daftar-transaksi" onclick="switchCMSModule('daftar-transaksi')">
+                        📅 Daftar Transaksi
                     </button>
 <button class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" id="tab-cms-laporan" onclick="switchCMSModule('laporan')">
                         📑 Laporan Keuangan
@@ -358,7 +762,7 @@ function deleteTesti(idx) {
 </div>
 </div>
 <!-- SUMMARY METRICS -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 text-xs">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-md space-y-1">
 <span class="text-slate-400 font-bold text-[10px] uppercase">Permohonan Sewa</span>
 <div class="text-xl font-black text-slate-900 dark:text-white" id="stat-total-orders">0</div>
@@ -374,14 +778,6 @@ function deleteTesti(idx) {
 <div class="bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/50 rounded-2xl p-4 shadow-md space-y-1">
 <span class="text-emerald-500 font-bold text-[10px] uppercase">Terkonfirmasi Tayang</span>
 <div class="text-xl font-black text-emerald-600 dark:text-emerald-400" id="stat-approved-orders">0</div>
-</div>
-<div class="bg-gradient-to-tr from-emerald-900 to-emerald-950 text-white rounded-2xl p-4 shadow-md space-y-1 border border-emerald-500/40">
-<span class="text-emerald-300 font-bold text-[10px] uppercase">PAD Sudah Dibayar</span>
-<div class="text-lg font-black text-emerald-400" id="stat-pad-lunas">Rp 0</div>
-</div>
-<div class="bg-gradient-to-tr from-slate-900 to-blue-950 text-white rounded-2xl p-4 shadow-md space-y-1 border border-sky-500/40">
-<span class="text-amber-300 font-bold text-[10px] uppercase">PAD Belum Dibayar</span>
-<div class="text-lg font-black text-amber-400" id="stat-pad-belum">Rp 0</div>
 </div>
 </div>
 <!-- NAVIGATION MODULE TABS SYSTEM -->
@@ -430,9 +826,12 @@ function deleteTesti(idx) {
 <div class="flex gap-2 w-full md:w-auto">
 <select class="p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" id="admin-status-filter" onchange="renderAdminTable()">
 <option value="all">Semua Status</option>
-<option value="menunggu">🟡 Proses Verifikasi</option>
-<option value="diproses">🔵 Uji Tayang</option>
-<option value="terkonfirmasi">🟢 Terkonfirmasi</option>
+<option value="menunggu">⏳ Proses Verifikasi</option>
+<option value="diproses">🔄 Uji Tayang</option>
+<option value="pembayaran_diverifikasi">💸 Pembayaran Diverifikasi</option>
+<option value="terkonfirmasi">✅ Terkonfirmasi</option>
+<option value="lunas">🟢 Lunas</option>
+<option value="batal">❌ Batal</option>
 </select>
 <input class="p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium w-full md:w-60" id="admin-search-input" onkeyup="renderAdminTable()" placeholder="Cari kode, nama, lokasi..." type="text"/>
 </div>
@@ -454,6 +853,69 @@ function deleteTesti(idx) {
 </table>
 </div>
 </div>
+<!-- ========================================================================= -->
+<!-- MODULE DAFTAR TRANSAKSI -->
+<!-- ========================================================================= -->
+<div class="hidden space-y-6" id="sec-cms-daftar-transaksi">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 gap-4">
+        <div>
+            <h3 class="text-base font-black text-slate-900 dark:text-white">Daftar Transaksi User</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Semua riwayat transaksi penyewaan videotron berdasarkan periode tanggal.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <div class="flex items-center gap-2">
+                <label class="text-xs font-bold text-slate-600 dark:text-slate-400">Dari:</label>
+                <input type="date" id="filter-trx-start" class="p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold" onchange="renderDaftarTransaksiTable()" />
+            </div>
+            <div class="flex items-center gap-2">
+                <label class="text-xs font-bold text-slate-600 dark:text-slate-400">Sampai:</label>
+                <input type="date" id="filter-trx-end" class="p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold" onchange="renderDaftarTransaksiTable()" />
+            </div>
+            <div class="flex items-center gap-2">
+                <label class="text-xs font-bold text-slate-600 dark:text-slate-400">Status:</label>
+                <select id="filter-trx-status" class="p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold" onchange="renderDaftarTransaksiTable()">
+                    <option value="all">Semua Status</option>
+                    <option value="menunggu">⏳ Proses Verifikasi</option>
+                    <option value="diproses">🔄 Uji Tayang</option>
+                    <option value="pembayaran_diverifikasi">💸 Pembayaran Diverifikasi</option>
+                    <option value="terkonfirmasi">✅ Terkonfirmasi</option>
+                    <option value="lunas">🟢 Lunas</option>
+                    <option value="batal">❌ Batal</option>
+                </select>
+            </div>
+            <button onclick="renderDaftarTransaksiTable()" class="px-3 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-bold shadow-sm">Terapkan</button>
+        </div>
+    </div>
+    
+    <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+        <table class="w-full text-left border-collapse text-xs">
+            <thead>
+                <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-800">
+                    <th class="p-3.5">Kode / Tgl Masuk</th>
+                    <th class="p-3.5">Pemesan / Instansi</th>
+                    <th class="p-3.5">Lokasi & Jadwal</th>
+                    <th class="p-3.5 text-right">Nominal (Rp)</th>
+                    <th class="p-3.5 text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-medium text-slate-700 dark:text-slate-200" id="daftar-transaksi-tbody">
+                <!-- Injected via JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 p-4 rounded-xl flex justify-between items-center">
+            <span class="text-xs font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider">Total Sudah Bayar (Lunas)</span>
+            <span class="text-lg font-black text-emerald-600 dark:text-emerald-300" id="daftar-trx-total-lunas">Rp 0</span>
+        </div>
+        <div class="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 p-4 rounded-xl flex justify-between items-center">
+            <span class="text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider">Total Belum Bayar</span>
+            <span class="text-lg font-black text-amber-600 dark:text-amber-300" id="daftar-trx-total-belum">Rp 0</span>
+        </div>
+    </div>
+</div>
+
 <!-- ========================================================================= -->
 <!-- MODULE LAPORAN KHUSUS -->
 <!-- ========================================================================= -->
@@ -663,67 +1125,24 @@ function deleteTesti(idx) {
 <p class="text-xs text-slate-500 dark:text-slate-400">Tambah, Edit, dan Hapus ulasan/testimoni pelanggan yang tampil di website publik.</p>
 </div>
 </div>
-<form class="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-xs" onsubmit="savePortfolioAdminForm(event)">
-<input id="port-edit-id" type="hidden" value=""/>
-<h4 class="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 pb-2" id="port-form-title-label">➕ Form Tambah / Edit Testimoni</h4>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div>
-<label class="block font-bold mb-1">Nama Penyewa / Klien *</label>
-<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="port-admin-client" placeholder="Contoh: PT ABC / Dinas Pendidikan" required="" type="text"/>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+            <thead class="bg-slate-900 text-slate-100 uppercase text-[10px] tracking-wider font-extrabold sticky top-0 z-10">
+                <tr>
+                    <th class="p-3.5">Nama Penyewa / Klien</th>
+                    <th class="p-3.5">Lokasi / Rating</th>
+                    <th class="p-3.5">Ulasan</th>
+                    <th class="p-3.5 text-center">Status</th>
+                    <th class="p-3.5 text-center">Aksi Admin</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800 font-medium" id="admin-port-tbody">
+                <!-- Injected via loadAdminPortfolio() -->
+            </tbody>
+        </table>
+    </div>
 </div>
-<div>
-<label class="block font-bold mb-1">Rating Bintang (1-5) *</label>
-<select class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-amber-600" id="port-admin-rating" required="">
-<option value="5">⭐⭐⭐⭐⭐ (5 Bintang)</option>
-<option value="4">⭐⭐⭐⭐ (4 Bintang)</option>
-<option value="3">⭐⭐⭐ (3 Bintang)</option>
-</select>
-</div>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div>
-<label class="block font-bold mb-1">Titik Lokasi Videotron *</label>
-<select class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="port-admin-location" required="">
-<option value="Pasar Rejosari">Pasar Rejosari</option>
-<option value="Selasar Kartini">Selasar Kartini</option>
-<option value="Blotongan">Blotongan</option>
-<option value="Alun-Alun Salatiga">Alun-Alun Salatiga</option>
-</select>
-</div>
-<div>
-<label class="block font-bold mb-1">Jenis Instansi / Kategori *</label>
-<select class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold" id="port-admin-category" required="">
-<option value="Instansi Pemerintah">Instansi Pemerintah</option>
-<option value="Perusahaan Swasta">Perusahaan Swasta</option>
-<option value="UMKM / Personal">UMKM / Personal</option>
-<option value="Event Organizer">Event Organizer</option>
-</select>
-</div>
-</div>
-<div>
-<label class="block font-bold mb-1">Teks Ulasan / Testimoni *</label>
-<textarea class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="port-admin-desc" placeholder="Tuliskan pengalaman penyewa di sini..." required="" rows="3"></textarea>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div>
-<label class="block font-bold mb-1">📁 Upload Foto Klien / Logo (Opsional)</label>
-<input accept="image/*" class="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" id="port-admin-file" type="file"/>
-</div>
-<div>
-<label class="block font-bold mb-1">🔗 Atau URL Foto / Logo Klien</label>
-<input class="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-medium" id="port-admin-url" placeholder="Opsional, contoh: logo_klien.jpg" type="text"/>
-</div>
-</div>
-<div class="flex gap-2">
-<button class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition" type="submit">
-                                💾 SIMPAN TESTIMONI →
-                            </button>
-<button class="px-4 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl" onclick="resetPortfolioForm()" type="button">
-                                Batal
-                            </button>
-</div>
-</form>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs" id="admin-portfolio-list-container"></div>
 </div>
 <!-- ========================================================================= -->
 <!-- MODULE 4: FULL CRUD BLOG -->
@@ -970,32 +1389,52 @@ function deleteTesti(idx) {
 <p class="text-xs text-slate-500 dark:text-slate-400">Kode Transaksi: <strong class="font-mono text-brand-600 dark:text-sky-400 font-black" id="modal-manage-code">SVS-XXX</strong></p>
 </div>
 <form class="space-y-4 text-xs" onsubmit="saveAdminStatusUpdate(event)">
-<div class="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-1 text-xs">
-<span class="font-black text-slate-900 dark:text-white block" id="modal-manage-user">Budi Santoso (PT Salatiga Digital Indo)</span>
-<span class="text-slate-600 dark:text-slate-300 block font-semibold" id="modal-manage-location">Pasar Rejosari • 2026-08-15 s.d. 2026-08-22</span>
-<span class="text-emerald-600 dark:text-emerald-400 font-mono font-bold block text-[11px]" id="modal-manage-file">📁 Materi: Video_Promosi.mp4</span>
-</div>
-<div>
-<label class="block font-bold mb-1 uppercase tracking-wider">1. Ubah Status Pengajuan *</label>
-<select class="w-full p-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-extrabold rounded-xl focus:outline-none" id="modal-status-select" required="">
-<option value="menunggu">🟡 MENUNGGU VERIFIKASI DISKOMINFO (Tahap 1)</option>
-<option value="diproses">🔵 SEDANG DIPROSES / UJI TAYANG (Tahap 2)</option>
-<option value="terkonfirmasi">🟢 TERKONFIRMASI &amp; SIAP PENAYANGAN (Tahap 3)</option>
-</select>
-</div>
-<div>
-<label class="block font-bold mb-1 uppercase tracking-wider">2. Pesan / Catatan Resmi Diskominfo untuk Pemesan *</label>
-<textarea class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-xl font-medium focus:outline-none" id="modal-status-notes" placeholder="Tuliskan catatan verifikasi materi, jadwal penyiaran, atau instruksi resmi..." required="" rows="3"></textarea>
-</div>
-<div>
-<label class="block font-bold mb-1 uppercase tracking-wider">3. Foto Bukti Penayangan Videotron di Lapangan</label>
-<select class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold rounded-xl focus:outline-none" id="modal-proof-preset">
-<option value="header_banner.jpg">📸 Foto Standar Penayangan Videotron Diskominfo</option>
-<option value="header_banner.jpg">📸 Videotron Pasar Rejosari (Kawasan Pasar)</option>
-<option value="header_banner.jpg">📸 Videotron Selasar Kartini (Pusat Kota)</option>
-<option value="header_banner.jpg">📸 Videotron Blotongan (Gate Utara)</option>
-</select>
-</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700">
+                    <div>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-[10px] text-slate-500">Nama Pemesan</label>
+                        <input type="text" id="modal-manage-user" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded font-semibold text-xs text-slate-800 dark:text-slate-100" />
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-[10px] text-slate-500">Instansi / Perusahaan</label>
+                        <input type="text" id="modal-manage-company" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded font-semibold text-xs text-slate-800 dark:text-slate-100" />
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-[10px] text-slate-500">No. WhatsApp</label>
+                        <input type="text" id="modal-manage-wa" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded font-semibold text-xs text-slate-800 dark:text-slate-100" />
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-[10px] text-slate-500">Email</label>
+                        <input type="text" id="modal-manage-email" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded font-semibold text-xs text-slate-800 dark:text-slate-100" />
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-[10px] text-slate-500">Lokasi Penayangan</label>
+                        <input type="text" id="modal-manage-location" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded font-semibold text-xs text-slate-800 dark:text-slate-100" />
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-[10px] text-slate-500">Jadwal Penayangan (Paket)</label>
+                        <input type="text" id="modal-manage-dates" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded font-semibold text-xs text-slate-800 dark:text-slate-100" />
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-[10px] text-slate-500">Nominal Total (Rp)</label>
+                        <input type="text" id="modal-manage-price" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded font-bold text-xs text-slate-800 dark:text-slate-100" />
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 uppercase tracking-wider text-[10px] text-slate-500">File Materi</label>
+                        <div class="flex gap-1.5">
+                            <input type="text" id="modal-manage-file" class="w-full p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded font-bold text-xs text-emerald-600 dark:text-emerald-400" />
+                            <button type="button" onclick="downloadMateriDariModal()" class="px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold text-xs whitespace-nowrap shadow-sm" title="Download Materi">⬇️</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold mb-1 uppercase tracking-wider">Pesan untuk Pengguna (Tampil di Web) *</label>
+                    <textarea class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-xl font-medium focus:outline-none" id="modal-status-notes" placeholder="Tuliskan pesan / instruksi resmi untuk pemesan..." required="" rows="2"></textarea>
+                </div>
+                <div>
+                    <label class="block font-bold mb-1 uppercase tracking-wider text-rose-600 dark:text-rose-400">Catatan Internal Admin (Sangat Rahasia)</label>
+                    <textarea class="w-full p-3 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-slate-800 dark:text-slate-200 rounded-xl font-medium focus:outline-none placeholder-rose-400" id="modal-admin-internal-note" placeholder="Catatan ini hanya bisa dilihat oleh internal admin (tidak tampil di publik)..." rows="2"></textarea>
+                </div>
 <button class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition" type="submit">
                     💾 SIMPAN PERUBAHAN STATUS &amp; KIRIM PESAN →
                 </button>
@@ -1035,7 +1474,7 @@ function deleteTesti(idx) {
 
         // CHECK ADMIN LOGIN STATUS & APPLY ROLE HIERARCHY
         function checkAdminSession() {
-            const logged = sessionStorage.getItem('sevisa_admin_logged');
+            const logged = localStorage.getItem('sevisa_admin_logged');
             const loginScreen = document.getElementById('admin-login-screen');
             const mainWrapper = document.getElementById('admin-main-wrapper');
 
@@ -1059,9 +1498,9 @@ function deleteTesti(idx) {
             const pass = document.getElementById('admin-login-pass').value.trim();
 
             if (email === 'admin@salatiga.go.id' && pass === 'admin123') {
-                sessionStorage.setItem('sevisa_admin_logged', 'true');
-                sessionStorage.setItem('sevisa_admin_role', 'superadmin');
-                sessionStorage.setItem('sevisa_admin_name', 'Super Admin Diskominfo');
+                localStorage.setItem('sevisa_admin_logged', 'true');
+                localStorage.setItem('sevisa_admin_role', 'superadmin');
+                localStorage.setItem('sevisa_admin_name', 'Super Admin Diskominfo');
                 checkAdminSession();
                 showAdminToast('🛡️ AKSES SUPER ADMIN', 'Selamat datang Super Admin! Seluruh fitur & pengelolaan akun terbuka penuh.');
                 return;
@@ -1070,9 +1509,9 @@ function deleteTesti(idx) {
             const operators = getStoredOperators();
             const foundOp = operators.find(op => op.email.toLowerCase() === email.toLowerCase() && op.pass === pass);
             if (foundOp) {
-                sessionStorage.setItem('sevisa_admin_logged', 'true');
-                sessionStorage.setItem('sevisa_admin_role', 'operator');
-                sessionStorage.setItem('sevisa_admin_name', foundOp.name + ' (Operator)');
+                localStorage.setItem('sevisa_admin_logged', 'true');
+                localStorage.setItem('sevisa_admin_role', 'operator');
+                localStorage.setItem('sevisa_admin_name', foundOp.name + ' (Operator)');
                 checkAdminSession();
                 showAdminToast('⚙️ AKSES OPERATOR PENYIARAN', `Selamat datang Operator ${foundOp.name}. Akses dibatasi untuk operasional penyiaran & live chat.`);
                 return;
@@ -1082,31 +1521,31 @@ function deleteTesti(idx) {
         }
 
         function quickSuperAdminLogin() {
-            sessionStorage.setItem('sevisa_admin_logged', 'true');
-            sessionStorage.setItem('sevisa_admin_role', 'superadmin');
-            sessionStorage.setItem('sevisa_admin_name', 'Super Admin Diskominfo');
+            localStorage.setItem('sevisa_admin_logged', 'true');
+            localStorage.setItem('sevisa_admin_role', 'superadmin');
+            localStorage.setItem('sevisa_admin_name', 'Super Admin Diskominfo');
             checkAdminSession();
             showAdminToast('🛡️ LOGIN SUPER ADMIN', 'Akses Penuh Super Admin Aktif.');
         }
 
         function quickOperatorLogin() {
-            sessionStorage.setItem('sevisa_admin_logged', 'true');
-            sessionStorage.setItem('sevisa_admin_role', 'operator');
-            sessionStorage.setItem('sevisa_admin_name', 'Siti Rahmawati, S.Kom (Operator)');
+            localStorage.setItem('sevisa_admin_logged', 'true');
+            localStorage.setItem('sevisa_admin_role', 'operator');
+            localStorage.setItem('sevisa_admin_name', 'Siti Rahmawati, S.Kom (Operator)');
             checkAdminSession();
             showAdminToast('⚙️ LOGIN OPERATOR', 'Akses Operasional Penyiaran & Live Chat Aktif.');
         }
 
         function handleAdminLogout() {
-            sessionStorage.removeItem('sevisa_admin_logged');
-            sessionStorage.removeItem('sevisa_admin_role');
-            sessionStorage.removeItem('sevisa_admin_name');
+            localStorage.removeItem('sevisa_admin_logged');
+            localStorage.removeItem('sevisa_admin_role');
+            localStorage.removeItem('sevisa_admin_name');
             checkAdminSession();
         }
 
         function applyRolePermissions() {
-            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
-            const name = sessionStorage.getItem('sevisa_admin_name') || 'Admin Diskominfo';
+            const role = localStorage.getItem('sevisa_admin_role') || 'superadmin';
+            const name = localStorage.getItem('sevisa_admin_name') || 'Admin Diskominfo';
             
             const roleBadge = document.getElementById('admin-role-badge');
             const roleNameEl = document.getElementById('admin-role-name');
@@ -1139,9 +1578,52 @@ function deleteTesti(idx) {
         }
 
         // INITIALIZE ALL DATA FROM LOCALSTORAGE OR SET DEFAULTS
+        function updateDashboardStats() {
+            const orders = getStoredOrders();
+            let totalLunas = 0;
+            let locCounts = {};
+            
+            orders.forEach(o => {
+                if(o.location) {
+                    locCounts[o.location] = (locCounts[o.location] || 0) + 1;
+                }
+                
+                const sudahBayarStatus = ['pembayaran_diverifikasi', 'terkonfirmasi', 'lunas', 'selesai'];
+                if (sudahBayarStatus.includes(o.status)) {
+                    let p = parseInt((o.totalPrice || '0').toString().replace(/\./g, ''));
+                    if (p === 0 && o.dates) {
+                        const pm = o.dates.match(/Rp\s*([\d.]+)/);
+                        if (pm) p = parseInt(pm[1].replace(/\./g, ''));
+                    }
+                    if (!isNaN(p)) totalLunas += p;
+                }
+            });
+            
+            let favLoc = '-';
+            let maxCount = 0;
+            for(const [loc, count] of Object.entries(locCounts)) {
+                if(count > maxCount) {
+                    maxCount = count;
+                    favLoc = loc;
+                }
+            }
+            
+            const elTotalTx = document.getElementById('stat-total-tx');
+            const elRevenue = document.getElementById('stat-total-revenue');
+            const elFavLoc = document.getElementById('stat-fav-loc');
+            
+            if(elTotalTx) elTotalTx.innerText = orders.length;
+            if(elRevenue) elRevenue.innerText = 'Rp ' + totalLunas.toLocaleString('id-ID');
+            if(elFavLoc) elFavLoc.innerText = favLoc;
+        }
+
         function initAdminCMSData() {
+            initDaftarTransaksiDates();
+            updateDashboardStats();
             getStoredOrders();
             renderAdminTable();
+            renderDaftarTransaksiTable();
+            renderLaporanKhusus();
             renderCMSLocations();
             renderCMSPortfolio();
             renderCMSBlog();
@@ -1194,14 +1676,23 @@ function deleteTesti(idx) {
                       selectClass = 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 border-emerald-300';
                   }
                   
-                  let kontenClass = o.contentApproved 
-                      ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border-emerald-300' 
-                      : 'bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-400 border-amber-300';
-                      
+                  let kontenStatus = o.contentStatus || (o.contentApproved ? 'disetujui' : 'menunggu');
+                  let kontenClass = 'bg-slate-100 dark:bg-slate-900 text-slate-800 border-slate-300';
+                  if (kontenStatus === 'menunggu') kontenClass = 'bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-400 border-amber-300';
+                  else if (kontenStatus === 'disetujui') kontenClass = 'bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-400 border-blue-300';
+                  else if (kontenStatus === 'sudah_upload') kontenClass = 'bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-400 border-indigo-300';
+                  else if (kontenStatus === 'terjadwal') kontenClass = 'bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-400 border-purple-300';
+                  else if (kontenStatus === 'tayang') kontenClass = 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border-emerald-300';
+                  else if (kontenStatus === 'ditolak') kontenClass = 'bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-400 border-rose-300 font-extrabold';
+
                   let kontenHtml = `
                       <select onchange="changeContentStatus('${o.code}', this.value)" class="p-1.5 border rounded-lg font-bold text-[10px] cursor-pointer shadow-sm ${kontenClass}">
-                          <option value="false" ${!o.contentApproved ? 'selected' : ''}>⏳ Menunggu</option>
-                          <option value="true" ${o.contentApproved ? 'selected' : ''}>✔ Disetujui</option>
+                          <option value="menunggu" ${kontenStatus === 'menunggu' ? 'selected' : ''}>⏳ Menunggu</option>
+                          <option value="disetujui" ${kontenStatus === 'disetujui' ? 'selected' : ''}>✔️ Disetujui</option>
+                          <option value="sudah_upload" ${kontenStatus === 'sudah_upload' ? 'selected' : ''}>📂 Sudah Upload</option>
+                          <option value="terjadwal" ${kontenStatus === 'terjadwal' ? 'selected' : ''}>📅 Terjadwal</option>
+                          <option value="tayang" ${kontenStatus === 'tayang' ? 'selected' : ''}>📺 Tayang</option>
+                          <option value="ditolak" ${kontenStatus === 'ditolak' ? 'selected' : ''}>❌ Ditolak</option>
                       </select>
                   `;
 
@@ -1211,21 +1702,24 @@ function deleteTesti(idx) {
                                   <option value="diproses" ${o.status === 'diproses' ? 'selected' : ''}>🔄 2. DISETUJUI / MENUNGGU BAYAR</option>
                                   <option value="pembayaran_diverifikasi" ${o.status === 'pembayaran_diverifikasi' ? 'selected' : ''}>💸 3. BUKTI BAYAR DIUNGGAH (VERIFIKASI ADMIN)</option>
                                   <option value="terkonfirmasi" ${o.status === 'terkonfirmasi' ? 'selected' : ''}>✅ 4. DISETUJUI FINAL (SIAP TAYANG)</option>
+                                  <option value="lunas" ${o.status === 'lunas' ? 'selected' : ''}>🟢 5. LUNAS</option>
+                                  <option value="batal" ${o.status === 'batal' ? 'selected' : ''}>❌ 6. BATAL</option>
                               </select>
                   `;
 
+                  let internalNoteBadge = o.internalNote ? `<span title="Catatan Internal: ${o.internalNote.replace(/"/g, '&quot;')}" class="cursor-help ml-1 inline-flex items-center justify-center w-3 h-3 rounded-full bg-rose-500 animate-pulse text-[8px] text-white">!</span>` : '';
                   html += `
                       <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/60 transition border-b border-slate-200 dark:border-slate-800">
-                          <td class="p-3.5"><strong class="font-mono text-brand-600 dark:text-sky-400 font-black">${o.code}</strong></td>
+                          <td class="p-3.5 flex items-center"><strong class="font-mono text-brand-600 dark:text-sky-400 font-black">${o.code}</strong>${internalNoteBadge}</td>
                           <td class="p-3.5"><strong>${o.userName}</strong><br><span class="text-[10px] text-slate-400">${o.company}</span></td>
                           <td class="p-3.5"><span class="px-2 py-0.5 bg-slate-200 dark:bg-slate-800 font-bold rounded text-[10px]">📍 ${o.location}</span></td>
                           <td class="p-3.5 leading-relaxed text-[11px]">${o.dates}</td>
-                          <td class="p-3.5 font-mono text-[11px] font-bold text-emerald-600">📁 ${o.file}</td>
+                          <td class="p-3.5 font-mono text-[11px] font-bold text-emerald-600"><button type="button" onclick="downloadMateriTabel('${o.file}')" class="flex items-center gap-1 hover:text-emerald-500 hover:underline cursor-pointer" title="Download Materi">📁 ${o.file}</button></td>
                           <td class="p-3.5 text-center">${kontenHtml}</td>
                           <td class="p-3.5">${selectHtml}</td>
-                          <td class="p-3.5 text-center flex items-center justify-center gap-1.5 pt-4">
-                              <button onclick="openAdminManageModal('${o.code}')" class="px-2.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-[10px] rounded-lg shadow">📝 Catatan & Foto</button>
-                              <button onclick="printAdminOrderInvoice('${o.code}')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-[10px] rounded-lg border border-slate-700 shadow">🖨️ Cetak Invoice</button>
+                          <td class="p-3.5 text-center flex flex-col items-stretch gap-1.5 pt-2">
+                              <button onclick="openAdminManageModal('${o.code}')" class="px-2.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-[10px] rounded-lg shadow">⚙️ Edit Semua Data</button>
+                              <button onclick="openOfficialInvoiceModal('${o.code}')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-sky-300 font-extrabold text-[10px] rounded-lg border border-slate-700 shadow">🖨️ Cetak Invoice</button>
                           </td>
                       </tr>
                   `;
@@ -1238,19 +1732,33 @@ function deleteTesti(idx) {
               const orders = getStoredOrders();
               const idx = orders.findIndex(o => o.code === code);
               if (idx !== -1) {
-                  const isApproved = value === 'true';
-                  orders[idx].contentApproved = isApproved;
-                  
-                  // Auto update status dropdown based on content approval
-                  if (isApproved) {
-                      orders[idx].status = 'diproses';
+                  if (value === 'ditolak') {
+                      const reason = prompt('Masukkan alasan mengapa konten/materi iklan ini ditolak:');
+                      if (reason === null || reason.trim() === '') {
+                          renderAdminTable(); 
+                          return;
+                      }
+                      orders[idx].contentRejectionNote = reason.trim();
                   } else {
-                      orders[idx].status = 'menunggu';
-                      orders[idx].statusLabel = '1. proses verifikasi';
+                      delete orders[idx].contentRejectionNote;
                   }
+
+                  orders[idx].contentStatus = value;
+                  orders[idx].contentApproved = (value === 'disetujui' || value === 'sudah_upload' || value === 'terjadwal' || value === 'tayang');
                   
+                  if (value === 'disetujui') {
+                      orders[idx].status = 'diproses';
+                      orders[idx].statusLabel = 'DISETUJUI / MENUNGGU PEMBAYARAN USER';
+                      orders[idx].statusDesc = '⚙️ <strong>Status: Disetujui / Menunggu Pembayaran User</strong><br>Permohonan sewa & materi iklan Anda telah disetujui! Silakan selesaikan pembayaran retribusi PAD agar dapat diverifikasi Lunas & ditayangkan.';
+                  } else if (value === 'ditolak') {
+                      orders[idx].status = 'batal';
+                      orders[idx].statusLabel = 'DITOLAK';
+                      orders[idx].statusDesc = '❌ <strong>Status: Ditolak</strong><br>Mohon maaf, transaksi penyewaan ini ditolak dengan alasan: ' + orders[idx].contentRejectionNote;
+                  }
+
                   saveStoredOrders(orders);
                   renderAdminTable();
+                  showAdminToast('✅ STATUS KONTEN & TRANSAKSI DIPERBARUI', `Konten transaksi ${code} kini ${value.toUpperCase()}`);
               }
           }
 
@@ -1272,6 +1780,13 @@ function deleteTesti(idx) {
                     orders[idx].statusLabel = 'TERKONFIRMASI LUNAS & SIAP PENAYANGAN';
                     orders[idx].statusDesc = '✅ <strong>Status: Terkonfirmasi Lunas & Siap Penayangan</strong><br>Selamat! Pembayaran retribusi sewa videotron Anda telah diverifikasi LUNAS oleh Diskominfo Salatiga dan materi iklan siap disiarkan.';
                     orders[idx].proofImg = 'header_banner.jpg';
+                } else if (newStatus === 'lunas') {
+                    orders[idx].statusLabel = 'LUNAS (SELESAI)';
+                    orders[idx].statusDesc = '🟢 <strong>Status: Lunas</strong><br>Pembayaran telah diterima penuh. Transaksi selesai.';
+                    orders[idx].proofImg = 'header_banner.jpg';
+                } else if (newStatus === 'batal') {
+                    orders[idx].statusLabel = 'DIBATALKAN';
+                    orders[idx].statusDesc = '❌ <strong>Status: Batal</strong><br>Mohon maaf, transaksi penyewaan ini telah dibatalkan.';
                 }
 
                 saveStoredOrders(orders);
@@ -1287,17 +1802,50 @@ function deleteTesti(idx) {
 
             currentTargetOrderCode = code;
             document.getElementById('modal-manage-code').innerText = order.code;
-            document.getElementById('modal-manage-user').innerText = `${order.userName} (${order.company})`;
-            document.getElementById('modal-manage-location').innerText = `${order.location} • ${order.dates}`;
-            document.getElementById('modal-manage-file').innerText = `📁 Materi: ${order.file}`;
+            
+            document.getElementById('modal-manage-user').value = order.userName || '';
+            document.getElementById('modal-manage-company').value = order.company || '';
+            
+            // Try to find the registered user to get their actual email & phone
+            let registeredEmail = '';
+            let registeredPhone = '';
+            let savedUsers = localStorage.getItem('sevisa_users');
+            if (savedUsers) {
+                let users = JSON.parse(savedUsers);
+                let matchedUser = users.find(u => 
+                    (order.phone && u.phone === order.phone) || 
+                    (order.wa && u.phone === order.wa) ||
+                    (order.userName && u.name.toLowerCase() === order.userName.toLowerCase())
+                );
+                if (matchedUser) {
+                    registeredEmail = matchedUser.email;
+                    registeredPhone = matchedUser.phone;
+                }
+            }
 
-            document.getElementById('modal-status-select').value = order.status;
+            document.getElementById('modal-manage-wa').value = order.wa || order.phone || registeredPhone || '081234567890';
+            document.getElementById('modal-manage-email').value = order.email || registeredEmail || 'user@example.com';
+            
+            document.getElementById('modal-manage-location').value = order.location || '';
+            document.getElementById('modal-manage-dates').value = order.dates || '';
+            
+            // Try to extract price from dates if empty
+            let price = order.totalPrice;
+            if (!price && order.dates) {
+                const pm = order.dates.match(/Rp\s*([\d.]+)/);
+                if (pm) price = pm[1].replace(/\./g, '');
+            }
+            document.getElementById('modal-manage-price').value = price || '';
+            
+            document.getElementById('modal-manage-file').value = order.file || '';
+            
             let rawNote = order.statusDesc || '';
-            let cleanNote = rawNote.includes('<br>') ? rawNote.split('<br>')[1] : rawNote.replace(/<[^>]*>?/gm, '');
+            let cleanNote = rawNote.includes('<br>') ? rawNote.split('<br>').slice(1).join('<br>') : rawNote.replace(/<[^>]*>?/gm, '');
             if (!cleanNote || cleanNote.length < 5) {
                 cleanNote = 'Permohonan sewa lokasi videotron telah disetujui resmi oleh Diskominfo Salatiga dan materi siap ditayangkan.';
             }
             document.getElementById('modal-status-notes').value = cleanNote.trim();
+            document.getElementById('modal-admin-internal-note').value = order.internalNote || '';
 
             document.getElementById('admin-manage-modal').classList.remove('hidden');
             document.getElementById('admin-manage-modal').classList.add('flex');
@@ -1312,33 +1860,79 @@ function deleteTesti(idx) {
             e.preventDefault();
             if (!currentTargetOrderCode) return;
 
-            const newStatus = document.getElementById('modal-status-select').value;
             const newNotes = document.getElementById('modal-status-notes').value.trim();
-            const selectedProofImg = document.getElementById('modal-proof-preset').value;
-
+            const internalNote = document.getElementById('modal-admin-internal-note').value.trim();
+            
             let orders = getStoredOrders();
-            const index = orders.findIndex(o => o.code === currentTargetOrderCode);
-
-            if (index !== -1) {
-                orders[index].status = newStatus;
-                if (newStatus === 'menunggu') {
-                    orders[index].statusLabel = '1. proses verifikasi';
-                    orders[index].statusDesc = `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>${newNotes}`;
-                } else if (newStatus === 'diproses') {
-                    orders[index].statusLabel = 'SEDANG DIPROSES / UJI TAYANG';
-                    orders[index].statusDesc = `⚙️ <strong>Status: Sedang Diproses / Review Uji Tayang</strong><br>${newNotes}`;
-                } else if (newStatus === 'terkonfirmasi') {
-                    orders[index].statusLabel = 'TERKONFIRMASI & SIAP PENAYANGAN';
-                    orders[index].statusDesc = `✅ <strong>Status: Terkonfirmasi & Siap Penayangan</strong><br>${newNotes}`;
+            const idx = orders.findIndex(o => o.code === currentTargetOrderCode);
+            if (idx !== -1) {
+                // Update identity & details
+                orders[idx].userName = document.getElementById('modal-manage-user').value.trim();
+                orders[idx].company = document.getElementById('modal-manage-company').value.trim();
+                orders[idx].wa = document.getElementById('modal-manage-wa').value.trim();
+                orders[idx].email = document.getElementById('modal-manage-email').value.trim();
+                orders[idx].location = document.getElementById('modal-manage-location').value.trim();
+                orders[idx].dates = document.getElementById('modal-manage-dates').value.trim();
+                orders[idx].totalPrice = document.getElementById('modal-manage-price').value.trim();
+                orders[idx].file = document.getElementById('modal-manage-file').value.trim();
+                orders[idx].internalNote = internalNote;
+                
+                // Update notes based on CURRENT status
+                const currentStatus = orders[idx].status;
+                if (currentStatus === 'menunggu') {
+                    orders[idx].statusDesc = `📌 <strong>Status: Menunggu Verifikasi Admin Diskominfo</strong><br>${newNotes}`;
+                } else if (currentStatus === 'diproses') {
+                    orders[idx].statusDesc = `⚙️ <strong>Status: Disetujui / Menunggu Pembayaran User</strong><br>${newNotes}`;
+                } else if (currentStatus === 'pembayaran_diverifikasi') {
+                    orders[idx].statusDesc = `💸 <strong>Status: Bukti Pembayaran Diunggah</strong><br>${newNotes}`;
+                } else if (currentStatus === 'terkonfirmasi') {
+                    orders[idx].statusDesc = `✅ <strong>Status: Terkonfirmasi Lunas & Siap Penayangan</strong><br>${newNotes}`;
+                } else if (currentStatus === 'lunas') {
+                    orders[idx].statusDesc = `🟢 <strong>Status: Lunas</strong><br>${newNotes}`;
+                } else if (currentStatus === 'batal') {
+                    orders[idx].statusDesc = `❌ <strong>Status: Batal</strong><br>${newNotes}`;
                 }
 
-                orders[index].proofImg = selectedProofImg;
-
                 saveStoredOrders(orders);
-                closeAdminModal('admin-manage-modal');
                 renderAdminTable();
-                showAdminToast('✅ STATUS TERSIMPAN', `Status ${currentTargetOrderCode} berhasil diperbarui.`);
+                
+                // If on Daftar Transaksi view, update that as well
+                renderDaftarTransaksiTable();
+
+                closeAdminModal('admin-manage-modal');
+                showAdminToast('✅ PERUBAHAN TERSIMPAN', `Data transaksi & status ${currentTargetOrderCode} berhasil diperbarui.`);
             }
+        }
+
+        function downloadMateriDariModal() {
+            const filename = document.getElementById('modal-manage-file').value.trim();
+            if (!filename) {
+                alert('File materi kosong.');
+                return;
+            }
+            
+            const blob = new Blob(["(File asli tidak tersedia di server karena ini adalah prototipe lokal)\\nIni adalah simulasi file terunduh untuk: " + filename], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        function downloadMateriTabel(filename) {
+            if (!filename || filename === '-') return;
+            const blob = new Blob(["(File asli tidak tersedia di server karena ini adalah prototipe lokal)\\nIni adalah simulasi file terunduh untuk: " + filename], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
         }
 
         // 2. LOCATIONS & GOOGLE MAPS CMS MANAGEMENT (FULL CRUD)
@@ -1580,7 +2174,7 @@ function deleteTesti(idx) {
         }
 
         function deleteLocationAdminItem(id) {
-            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
+            const role = localStorage.getItem('sevisa_admin_role') || 'superadmin';
             if (role !== 'superadmin') {
                 showAdminToast('⛔ AKSES DITOLAK', 'Hanya Super Admin yang berhak menghapus lokasi videotron!');
                 return;
@@ -1619,128 +2213,6 @@ function deleteTesti(idx) {
             document.getElementById('loc-admin-minute-rokok').value = '';
 
             document.getElementById('loc-form-title-label').innerText = '➕ Form Tambah / Edit Titik Lokasi Videotron';
-        }
-
-        // 3. FULL CRUD PORTFOLIO
-        function renderCMSPortfolio() {
-            const container = document.getElementById('admin-portfolio-list-container');
-            let saved = localStorage.getItem('sevisa_portfolio');
-            let items = saved ? JSON.parse(saved) : [];
-
-            if (items.length === 0) {
-                container.innerHTML = '<p class="text-slate-400 italic text-xs col-span-3">Belum ada testimoni. Gunakan form di atas untuk menambah.</p>';
-                return;
-            }
-
-            let html = '';
-            items.forEach(item => {
-                const stars = '⭐'.repeat(parseInt(item.rating || 5));
-                html += `
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl space-y-2 shadow-sm">
-                        <div class="flex items-center justify-between text-[10px]">
-                            <span class="font-mono font-bold text-sky-400">${item.id}</span>
-                            <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-bold">${item.location}</span>
-                        </div>
-                        <h5 class="font-extrabold text-slate-900 dark:text-white text-xs truncate">${item.client}</h5>
-                        <p class="text-[10px] text-amber-500 truncate">${stars}</p>
-                        <p class="text-[10px] text-slate-500 line-clamp-2 italic">"${item.description}"</p>
-                        <div class="pt-2 flex gap-2 border-t border-slate-100 dark:border-slate-800">
-                            <button onclick="editPortfolioItem('${item.id}')" class="text-sky-600 font-bold text-[10px] hover:underline">✏️ Edit</button>
-                            <button onclick="deletePortfolioItem('${item.id}')" class="text-rose-500 font-bold text-[10px] hover:underline">🗑️ Hapus</button>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function savePortfolioAdminForm(e) {
-            e.preventDefault();
-            const editId = document.getElementById('port-edit-id').value;
-            const client = document.getElementById('port-admin-client').value.trim();
-            const rating = document.getElementById('port-admin-rating').value;
-            const location = document.getElementById('port-admin-location').value;
-            const category = document.getElementById('port-admin-category').value;
-            const description = document.getElementById('port-admin-desc').value.trim();
-            const fileInput = document.getElementById('port-admin-file');
-            const urlInput = document.getElementById('port-admin-url');
-            const customUrl = urlInput ? urlInput.value.trim() : '';
-
-            const commitSave = (mediaDataUrl) => {
-                let saved = localStorage.getItem('sevisa_portfolio');
-                let items = saved ? JSON.parse(saved) : [];
-
-                const finalMedia = mediaDataUrl || customUrl || 'https://ui-avatars.com/api/?name='+encodeURIComponent(client)+'&background=random';
-
-                if (editId) {
-                    const idx = items.findIndex(p => p.id === editId);
-                    if (idx !== -1) {
-                        items[idx] = { 
-                            ...items[idx], 
-                            client, rating, location, category, description,
-                            imgUrl: finalMedia
-                        };
-                    }
-                } else {
-                    const newItem = {
-                        id: 'TESTI-' + Math.floor(100 + Math.random() * 900),
-                        client, rating, location, category, description,
-                        imgUrl: finalMedia
-                    };
-                    items.unshift(newItem);
-                }
-
-                localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
-                window.dispatchEvent(new Event('storage'));
-                resetPortfolioForm();
-                renderCMSPortfolio();
-                showAdminToast('💾 TESTIMONI TERSIMPAN', `Testimoni dari "${client}" telah disimpan & tampil di website publik.`);
-            };
-
-            if (fileInput && fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    commitSave(evt.target.result);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                commitSave(null);
-            }
-        }
-
-        function editPortfolioItem(id) {
-            let saved = localStorage.getItem('sevisa_portfolio');
-            let items = saved ? JSON.parse(saved) : [];
-            const item = items.find(p => p.id === id);
-            if (!item) return;
-
-            document.getElementById('port-edit-id').value = item.id;
-            document.getElementById('port-form-title-label').innerText = `✏️ Edit Testimoni (${item.id})`;
-            document.getElementById('port-admin-client').value = item.client || '';
-            if(document.getElementById('port-admin-rating')) document.getElementById('port-admin-rating').value = item.rating || '5';
-            document.getElementById('port-admin-location').value = item.location || 'Pasar Rejosari';
-            document.getElementById('port-admin-category').value = item.category || 'Instansi Pemerintah';
-            document.getElementById('port-admin-desc').value = item.description || '';
-        }
-
-        function deletePortfolioItem(id) {
-            if (confirm(`Apakah Anda yakin ingin menghapus testimoni ${id}?`)) {
-                let saved = localStorage.getItem('sevisa_portfolio');
-                let items = saved ? JSON.parse(saved) : [];
-                items = items.filter(p => p.id !== id);
-                localStorage.setItem('sevisa_portfolio', JSON.stringify(items));
-                window.dispatchEvent(new Event('storage'));
-                renderCMSPortfolio();
-                showAdminToast('🗑️ TESTIMONI DIHAPUS', `Testimoni ${id} telah dihapus.`);
-            }
-        }
-
-        function resetPortfolioForm() {
-            document.getElementById('port-edit-id').value = '';
-            document.getElementById('port-form-title-label').innerText = '➕ Form Tambah / Edit Testimoni';
-            document.getElementById('port-admin-client').value = '';
-            if(document.getElementById('port-admin-rating')) document.getElementById('port-admin-rating').value = '5';
-            document.getElementById('port-admin-desc').value = '';
         }
 
         // 4. FULL CRUD BLOG
@@ -1905,7 +2377,7 @@ function deleteTesti(idx) {
             const tbody = document.getElementById('admin-operator-table-body');
             if (!tbody) return;
             const operators = getStoredOperators();
-            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
+            const role = localStorage.getItem('sevisa_admin_role') || 'superadmin';
 
             let html = '';
             operators.forEach(op => {
@@ -1930,7 +2402,7 @@ function deleteTesti(idx) {
 
         function saveOperatorAccountForm(e) {
             e.preventDefault();
-            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
+            const role = localStorage.getItem('sevisa_admin_role') || 'superadmin';
             if (role !== 'superadmin') {
                 alert('Hanya Super Admin Diskominfo yang berhak menambahkan akun Operator Staf baru!');
                 return;
@@ -1969,7 +2441,7 @@ function deleteTesti(idx) {
         }
 
         function deleteOperatorAccount(email) {
-            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
+            const role = localStorage.getItem('sevisa_admin_role') || 'superadmin';
             if (role !== 'superadmin') {
                 alert('Hanya Super Admin yang dapat menghapus akun operator!');
                 return;
@@ -1998,14 +2470,14 @@ function deleteTesti(idx) {
 
         // TAB MODULE SWITCHER
         function switchCMSModule(modName) {
-            const role = sessionStorage.getItem('sevisa_admin_role') || 'superadmin';
+            const role = localStorage.getItem('sevisa_admin_role') || 'superadmin';
             
             if (role === 'operator' && (modName === 'lokasi' || modName === 'tentang')) {
                 showAdminToast('🔒 AKSES TERBATASI', 'Modul Lokasi & Edit Teks Tentang Kami hanya dapat diubah oleh Super Admin Diskominfo!');
                 return;
             }
 
-            const modules = ['dashboard', 'transaksi', 'laporan', 'lokasi', 'portofolio', 'blog', 'tentang', 'users', 'chat'];
+            const modules = ['dashboard', 'transaksi', 'daftar-transaksi', 'laporan', 'lokasi', 'portofolio', 'blog', 'tentang', 'users', 'chat'];
             modules.forEach(m => {
                 const sec = document.getElementById('sec-cms-' + m);
                 const tab = document.getElementById('tab-cms-' + m);
@@ -2021,20 +2493,149 @@ function deleteTesti(idx) {
             if (modName === 'chat') renderAdminChatBox();
             if (modName === 'dashboard') renderDashboardStats();
             if (modName === 'laporan') renderLaporanKhusus();
+            if (modName === 'daftar-transaksi') renderDaftarTransaksiTable();
+            if (modName === 'portofolio') loadAdminPortfolio();
             if (modName === 'users') {
                 renderCMSUsers();
                 renderCMSOperators();
             }
         }
 
-        // PRINT OFFICIAL INVOICE FROM ADMIN
-        function printAdminOrderInvoice(code) {
-            const orders = getStoredOrders();
-            const order = orders.find(o => o.code === code);
-            if (!order) return;
+        function initDaftarTransaksiDates() {
+            const today = new Date();
+            const startOfYear = new Date(today.getFullYear(), 0, 1);
+            const strStart = startOfYear.toISOString().split('T')[0];
+            const strEnd = today.toISOString().split('T')[0];
 
-            window.open(`index.html#status-check`, '_blank');
-            showAdminToast('📄 BUKA FAKTUR INVOICE', `Faktur Invoice ${code} disiapkan di tab pengguna.`);
+            const startInput = document.getElementById('filter-trx-start');
+            const endInput = document.getElementById('filter-trx-end');
+            if (startInput && endInput) {
+                startInput.value = strStart;
+                endInput.value = strEnd;
+            }
+
+            const lapStart = document.getElementById('laporan-start-date');
+            const lapEnd = document.getElementById('laporan-end-date');
+            if (lapStart && lapEnd) {
+                lapStart.value = strStart;
+                lapEnd.value = strEnd;
+            }
+        }
+
+        function renderDaftarTransaksiTable() {
+            const startDate = document.getElementById('filter-trx-start').value;
+            const endDate = document.getElementById('filter-trx-end').value;
+            const statusFilter = document.getElementById('filter-trx-status')?.value || 'all';
+            const tbody = document.getElementById('daftar-transaksi-tbody');
+            if(!tbody) return;
+            
+            let orders = getStoredOrders();
+            let html = '';
+            
+            let totalLunas = 0;
+            let totalBelum = 0;
+            
+            orders.forEach(o => {
+                let orderDate = o.createdAt;
+                if (!orderDate && o.dates) {
+                    const m = o.dates.match(/^(\d{4}-\d{2}-\d{2})/);
+                    if (m) orderDate = m[1];
+                }
+                
+                if (startDate && orderDate && orderDate < startDate) return;
+                if (endDate && orderDate && orderDate > endDate) return;
+                if (statusFilter !== 'all' && o.status !== statusFilter) return;
+                
+                let p = parseInt((o.totalPrice || '0').toString().replace(/\./g, ''));
+                if (p === 0 && o.dates) {
+                    const pm = o.dates.match(/Rp\s*([\d.]+)/);
+                    if (pm) p = parseInt(pm[1].replace(/\./g, ''));
+                }
+                if (isNaN(p)) p = 0;
+                
+                const sudahBayarStatus = ['pembayaran_diverifikasi', 'terkonfirmasi', 'lunas', 'selesai'];
+                if (sudahBayarStatus.includes(o.status)) {
+                    totalLunas += p;
+                } else if (o.status !== 'batal' && o.status !== 'ditolak') {
+                    totalBelum += p;
+                }
+                
+                let statusBadge = '';
+                if(o.status === 'menunggu') statusBadge = '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-[10px] font-bold block w-full text-center">Menunggu Verifikasi</span>';
+                else if (o.status === 'diproses') statusBadge = '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-[10px] font-bold block w-full text-center">Diproses</span>';
+                else if (o.status === 'pembayaran_diverifikasi') statusBadge = '<span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-[10px] font-bold block w-full text-center">Pembayaran Diverifikasi</span>';
+                else if (o.status === 'terkonfirmasi') statusBadge = '<span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold block w-full text-center">Terkonfirmasi</span>';
+                else if (o.status === 'lunas') statusBadge = '<span class="px-2 py-1 bg-emerald-500 text-white rounded text-[10px] font-extrabold block w-full text-center">LUNAS</span>';
+                else if (o.status === 'batal') statusBadge = '<span class="px-2 py-1 bg-rose-100 text-rose-700 rounded text-[10px] font-extrabold block w-full text-center">BATAL</span>';
+                else statusBadge = `<span class="px-2 py-1 bg-slate-100 text-slate-700 rounded text-[10px] font-bold block w-full text-center">${o.status}</span>`;
+                
+                html += `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/60 transition">
+                    <td class="p-3.5 border-b border-slate-100 dark:border-slate-800">
+                        <strong class="text-sky-600 dark:text-sky-400 block">${o.code}</strong>
+                        <span class="text-[10px] text-slate-500">${orderDate || '-'}</span>
+                    </td>
+                    <td class="p-3.5 border-b border-slate-100 dark:border-slate-800">
+                        <strong class="block text-slate-900 dark:text-white">${o.company}</strong>
+                        <span class="text-xs text-slate-500">${o.userName}</span>
+                    </td>
+                    <td class="p-3.5 border-b border-slate-100 dark:border-slate-800 text-xs">
+                        ${o.location}<br>
+                        <span class="text-[10px] text-slate-500">${o.dates}</span>
+                    </td>
+                    <td class="p-3.5 border-b border-slate-100 dark:border-slate-800 text-right font-bold text-slate-900 dark:text-white">
+                        ${p.toLocaleString('id-ID')}
+                    </td>
+                    <td class="p-3.5 border-b border-slate-100 dark:border-slate-800">
+                        ${statusBadge}
+                    </td>
+                </tr>
+                `;
+            });
+            
+            if (html === '') {
+                html = `<tr><td colspan="5" class="p-6 text-center text-slate-500 text-xs font-bold bg-slate-50 dark:bg-slate-800/30">Tidak ada transaksi yang ditemukan pada periode ini.</td></tr>`;
+            }
+            tbody.innerHTML = html;
+            
+            const elLunas = document.getElementById('daftar-trx-total-lunas');
+            const elBelum = document.getElementById('daftar-trx-total-belum');
+            if (elLunas) elLunas.innerText = 'Rp ' + totalLunas.toLocaleString('id-ID');
+            if (elBelum) elBelum.innerText = 'Rp ' + totalBelum.toLocaleString('id-ID');
+        }
+
+        // PRINT OFFICIAL INVOICE FROM ADMIN
+        function openOfficialInvoiceModal(code) {
+            const orders = getStoredOrders();
+            const found = orders.find(o => o.code === code);
+            if (!found) {
+                alert('Data transaksi tidak ditemukan.');
+                return;
+            }
+
+            document.getElementById('inv-no').innerText = 'INV/SVS/2026/08/' + found.code.replace('SVS-', '');
+            document.getElementById('inv-client-name').innerText = found.userName || '-';
+            document.getElementById('inv-client-company').innerText = found.company || 'Personal';
+            document.getElementById('inv-location').innerText = 'Videotron ' + found.location;
+            document.getElementById('inv-dates').innerText = found.dates;
+            document.getElementById('inv-file').innerText = 'Materi: ' + (found.file || '-');
+            document.getElementById('inv-table-desc').innerText = 'Sewa Layanan Penyiaran Videotron ' + found.location + ' (' + found.dates + ')';
+
+            let p = parseInt((found.totalPrice || '0').toString().replace(/\./g, ''));
+            if (p === 0 && found.dates) {
+                const pm = found.dates.match(/Rp\s*([\d.]+)/);
+                if (pm) p = parseInt(pm[1].replace(/\./g, ''));
+            }
+            if (isNaN(p)) p = 0;
+            
+            const priceEl = document.getElementById('inv-table-price');
+            if (priceEl) priceEl.innerText = 'Rp ' + p.toLocaleString('id-ID');
+
+            const totalEl = document.getElementById('inv-total-price');
+            if (totalEl) totalEl.innerText = 'Rp ' + p.toLocaleString('id-ID');
+
+            document.getElementById('official-invoice-modal').classList.remove('hidden');
+            document.getElementById('official-invoice-modal').classList.add('flex');
         }
 
         const DEFAULT_SAMPLE_CHATS = [
@@ -2283,8 +2884,7 @@ function deleteTesti(idx) {
                     totalBelum += p;
                 }
             });
-            document.getElementById('stat-pad-lunas').innerText = 'Rp ' + totalLunas.toLocaleString('id-ID');
-            document.getElementById('stat-pad-belum').innerText = 'Rp ' + totalBelum.toLocaleString('id-ID');
+            document.getElementById('stat-total-revenue').innerText = 'Rp ' + totalLunas.toLocaleString('id-ID');
             
             let locCounts = {};
             orders.forEach(o => { 
@@ -2304,11 +2904,6 @@ function deleteTesti(idx) {
                 }
             });
             
-            // Dummy trending data if no orders yet, to make it look like a dashboard
-            if(orders.length === 0) {
-                monthlyCounts = [2, 5, 8, 12, 10, 15, 22, 18, 14, 25, 30, 28];
-            }
-            
             if(window.rentalChartInstance) {
                 window.rentalChartInstance.destroy();
             }
@@ -2321,23 +2916,15 @@ function deleteTesti(idx) {
             const textColor = isDark ? '#94a3b8' : '#64748b';
 
             window.rentalChartInstance = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
                     datasets: [{
                         label: 'Jumlah Penyewaan',
                         data: monthlyCounts,
-                        borderColor: '#0ea5e9',
-                        backgroundColor: 'rgba(14, 165, 233, 0.15)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#0ea5e9',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#0ea5e9',
-                        pointRadius: 4,
-                        pointHoverRadius: 6
+                        backgroundColor: '#0ea5e9',
+                        borderRadius: 6,
+                        borderWidth: 0,
                     }]
                 },
                 options: {
@@ -2533,6 +3120,7 @@ function deleteTesti(idx) {
 
         // LISTEN FOR REAL-TIME NEW ORDERS, CHAT MESSAGES & NEW USER REGISTRATIONS FROM INDEX.HTML
         window.addEventListener('storage', () => {
+            updateDashboardStats();
             renderAdminTable();
             renderCMSUsers();
             renderAdminChatBox();
@@ -2552,6 +3140,8 @@ function deleteTesti(idx) {
             checkAdminSession();
             renderAdminChatBox();
             updateAdminChatBadge();
+            initDaftarTransaksiDates();
+            renderDaftarTransaksiTable();
         });
     
 // ---------------- FAQ LOGIC ----------------
