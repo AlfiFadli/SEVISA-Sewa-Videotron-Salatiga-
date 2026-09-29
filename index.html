@@ -4049,7 +4049,10 @@ function searchOrderStatus() {
             const pages = ['home', 'tentang', 'lokasi', 'detail-lokasi', 'proyek', 'cek-status', 'profil', 'tulis-testimoni'];
             pages.forEach(p => {
                 const el = document.getElementById('page-' + p);
-                if (el) el.classList.add('hidden');
+                if (el) {
+                    el.classList.add('hidden');
+                    el.style.display = 'none';
+                }
 
                 const navBtn = document.getElementById('nav-' + p);
                 if (navBtn) {
@@ -4065,7 +4068,10 @@ function searchOrderStatus() {
 
             const target = document.getElementById('page-' + pageId);
             if (pageId === 'cek-status') loadUserTransactions();
-            if (target) target.classList.remove('hidden');
+            if (target) {
+                target.classList.remove('hidden');
+                target.style.display = 'block';
+            }
 
             const activeNav = document.getElementById('nav-' + pageId);
             if (activeNav) {
